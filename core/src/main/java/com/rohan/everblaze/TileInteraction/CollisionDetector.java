@@ -1,4 +1,4 @@
-package com.rohan.everblaze.TileInteraction;
+package main.java.com.rohan.everblaze.TileInteraction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,9 +9,9 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.rohan.everblaze.Entities.Item;
-import com.rohan.everblaze.Entities.Player;
-import com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Levels.World;
 
 import java.util.Arrays;
 

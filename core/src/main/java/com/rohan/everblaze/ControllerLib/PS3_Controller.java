@@ -1,4 +1,4 @@
-package com.rohan.everblaze.ControllerLib;
+package main.java.com.rohan.everblaze.ControllerLib;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
@@ -6,9 +6,9 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import com.rohan.everblaze.Entities.Player;
-import com.rohan.everblaze.Levels.World;
-import com.rohan.everblaze.TileInteraction.CollisionDetector;
+import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 
 public class PS3_Controller implements ControllerListener {
 

@@ -1,4 +1,4 @@
-package com.rohan.everblaze.FileUtils;
+package main.java.com.rohan.everblaze.FileUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
-import com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Entities.Player;
 
 public class GameManager {
 

@@ -1,4 +1,4 @@
-package com.rohan.everblaze.Entities;
+package main.java.com.rohan.everblaze.Entities;
 
 public class Classifier {
 

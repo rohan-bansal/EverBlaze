@@ -1,8 +1,8 @@
-package com.rohan.everblaze.ControllerLib;
+package main.java.com.rohan.everblaze.ControllerLib;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.rohan.everblaze.Entities.Player;
-import com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class FollowCam {
 

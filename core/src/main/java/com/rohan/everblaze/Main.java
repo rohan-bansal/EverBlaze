@@ -1,8 +1,8 @@
-package com.rohan.everblaze;
+package main.java.com.rohan.everblaze;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.rohan.everblaze.Levels.TitleScreen;
+import main.java.com.rohan.everblaze.Levels.TitleScreen;
 
 public class Main extends Game {
 

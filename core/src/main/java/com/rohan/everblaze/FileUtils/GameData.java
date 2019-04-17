@@ -1,8 +1,8 @@
-package com.rohan.everblaze.FileUtils;
+package main.java.com.rohan.everblaze.FileUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.Entities.Item;
 
 public class GameData {
 

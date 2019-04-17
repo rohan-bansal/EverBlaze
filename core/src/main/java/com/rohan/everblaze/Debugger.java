@@ -1,10 +1,10 @@
-package com.rohan.everblaze;
+package main.java.com.rohan.everblaze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.rohan.everblaze.Entities.Item;
-import com.rohan.everblaze.Entities.Player;
-import com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class Debugger {
 

@@ -1,4 +1,4 @@
-package com.rohan.everblaze.Entities;
+package main.java.com.rohan.everblaze.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -9,9 +9,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
-import com.rohan.everblaze.FileUtils.GameManager;
-import com.rohan.everblaze.Levels.World;
-import com.rohan.everblaze.TileInteraction.Inventory;
+import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Inventory;
 
 public class Player {
 

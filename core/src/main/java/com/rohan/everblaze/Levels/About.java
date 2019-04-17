@@ -1,4 +1,4 @@
-package com.rohan.everblaze.Levels;
+package main.java.com.rohan.everblaze.Levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

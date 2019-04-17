@@ -1,4 +1,4 @@
-package com.rohan.everblaze.TileInteraction;
+package main.java.com.rohan.everblaze.TileInteraction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.rohan.everblaze.Entities.Item;
-import com.rohan.everblaze.Entities.Player;
-import com.rohan.everblaze.FileUtils.GameManager;
+import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.FileUtils.GameManager;
 
 import java.util.ArrayList;
 

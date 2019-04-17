@@ -1,4 +1,4 @@
-package com.rohan.everblaze.Levels;
+package main.java.com.rohan.everblaze.Levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.rohan.everblaze.FileUtils.GameManager;
+import main.java.com.rohan.everblaze.FileUtils.GameManager;
 
 public class TitleScreen implements Screen {
 

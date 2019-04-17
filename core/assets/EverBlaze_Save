@@ -3,8 +3,8 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 325
-	y: 1280
+	x: 307
+	y: 1298
 }
 inventory: [
 	{
@@ -14,4 +14,7 @@ inventory: [
 		description: Restores 2 hearts.
 	}
 ]
+slotSelected: 1
+health: 10
+hearts: 10
 }

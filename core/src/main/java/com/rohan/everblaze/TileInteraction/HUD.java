@@ -1,10 +1,10 @@
-package com.rohan.everblaze.TileInteraction;
+package main.java.com.rohan.everblaze.TileInteraction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.rohan.everblaze.Entities.Player;
-import org.mini2Dx.core.graphics.Sprite;
+import main.java.com.rohan.everblaze.Entities.Player;
 
 public class HUD {
 

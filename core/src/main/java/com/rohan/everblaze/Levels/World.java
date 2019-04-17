@@ -1,4 +1,4 @@
-package com.rohan.everblaze.Levels;
+package main.java.com.rohan.everblaze.Levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -14,16 +14,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.rohan.everblaze.Entities.Classifier;
-import com.rohan.everblaze.Entities.Item;
-import com.rohan.everblaze.FileUtils.GameManager;
-import com.rohan.everblaze.ControllerLib.FollowCam;
-import com.rohan.everblaze.ControllerLib.PS3_Controller;
-import com.rohan.everblaze.Debugger;
-import com.rohan.everblaze.Entities.Player;
-import com.rohan.everblaze.Effects.Sound_Effects;
-import com.rohan.everblaze.TileInteraction.CollisionDetector;
-import com.rohan.everblaze.TileInteraction.HUD;
+import main.java.com.rohan.everblaze.Entities.Classifier;
+import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.FileUtils.GameManager;
+import main.java.com.rohan.everblaze.ControllerLib.FollowCam;
+import main.java.com.rohan.everblaze.ControllerLib.PS3_Controller;
+import main.java.com.rohan.everblaze.Debugger;
+import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Effects.Sound_Effects;
+import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
+import main.java.com.rohan.everblaze.TileInteraction.HUD;
 
 import java.util.ArrayList;
 
