@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: EverBlaze-V1.jar
+Main-Class: com.rohan.everblaze.desktop.DesktopLauncher
+

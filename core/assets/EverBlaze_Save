@@ -1,0 +1,17 @@
+{
+musicOn: true
+VsyncOn: true
+effectsOn: true
+playerPosition: {
+	x: 325
+	y: 1280
+}
+inventory: [
+	{
+		name: Cherry
+		spritePath: itemSprites/tile002.png
+		type: Food
+		description: Restores 2 hearts.
+	}
+]
+}
