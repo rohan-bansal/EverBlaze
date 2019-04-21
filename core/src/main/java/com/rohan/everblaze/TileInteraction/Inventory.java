@@ -3,29 +3,33 @@ package main.java.com.rohan.everblaze.TileInteraction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import main.java.com.rohan.everblaze.Entities.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
+import main.java.com.rohan.everblaze.Levels.World;
 
 import java.util.ArrayList;
 
 public class Inventory {
 
     private Player player;
-    public Array<Item> inventory;
+    public ArrayList<Item> inventory;
     public int slotSelected = 1;
     public ArrayList<Sprite> slots;
-    public int availableSlot;
     private SpriteBatch slotBatch;
+    private float slotX = 300;
+
+    private BitmapFont nameDrawer = new BitmapFont();
 
     private Sprite highlighted;
 
     public Inventory(Player player) {
         this.player = player;
-        inventory = new Array<Item>();
+        inventory = new ArrayList<Item>();
         slots = new ArrayList<Sprite>();
         slotBatch = new SpriteBatch();
 
@@ -49,25 +53,36 @@ public class Inventory {
     }
 
     public void addItem(Item item) {
+        Gdx.app.log("Inventory", item.name + " added to inventory");
+        item.setSprite();
+        item.sprite.setCenter(slotX, 25);
+        slotX += 50;
         inventory.add(item);
     }
 
     public void render() {
-        detectHotBarSlotSelected();
+        detectKeyPressed();
 
         slotBatch.begin();
-        for(Sprite sprite : slots) {
-            if(slots.indexOf(sprite) == slotSelected - 1) {
-                highlighted.setCenter(sprite.getX() + 25, sprite.getY() + 25);
+        for(int y = 0; y < slots.size(); y++) {
+            if(slots.indexOf(slots.get(y)) == slotSelected - 1) {
+                highlighted.setCenter(slots.get(y).getX() + 25, slots.get(y).getY() + 25);
                 highlighted.draw(slotBatch);
+                try {
+                    nameDrawer.draw(slotBatch, inventory.get(y).name, inventory.get(y).sprite.getX() - 16, inventory.get(y).sprite.getY() + 60);
+                } catch(Exception e) {
+                }
             } else {
-                sprite.draw(slotBatch);
+                slots.get(y).draw(slotBatch);
             }
+        }
+        for(int x = 0; x < inventory.size(); x++) {
+            inventory.get(x).render(slotBatch);
         }
         slotBatch.end();
     }
 
-    public void detectHotBarSlotSelected() {
+    public void detectKeyPressed() {
         if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             slotSelected = 1;
         } else
@@ -97,6 +112,38 @@ public class Inventory {
         } else
         if(Gdx.input.isKeyPressed(Input.Keys.NUM_0)) {
             slotSelected = 10;
+        } else
+        if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            pickUpItem();
+        } else
+        if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            dropItem();
+        }
+    }
+
+    private void pickUpItem() {
+        if (World.detector.itemCollision(false) != null) {
+            Item item = World.detector.itemCollision(false);
+            Gdx.app.log("Inventory", "Picking Up Item : " + item.name);
+
+            addItem(item);
+            World.onFloor.remove(item);
+        }
+    }
+
+    private void dropItem() {
+        if(inventory.size() != 0 && inventory.get(slotSelected - 1) != null) {
+            Item item_ = inventory.get(slotSelected - 1);
+            Gdx.app.log("Inventory", "Dropping Item : " + item_.name);
+
+            item_.setSprite();
+            item_.sprite.setCenter(player.position.x, player.position.y);
+            item_.sprite.setSize(16, 16);
+
+            World.onFloor.add(item_);
+            inventory.remove(item_);
+
+            refreshInventory();
         }
     }
 
@@ -106,18 +153,19 @@ public class Inventory {
         }
     }
 
-    public void loadInventory(GameManager manager) {
-        inventory = manager.data.getInventory();
+    private void refreshInventory() {
+        slotX = 300;
         for(Item item : inventory) {
             item.setSprite();
-            Gdx.app.log("Inventory", item.name);
+            item.sprite.setCenter(slotX, 25);
+            slotX += 50;
         }
+    }
+
+    public void loadInventory(GameManager manager) {
+        inventory = manager.data.getInventory();
+        slotX = 300;
+        refreshInventory();
         Gdx.app.log("Inventory", "Inventory Loaded, Sprite Textures Set");
-        if(inventory.size != 0) {
-            availableSlot = inventory.size + 1;
-        } else {
-            availableSlot = 1;
-        }
-        Gdx.app.log("Inventory", "Highest Available Slot: " + availableSlot);
     }
 }

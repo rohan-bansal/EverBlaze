@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import main.java.com.rohan.everblaze.Entities.Item;
 
+import java.util.ArrayList;
+
 public class GameData {
 
     private boolean musicOn;
@@ -11,7 +13,7 @@ public class GameData {
     private boolean invertControlsOn;
     private boolean effectsOn;
     private Vector2 playerPosition;
-    private Array<Item> inventory;
+    private ArrayList<Item> inventory;
     private int slotSelected;
     private int health;
     private int hearts;
@@ -40,11 +42,11 @@ public class GameData {
         this.hearts = hearts;
     }
 
-    public Array<Item> getInventory() {
+    public ArrayList<Item> getInventory() {
         return inventory;
     }
 
-    public void setInventory(Array<Item> inventory) {
+    public void setInventory(ArrayList<Item> inventory) {
         this.inventory = inventory;
     }
 

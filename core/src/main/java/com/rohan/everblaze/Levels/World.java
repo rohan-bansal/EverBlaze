@@ -4,16 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import main.java.com.rohan.everblaze.Entities.Classifier;
 import main.java.com.rohan.everblaze.Entities.Item;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
@@ -63,7 +60,7 @@ public class World implements Screen {
         pauseBatch = new SpriteBatch();
         overwriteBatch = new SpriteBatch();
         itemBatch = new SpriteBatch();
-        player = new Player(325, 1280);
+        player = new Player(580, 1300);
 
         onFloor = new ArrayList<Item>();
 
@@ -99,9 +96,9 @@ public class World implements Screen {
 
         manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader());
-        manager.load("level.tmx", TiledMap.class);
+        manager.load("level/overworld_forest.tmx", TiledMap.class);
         manager.finishLoading();
-        map = manager.get("level.tmx", TiledMap.class);
+        map = manager.get("level/overworld_forest.tmx", TiledMap.class);
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
@@ -142,15 +139,12 @@ public class World implements Screen {
             batch.end();
 
             player.render(batch, cam.camera);
-
-
-
             hud.render();
         }
 
     }
 
-    private void applyData() {
+    private void setSave() {
         gameManager.data.setPlayerPosition(player.position);
         gameManager.data.setInventory(player.inventory_.inventory);
         gameManager.data.setHealth(player.health);
@@ -161,6 +155,8 @@ public class World implements Screen {
 
     private void applyChanges() {
         player.position = gameManager.data.getPlayerPosition();
+        player.health = gameManager.data.getHealth();
+        player.hearts = gameManager.data.getHearts();
         player.inventory_.loadInventory(gameManager);
         player.inventory_.slotSelected = gameManager.data.getSlotSelected();
     }
@@ -195,10 +191,10 @@ public class World implements Screen {
 
         if(Gdx.input.isTouched()) {
             if (options.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                applyData();
+                setSave();
                 game.setScreen(new Options(game, true, gameManager));
             } else if (save_quit.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                applyData();
+                setSave();
                 game.setScreen(new TitleScreen(game, false));
             } else if (back.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 pauseMenuActive = false;

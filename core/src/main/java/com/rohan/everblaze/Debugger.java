@@ -15,7 +15,7 @@ public class Debugger {
     }
 
     public void printDebug() {
-        if(Gdx.input.isKeyPressed(Input.Keys.C)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.U)) {
             Gdx.app.log("DEBUGGER", player.position.x + " : " + player.position.y);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.I)) {
@@ -25,6 +25,9 @@ public class Debugger {
             for(Item item : World.onFloor) {
                 Gdx.app.log("onFloor Logger", item.name);
             }
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.P)) {
+            World.detector.itemCollision(true);
         }
     }
 }

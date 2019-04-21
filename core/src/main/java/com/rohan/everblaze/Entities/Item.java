@@ -14,7 +14,6 @@ public class Item implements Json.Serializable {
     public Sprite sprite;
     public String type;
     public String description;
-    public String inventorySlot;
 
     public Item(String name, String path, String type, String description) {
         this.name = name;
@@ -37,14 +36,6 @@ public class Item implements Json.Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getInventorySlot() {
-        return inventorySlot;
-    }
-
-    public void setInventorySlot(String inventorySlot) {
-        this.inventorySlot = inventorySlot;
     }
 
     public void loadCoords(int x, int y) {
@@ -94,7 +85,6 @@ public class Item implements Json.Serializable {
         json.writeValue("spritePath", spritePath);
         json.writeValue("type", type);
         json.writeValue("description", description);
-
     }
 
     @Override
@@ -103,6 +93,5 @@ public class Item implements Json.Serializable {
         spritePath = jsonData.getString("spritePath");
         type = jsonData.getString("type");
         description = jsonData.getString("description");
-
     }
 }

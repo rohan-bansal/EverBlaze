@@ -25,7 +25,8 @@ public class CollisionDetector {
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
 
-    public static final String[] obstacles = {"Pillar", "Wall", "Statue"};
+    public static final String[] obstacles = {"Pillar", "Wall", "Statue", "Gate_Wall", "Tree", "Swamp_Wall", "Tower", "Railing"};
+    public static final String[] room_entrances = {"Cave_Entrance_1", "Cave_Entrance_2", "Blocked_Cave_Entrance_1", "Blocked_Cave_Entrance_2"};
 
     public CollisionDetector(Player player, TiledMap map) {
         this.player = player;
@@ -60,25 +61,29 @@ public class CollisionDetector {
         return "none";
     }
 
-    public void itemCollision() {
+    public Item itemCollision(boolean debug) {
         for(Item item : World.onFloor) {
             if (Intersector.overlaps(player.getRectangle(), item.sprite.getBoundingRectangle())) {
-                Gdx.app.log("Collision Detector", "Item Collision : " + item.name);
+                if(debug) {
+                    Gdx.app.log("Collision Detector", "Item Collision : " + item.name);
+                }
+                return item;
             }
         }
-
+        return null;
     }
 
-    public boolean hasCollided() {
+    public String hasCollided() {
 
         for(RectangleMapObject obj : objects.getByType(RectangleMapObject.class)) {
             Rectangle rectangle = obj.getRectangle();
 
-            if (Intersector.overlaps(rectangle, player.getInflatedRect())) {
-                Gdx.app.log("GAME", "Touching " + obj.getName() );
-                return true;
+            if (Intersector.overlaps(rectangle, player.getRectangle())) {
+                if(Arrays.asList(room_entrances).contains(obj.getName())) {
+                    return "room_entrance";
+                }
             }
         }
-        return false;
+        return "none";
     }
 }
