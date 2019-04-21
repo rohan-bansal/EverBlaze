@@ -132,18 +132,20 @@ public class Inventory {
     }
 
     private void dropItem() {
-        if(inventory.size() != 0 && inventory.get(slotSelected - 1) != null) {
-            Item item_ = inventory.get(slotSelected - 1);
-            Gdx.app.log("Inventory", "Dropping Item : " + item_.name);
+        if(inventory.size() != 0) {
+            if(slotSelected <= inventory.size()) {
+                Item item_ = inventory.get(slotSelected - 1);
+                Gdx.app.log("Inventory", "Dropping Item : " + item_.name);
 
-            item_.setSprite();
-            item_.sprite.setCenter(player.position.x, player.position.y);
-            item_.sprite.setSize(16, 16);
+                item_.setSprite();
+                item_.sprite.setCenter(player.position.x, player.position.y);
+                item_.sprite.setSize(16, 16);
 
-            World.onFloor.add(item_);
-            inventory.remove(item_);
+                World.onFloor.add(item_);
+                inventory.remove(item_);
 
-            refreshInventory();
+                refreshInventory();
+            }
         }
     }
 

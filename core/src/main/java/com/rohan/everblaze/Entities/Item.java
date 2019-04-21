@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import main.java.com.rohan.everblaze.Levels.World;
 
+import java.util.Arrays;
+
 public class Item implements Json.Serializable {
 
     public String name;
@@ -89,7 +91,7 @@ public class Item implements Json.Serializable {
         json.writeValue("type", type);
         json.writeValue("description", description);
         if(World.onFloor.contains(this)) {
-            json.writeValue("position", new Vector2(sprite.getX(), sprite.getY()));
+            json.writeValue("position", new Float[] {sprite.getX(), sprite.getY()});
         }
     }
 
@@ -99,5 +101,16 @@ public class Item implements Json.Serializable {
         spritePath = jsonData.getString("spritePath");
         type = jsonData.getString("type");
         description = jsonData.getString("description");
+
+        setSprite();
+
+        if(jsonData.has("position")) {
+            JsonValue position = jsonData.get("position");
+            float[] positions_2 = position.asFloatArray();
+            Gdx.app.log("Item", positions_2[0] + " " + positions_2[1]);
+            sprite.setX(positions_2[0]);
+            sprite.setY(positions_2[1]);
+        }
+
     }
 }

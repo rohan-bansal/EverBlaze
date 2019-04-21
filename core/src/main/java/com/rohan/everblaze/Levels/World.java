@@ -161,6 +161,11 @@ public class World implements Screen {
         player.inventory_.loadInventory(gameManager);
         player.inventory_.slotSelected = gameManager.data.getSlotSelected();
         onFloor = gameManager.data.getOnFloor();
+        if(onFloor.size() != 0) {
+            for(Item item : onFloor) {
+                item.sprite.setSize(16, 16);
+            }
+        }
 
     }
 

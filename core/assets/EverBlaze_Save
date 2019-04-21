@@ -3,8 +3,8 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 538
-	y: 1286
+	x: 806
+	y: 1374
 }
 inventory: [
 	{
@@ -19,14 +19,17 @@ inventory: [
 		type: Food
 		description: Restores 2 hearts.
 	}
+]
+onFloor: [
 	{
 		name: Cherry
 		spritePath: itemSprites/tile001.png
 		type: Food
 		description: Restores 2 hearts.
+		position: [ 1000, 1017 ]
 	}
 ]
-slotSelected: 3
+slotSelected: 2
 health: 10
 hearts: 10
 }
