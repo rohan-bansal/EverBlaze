@@ -20,11 +20,11 @@ public class HUD {
         this.player = player;
 
         hud = new SpriteBatch();
-        heart = new Texture(Gdx.files.internal("Hearts/heart.png"));
-        threeQheart = new Texture(Gdx.files.internal("Hearts/3-4-heart.png"));
-        halfHeart = new Texture(Gdx.files.internal("Hearts/half-heart.png"));
-        QuarterHeart = new Texture(Gdx.files.internal("Hearts/quarter-heart.png"));
-        empty = new Texture(Gdx.files.internal("Hearts/background.png"));
+        heart = new Texture(Gdx.files.internal("UI/Hearts/heart.png"));
+        threeQheart = new Texture(Gdx.files.internal("UI/Hearts/3-4-heart.png"));
+        halfHeart = new Texture(Gdx.files.internal("UI/Hearts/half-heart.png"));
+        QuarterHeart = new Texture(Gdx.files.internal("UI/Hearts/quarter-heart.png"));
+        empty = new Texture(Gdx.files.internal("UI/Hearts/background.png"));
 
         pause = new Sprite(new Texture(Gdx.files.internal("UI/pause.png")));
         pause.setPosition(950, 770);

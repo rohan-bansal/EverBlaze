@@ -6,6 +6,7 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.LocateReplyMessage_1_0;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
@@ -60,21 +61,17 @@ public class PS3_Controller implements ControllerListener {
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
-        Gdx.app.log("MAIN", Integer.toString(buttonCode));
-        if(buttonCode == UP) {
-            World.movingUp = true;
-        }
 
-        if(buttonCode == DOWN) {
-            World.movingDown = true;
-        }
-
-        if(buttonCode == LEFT) {
-            World.movingLeft = true;
-        }
-
-        if(buttonCode == RIGHT) {
-            World.movingRight = true;
+        if(buttonCode == BUTTON_O) {
+            player.inventory_.dropItem();
+        } else if (buttonCode == BUTTON_TRI) {
+            player.inventory_.pickUpItem();
+        } else if (buttonCode == BUTTON_L1) {
+            player.inventory_.shiftSlotSelected(false);
+        } else if (buttonCode == BUTTON_R1) {
+            player.inventory_.shiftSlotSelected(true);
+        } else if (buttonCode == BUTTON_SQU) {
+            player.inventory_.useSelected();
         }
 
         return false;
@@ -82,14 +79,6 @@ public class PS3_Controller implements ControllerListener {
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
-        if(buttonCode == UP)
-            World.movingUp = false;
-        if(buttonCode == DOWN)
-            World.movingDown = false;
-        if(buttonCode == LEFT)
-            World.movingLeft = false;
-        if(buttonCode == RIGHT)
-            World.movingRight = false;
         return false;
     }
 

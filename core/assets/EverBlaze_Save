@@ -3,33 +3,21 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 806
-	y: 1374
+	x: 580
+	y: 1300
 }
 inventory: [
-	{
-		name: Blackberry
-		spritePath: itemSprites/tile000.png
-		type: Food
-		description: Restores 2 hearts.
-	}
 	{
 		name: Green Apple
 		spritePath: itemSprites/tile002.png
 		type: Food
 		description: Restores 2 hearts.
 	}
-]
-onFloor: [
 	{
-		name: Cherry
-		spritePath: itemSprites/tile001.png
+		name: Blackberry
+		spritePath: itemSprites/tile000.png
 		type: Food
 		description: Restores 2 hearts.
-		position: [ 1000, 1017 ]
 	}
 ]
-slotSelected: 2
-health: 10
-hearts: 10
 }

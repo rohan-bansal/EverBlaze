@@ -25,7 +25,7 @@ public class Player {
     public int HEIGHT = 20;
 
     public int hearts = 10;
-    public int health = 10;
+    public int health = 7;
 
     private Rectangle box;
     public String direction = "right";

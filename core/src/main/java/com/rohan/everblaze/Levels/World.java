@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.Classifier;
 import main.java.com.rohan.everblaze.Entities.Item;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
@@ -40,6 +41,7 @@ public class World implements Screen {
     private Debugger debugger;
     public GameManager gameManager;
     private Sound_Effects levelMusic;
+    public static ScreenText drawManager;
 
     public static ArrayList<Item> onFloor;
 
@@ -103,6 +105,7 @@ public class World implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         detector = new CollisionDetector(player, map);
+        drawManager = new ScreenText(player);
         PS3_Controller controller = new PS3_Controller(player);
         hud = new HUD(player);
         cam = new FollowCam(player);
@@ -211,10 +214,10 @@ public class World implements Screen {
     }
 
     public void createItems() {
-        Item cherry = new Item("Cherry", "itemSprites/tile001.png", Classifier.Food, "Restores 2 hearts.");
-        cherry.loadCoords(360, 1280);
-        cherry.sprite.setSize(16, 16);
-        onFloor.add(cherry);
+        Item sword = new Item("Sword", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.");
+        sword.loadCoords(360, 1280);
+        sword.sprite.setSize(16, 16);
+        onFloor.add(sword);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
     }
 
