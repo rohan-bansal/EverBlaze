@@ -5,12 +5,13 @@ __A java roguelike with a custom storyline, combat, and exploration.__
 ## Features
 
 - Save game via encrypted json
+- Custom inventory mechanics, monster fights, treasure
 - built with LibGDX java
 
 ## Download
 
 * Download the latest release from the releases page
-* Clone the repository and load into IntelliJ IDEA
+* Clone the repository and load into IntelliJ IDEA or Eclipse
 
 ## Run
 
