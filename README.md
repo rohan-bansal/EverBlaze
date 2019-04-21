@@ -1,4 +1,4 @@
-![EverBlaze](https://github.com/Rohan-Bansal/EverBlaze/blob/master/assets/UI/title.png)
+![EverBlaze](https://github.com/Rohan-Bansal/EverBlaze/blob/master/core/assets/UI/title.png)
 
 __A java roguelike with a custom storyline, combat, and exploration.__
 
