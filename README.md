@@ -17,5 +17,5 @@ __A java roguelike with a custom storyline, combat, and exploration.__
 
 * Run the jar file in the release
 * Run the program from IntelliJ
-* Run the experimental jar file
+* Run the unstable jar file in desktop/build/libs
 
