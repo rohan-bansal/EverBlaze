@@ -164,7 +164,6 @@ public class Inventory {
 
     public void loadInventory(GameManager manager) {
         inventory = manager.data.getInventory();
-        slotX = 300;
         refreshInventory();
         Gdx.app.log("Inventory", "Inventory Loaded, Sprite Textures Set");
     }

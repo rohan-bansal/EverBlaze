@@ -1,7 +1,6 @@
 package main.java.com.rohan.everblaze.FileUtils;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import main.java.com.rohan.everblaze.Entities.Item;
 
 import java.util.ArrayList;
@@ -14,9 +13,18 @@ public class GameData {
     private boolean effectsOn;
     private Vector2 playerPosition;
     private ArrayList<Item> inventory;
+    private ArrayList<Item> onFloor;
     private int slotSelected;
     private int health;
     private int hearts;
+
+    public ArrayList<Item> getOnFloor() {
+        return onFloor;
+    }
+
+    public void setOnFloor(ArrayList<Item> onFloor) {
+        this.onFloor = onFloor;
+    }
 
     public int getSlotSelected() {
         return slotSelected;

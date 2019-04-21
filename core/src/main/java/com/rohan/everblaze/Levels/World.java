@@ -147,6 +147,7 @@ public class World implements Screen {
     private void setSave() {
         gameManager.data.setPlayerPosition(player.position);
         gameManager.data.setInventory(player.inventory_.inventory);
+        gameManager.data.setOnFloor(onFloor);
         gameManager.data.setHealth(player.health);
         gameManager.data.setHearts(player.hearts);
         gameManager.data.setSlotSelected(player.inventory_.slotSelected);
@@ -159,6 +160,8 @@ public class World implements Screen {
         player.hearts = gameManager.data.getHearts();
         player.inventory_.loadInventory(gameManager);
         player.inventory_.slotSelected = gameManager.data.getSlotSelected();
+        onFloor = gameManager.data.getOnFloor();
+
     }
 
     private void drawOverwriteMenu() {

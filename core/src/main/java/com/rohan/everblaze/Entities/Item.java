@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class Item implements Json.Serializable {
 
@@ -14,6 +16,7 @@ public class Item implements Json.Serializable {
     public Sprite sprite;
     public String type;
     public String description;
+    public String position;
 
     public Item(String name, String path, String type, String description) {
         this.name = name;
@@ -85,6 +88,9 @@ public class Item implements Json.Serializable {
         json.writeValue("spritePath", spritePath);
         json.writeValue("type", type);
         json.writeValue("description", description);
+        if(World.onFloor.contains(this)) {
+            json.writeValue("position", new Vector2(sprite.getX(), sprite.getY()));
+        }
     }
 
     @Override
