@@ -19,3 +19,9 @@ __A java roguelike with a custom storyline, combat, and exploration.__
 * Run the program from IntelliJ
 * Run the unstable jar file in `desktop/build/libs`
 
+# Credits
+
+Music: 
+
+- Title Screen: TheFatRat - Reminiscence
+- World: Eric Matyas
