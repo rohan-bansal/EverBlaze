@@ -20,4 +20,16 @@ inventory: [
 		description: Restores 2 hearts.
 	}
 ]
+onFloor: [
+	{
+		name: Sword
+		spritePath: itemSprites/tile072.png
+		type: Weapon
+		description: A typical adventurer's sword. Deals 2 damage per hit.
+		position: [ 343, 1263 ]
+	}
+]
+slotSelected: 1
+health: 8
+hearts: 10
 }

@@ -110,6 +110,8 @@ public class World implements Screen {
         hud = new HUD(player);
         cam = new FollowCam(player);
         debugger = new Debugger(player);
+
+        loadMusic();
     }
 
     @Override
@@ -213,12 +215,15 @@ public class World implements Screen {
         }
     }
 
-    public void createItems() {
+    private void createItems() {
         Item sword = new Item("Sword", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.");
         sword.loadCoords(360, 1280);
         sword.sprite.setSize(16, 16);
         onFloor.add(sword);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
+    }
+
+    private void loadMusic() {
     }
 
     @Override

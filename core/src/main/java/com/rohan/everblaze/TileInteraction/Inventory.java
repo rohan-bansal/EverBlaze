@@ -147,7 +147,7 @@ public class Inventory {
 
     public void useSelected() {
         if(inventory.size() != 0) {
-            if(slotSelected - 1 <= inventory.size()) {
+            if(slotSelected - 1 < inventory.size()) {
                 Item item = inventory.get(slotSelected - 1);
                 Gdx.app.log("Inventory", item.type);
                 if(item.type.equals("Food")) {

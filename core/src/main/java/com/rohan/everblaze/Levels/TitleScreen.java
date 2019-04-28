@@ -3,10 +3,12 @@ package main.java.com.rohan.everblaze.Levels;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 
 public class TitleScreen implements Screen {
@@ -20,10 +22,14 @@ public class TitleScreen implements Screen {
     int rotation = 1;
     boolean fileNotFound;
 
+    private Sound_Effects music;
+
 
     public TitleScreen(Game game, boolean fileNotFound) {
 
         Gdx.app.log("Title", "Set title screen");
+
+        music = new Sound_Effects("title", true);
 
         this.game = game;
         screen = new SpriteBatch();
@@ -60,6 +66,7 @@ public class TitleScreen implements Screen {
 
         titleIcon.setCenter(500,450);
 
+        music.play();
     }
 
     @Override
@@ -120,12 +127,14 @@ public class TitleScreen implements Screen {
     private void buttonPressed() {
         if(Gdx.input.isTouched()) {
             if(play.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                music.stop();
                 game.setScreen(new World(game, false));
             } else if(options.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 game.setScreen(new Options(game, false));
             } else if(about.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 game.setScreen(new About(game));
             } else if(loadGame.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                music.stop();
                 game.setScreen(new World(game, true));
             }
         }
