@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class HUD {
 
@@ -52,6 +53,7 @@ public class HUD {
 
         if(Gdx.input.isTouched()) {
             if (pause.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                World.levelMusic.pause();
                 return true;
             }
         }

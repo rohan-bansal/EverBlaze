@@ -3,33 +3,25 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 580
-	y: 1300
+	x: 830
+	y: 1814
 }
 inventory: [
-	{
-		name: Green Apple
-		spritePath: itemSprites/tile002.png
-		type: Food
-		description: Restores 2 hearts.
-	}
 	{
 		name: Blackberry
 		spritePath: itemSprites/tile000.png
 		type: Food
 		description: Restores 2 hearts.
 	}
-]
-onFloor: [
 	{
 		name: Sword
 		spritePath: itemSprites/tile072.png
 		type: Weapon
 		description: A typical adventurer's sword. Deals 2 damage per hit.
-		position: [ 343, 1263 ]
 	}
 ]
-slotSelected: 1
-health: 8
+onFloor: []
+slotSelected: 2
+health: 10
 hearts: 10
 }

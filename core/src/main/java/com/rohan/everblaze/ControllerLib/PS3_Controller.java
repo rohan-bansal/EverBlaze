@@ -6,7 +6,6 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.LocateReplyMessage_1_0;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
@@ -88,11 +87,11 @@ public class PS3_Controller implements ControllerListener {
             if(value > 0.2f || value < -0.2f) {
                 if (value > 0) {
                     World.movingRight = true;
-                    player.direction = "right";
+                    player.horiDirection = "right";
                     player.currentFrame = player.running;
                 } else {
                     World.movingLeft = true;
-                    player.direction = "left";
+                    player.horiDirection = "left";
                     player.currentFrame = player.running;
                 }
             } else {

@@ -40,7 +40,7 @@ public class World implements Screen {
     private Player player;
     private Debugger debugger;
     public GameManager gameManager;
-    private Sound_Effects levelMusic;
+    public static Sound_Effects levelMusic;
     public static ScreenText drawManager;
 
     public static ArrayList<Item> onFloor;
@@ -112,6 +112,7 @@ public class World implements Screen {
         debugger = new Debugger(player);
 
         loadMusic();
+        levelMusic.play();
     }
 
     @Override
@@ -208,8 +209,10 @@ public class World implements Screen {
                 game.setScreen(new Options(game, true, gameManager));
             } else if (save_quit.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 setSave();
+                levelMusic.stop();
                 game.setScreen(new TitleScreen(game, false));
             } else if (back.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                levelMusic.play();
                 pauseMenuActive = false;
             }
         }
@@ -224,6 +227,7 @@ public class World implements Screen {
     }
 
     private void loadMusic() {
+        levelMusic = new Sound_Effects("worldMusic", true);
     }
 
     @Override

@@ -167,7 +167,9 @@ public class Inventory {
                         World.drawManager.resetTimer();
                     }
                 } else if(item.type.equals("Weapon")) {
-
+                    if(item.name.contains("Sword")) {
+                        player.attack();
+                    }
                 }
             }
         }
