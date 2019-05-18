@@ -32,7 +32,7 @@ public class Main extends Game {
     @Override
     public void render() {
         super.render();
-        if(TimeUtils.millis() - startTime <= 3000) {
+        if(TimeUtils.millis() - startTime <= 1000) {
             batch.begin();
             Gdx.gl.glClearColor(0f, 0f, 0f, 1);
             logo.draw(batch);

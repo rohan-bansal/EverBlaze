@@ -26,9 +26,9 @@ public class Player {
     private boolean flip;
 
     private Item swordClone;
-    private Sprite slash;
-
+    private Sprite slash_left, slash_right;
     public boolean renderSlash = false;
+    private float slashTime = 0;
 
     public int hearts = 10;
     public int health = 8;
@@ -50,7 +50,8 @@ public class Player {
         idle = new Texture(Gdx.files.internal("Character/knight-idle.png"));
         running = new Texture(Gdx.files.internal("Character/knight-walk.png"));
 
-        slash = new Sprite(new Texture(Gdx.files.internal("Character/slash.png")));
+        slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left.png")));
+        slash_right = new Sprite(new Texture(Gdx.files.internal("Character/slash_right.png")));
 
         currentFrame = idle;
 
@@ -76,7 +77,6 @@ public class Player {
 
         box.x = position.x;
         box.y = position.y;
-
     }
 
     private void processCollision() {
@@ -90,7 +90,6 @@ public class Player {
         if(inventory_.inventory.size() != 0) {
             if (inventory_.slotSelected - 1 < inventory_.inventory.size()) {
                 Item item = inventory_.inventory.get(inventory_.slotSelected - 1);
-                Gdx.app.log("PLAYER", item.name);
                 if(item.name.contains("Sword")) {
                     swordClone = new Item(item.name, item.spritePath, item.type, item.description);
                     swordClone.sprite.setSize(16, 16);
@@ -103,18 +102,22 @@ public class Player {
         }
         if(swordClone != null) {
             if(horiDirection.equals("left")) {
-                swordClone.sprite.setCenter(Math.round(position.x), Math.round(position.y + (HEIGHT / 2)));
+                swordClone.sprite.setCenter(Math.round(position.x + 2), Math.round(position.y + (HEIGHT / 2)));
+                swordClone.sprite.rotate(-20);
             } else if(horiDirection.equals("right")) {
-                swordClone.sprite.setCenter(Math.round(position.x + WIDTH), Math.round(position.y + (HEIGHT / 2)));
+                swordClone.sprite.setCenter(Math.round(position.x + WIDTH - 4), Math.round(position.y + (HEIGHT / 2) + 5));
+                swordClone.sprite.rotate(20);
             }
         }
     }
 
     public void attack() {
         renderSlash = true;
+        slashTime = 0f;
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
+        slashTime += Gdx.graphics.getDeltaTime();
 
         flip = (horiDirection.equals("left"));
 
@@ -123,11 +126,28 @@ public class Player {
         batch.draw(currentFrame, flip ? position.x + WIDTH : position.x, position.y, flip ? -WIDTH : WIDTH, HEIGHT);
 
         if(swordClone != null) {
-            if(flip) {
-            } else {
+            if(!flip) {
                 swordClone.sprite.setFlip(true, false);
             }
+            if(renderSlash) {
+                if(flip) {
+                    slash_left.setPosition(position.x - 14, position.y - 2);
+                    swordClone.sprite.rotate90(false);
+                    swordClone.sprite.setY(swordClone.sprite.getY() - 10);
+                    slash_left.draw(batch);
+                    swordClone.render(batch);
+                } else {
+                    slash_right.setPosition(position.x + 14, position.y - 2);
+                    swordClone.sprite.rotate90(true);
+                    swordClone.sprite.setY(swordClone.sprite.getY() - 10);
+                    slash_right.draw(batch);
+                    swordClone.render(batch);
+                }
+            }
             swordClone.render(batch);
+        }
+        if(renderSlash && slashTime > 0.25f) {
+            renderSlash = false;
         }
 
         batch.end();
