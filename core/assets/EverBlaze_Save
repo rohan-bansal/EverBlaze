@@ -3,8 +3,8 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 830
-	y: 1814
+	x: 624
+	y: 1742
 }
 inventory: [
 	{
@@ -21,7 +21,7 @@ inventory: [
 	}
 ]
 onFloor: []
-slotSelected: 2
+slotSelected: 1
 health: 10
 hearts: 10
 }

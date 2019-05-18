@@ -90,12 +90,15 @@ public class Player {
         if(inventory_.inventory.size() != 0) {
             if (inventory_.slotSelected - 1 < inventory_.inventory.size()) {
                 Item item = inventory_.inventory.get(inventory_.slotSelected - 1);
+                Gdx.app.log("PLAYER", item.name);
                 if(item.name.contains("Sword")) {
                     swordClone = new Item(item.name, item.spritePath, item.type, item.description);
                     swordClone.sprite.setSize(16, 16);
                 } else {
                     swordClone = null;
                 }
+            } else {
+                swordClone = null;
             }
         }
         if(swordClone != null) {
