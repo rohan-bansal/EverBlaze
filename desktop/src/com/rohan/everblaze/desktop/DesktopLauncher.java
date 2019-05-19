@@ -13,6 +13,7 @@ public class DesktopLauncher {
 		config.title = "EverBlaze";
 		config.width = 1000;
 		config.height = 800;
+		config.resizable = false;
 		config.addIcon("UI/icon.png", Files.FileType.Internal);
 		new LwjglApplication(new Main(), config);
 	}

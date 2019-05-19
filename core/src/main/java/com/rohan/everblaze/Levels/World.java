@@ -13,6 +13,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.*;
+import main.java.com.rohan.everblaze.Entities.Evil.Goblin;
+import main.java.com.rohan.everblaze.Entities.Evil.Skeleton;
+import main.java.com.rohan.everblaze.Entities.Evil.Slime;
+import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.ControllerLib.FollowCam;
 import main.java.com.rohan.everblaze.ControllerLib.PS3_Controller;
@@ -231,7 +235,10 @@ public class World implements Screen {
     }
 
     private void loadEnemies() {
-        enemies.add(new Blob("Slime_1", Classifier.Slime, 300, 1280, new MovementScript("upDown3")));
+        enemies.add(new Slime("Slime_1", Classifier.Green_Slime, 300, 1280, new MovementScript("clockwise_2x2")));
+        enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 250, 1280, new MovementScript("clockwise_2x2")));
+        //enemies.add(new Goblin("Goblin_1", Classifier.Goblin, 200, 1280, new MovementScript("clockwise_2x2")));
+
     }
 
     private void loadMusic() {

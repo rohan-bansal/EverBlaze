@@ -6,12 +6,9 @@ import java.util.ArrayList;
 
 public class MovementScript {
 
-    private int pixelsUp;
-    private int pixelsDown;
-    private int pixelsRight;
-    private int pixelsLeft;
 
     private int intervalTime;
+    private int stopTime;
 
     private ArrayList<String> sequence = new ArrayList<String>();
 
@@ -29,72 +26,63 @@ public class MovementScript {
     }
 
     private void clockwise2by2() {
-        pixelsUp = 32;
-        pixelsDown = 32;
-        pixelsRight = 32;
-        pixelsLeft = 32;
 
         sequence.clear();
         sequence.add("Up");
+        sequence.add("Stop");
         sequence.add("Right");
+        sequence.add("Stop");
         sequence.add("Down");
+        sequence.add("Stop");
         sequence.add("Left");
+        sequence.add("Stop");
 
-        intervalTime = 2;
+        intervalTime = 3;
+        stopTime = 2;
     }
 
     private void counterClockwise2by2() {
-        pixelsUp = 32;
-        pixelsDown = 32;
-        pixelsRight = 32;
-        pixelsLeft = 32;
 
         sequence.clear();
         sequence.add("Down");
-        sequence.add("Rightme");
+        sequence.add("Stop");
+        sequence.add("Right");
+        sequence.add("Stop");
         sequence.add("Up");
+        sequence.add("Stop");
         sequence.add("Left");
+        sequence.add("Stop");
 
-        intervalTime = 2;
+
+        intervalTime = 3;
+        stopTime = 2;
     }
 
     private void upDown3() {
-        pixelsUp = 48;
-        pixelsDown = 48;
 
         sequence.clear();
         sequence.add("Up");
+        sequence.add("Stop");
         sequence.add("Down");
+        sequence.add("Stop");
 
-        intervalTime = 1;
+        intervalTime = 4;
+        stopTime = 2;
     }
 
     private void leftRight3() {
-        pixelsRight = 48;
-        pixelsLeft = 48;
 
         sequence.clear();
         sequence.add("Right");
+        sequence.add("Stop");
         sequence.add("Left");
+        sequence.add("Stop");
 
-        intervalTime = 1;
+
+        intervalTime = 4;
+        stopTime = 2;
     }
 
-    public int getPixelsUp() {
-        return pixelsUp;
-    }
-
-    public int getPixelsDown() {
-        return pixelsDown;
-    }
-
-    public int getPixelsRight() {
-        return pixelsRight;
-    }
-
-    public int getPixelsLeft() {
-        return pixelsLeft;
-    }
 
     public int getIntervalTime() {
         return intervalTime;
@@ -102,5 +90,9 @@ public class MovementScript {
 
     public ArrayList<String> getSequence() {
         return sequence;
+    }
+
+    public int getStopTime() {
+        return stopTime;
     }
 }
