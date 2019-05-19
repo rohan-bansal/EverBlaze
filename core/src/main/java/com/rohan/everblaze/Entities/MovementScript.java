@@ -14,18 +14,22 @@ public class MovementScript {
 
     public MovementScript(String type) {
 
-        if(type.equals("clockwise_2x2")) {
-            clockwise2by2();
-        } else if(type.equals("counterClockwise_2x2")) {
-            counterClockwise2by2();
-        } else if(type.equals("upDown3")) {
-            upDown3();
-        } else if(type.equals("leftRight3")) {
-            leftRight3();
+        if(type.contains("clockwise") && !type.contains("counter")) {
+            String[] params = type.split("_")[1].split("x");
+            clockwise(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+        } else if(type.contains("counter") && type.contains("clockwise")) {
+            String[] params = type.split("_")[1].split("x");
+            counterClockwise(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+        } else if(type.contains("upDown")) {
+            String[] params = type.split("_")[1].split("x");
+            upDown(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+        } else if(type.contains("leftRight")) {
+            String[] params = type.split("_")[1].split("x");
+            leftRight(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
         }
     }
 
-    private void clockwise2by2() {
+    private void clockwise(int inteT, int stopT) {
 
         sequence.clear();
         sequence.add("Up");
@@ -37,11 +41,11 @@ public class MovementScript {
         sequence.add("Left");
         sequence.add("Stop");
 
-        intervalTime = 3;
-        stopTime = 2;
+        intervalTime = inteT;
+        stopTime = stopT;
     }
 
-    private void counterClockwise2by2() {
+    private void counterClockwise(int inteT, int stopT) {
 
         sequence.clear();
         sequence.add("Down");
@@ -54,11 +58,11 @@ public class MovementScript {
         sequence.add("Stop");
 
 
-        intervalTime = 3;
-        stopTime = 2;
+        intervalTime = inteT;
+        stopTime = stopT;
     }
 
-    private void upDown3() {
+    private void upDown(int inteT, int stopT) {
 
         sequence.clear();
         sequence.add("Up");
@@ -66,11 +70,11 @@ public class MovementScript {
         sequence.add("Down");
         sequence.add("Stop");
 
-        intervalTime = 4;
-        stopTime = 2;
+        intervalTime = inteT;
+        stopTime = stopT;
     }
 
-    private void leftRight3() {
+    private void leftRight(int inteT, int stopT) {
 
         sequence.clear();
         sequence.add("Right");
@@ -79,8 +83,8 @@ public class MovementScript {
         sequence.add("Stop");
 
 
-        intervalTime = 4;
-        stopTime = 2;
+        intervalTime = inteT;
+        stopTime = stopT;
     }
 
 

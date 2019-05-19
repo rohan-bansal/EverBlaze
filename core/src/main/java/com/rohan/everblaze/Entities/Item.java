@@ -18,13 +18,19 @@ public class Item implements Json.Serializable {
     public Sprite sprite;
     public String type;
     public String description;
-    public String position;
+    public int damage;
 
-    public Item(String name, String path, String type, String description) {
+    public Item(String name, String path, String type, String description, int... damage) {
         this.name = name;
         this.spritePath = path;
         this.type = type;
         this.description = description;
+
+        if(damage.length > 0) {
+            this.damage = damage[0];
+        } else {
+            this.damage = 0;
+        }
         setSprite();
     }
 
@@ -90,6 +96,9 @@ public class Item implements Json.Serializable {
         json.writeValue("spritePath", spritePath);
         json.writeValue("type", type);
         json.writeValue("description", description);
+        if(damage != 0) {
+            json.writeValue("damage", damage);
+        }
         if(World.onFloor.contains(this)) {
             json.writeValue("position", new Float[] {sprite.getX(), sprite.getY()});
         }
@@ -101,7 +110,9 @@ public class Item implements Json.Serializable {
         spritePath = jsonData.getString("spritePath");
         type = jsonData.getString("type");
         description = jsonData.getString("description");
-
+        if(type.equals("Weapon")) {
+            damage = Integer.parseInt(jsonData.getString("damage"));
+        }
         setSprite();
 
         if(jsonData.has("position")) {

@@ -130,8 +130,10 @@ public class TitleScreen implements Screen {
                 music.stop();
                 game.setScreen(new World(game, false));
             } else if(options.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                music.stop();
                 game.setScreen(new Options(game, false));
             } else if(about.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                music.stop();
                 game.setScreen(new About(game));
             } else if(loadGame.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 music.stop();

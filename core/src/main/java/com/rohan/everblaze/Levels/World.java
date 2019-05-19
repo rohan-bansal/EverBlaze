@@ -13,10 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.*;
-import main.java.com.rohan.everblaze.Entities.Evil.Goblin;
-import main.java.com.rohan.everblaze.Entities.Evil.Skeleton;
-import main.java.com.rohan.everblaze.Entities.Evil.Slime;
-import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
+import main.java.com.rohan.everblaze.Entities.Evil.*;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.ControllerLib.FollowCam;
 import main.java.com.rohan.everblaze.ControllerLib.PS3_Controller;
@@ -117,7 +114,9 @@ public class World implements Screen {
         debugger = new Debugger(player);
 
         loadMusic();
-        levelMusic.play();
+        if(gameManager.data.isMusicOn()) {
+            levelMusic.play();
+        }
     }
 
     @Override
@@ -227,7 +226,7 @@ public class World implements Screen {
     }
 
     private void createItems() {
-        Item sword = new Item("Sword", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.");
+        Item sword = new Item("Sword", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
         sword.loadCoords(360, 1280);
         sword.sprite.setSize(16, 16);
         onFloor.add(sword);
@@ -235,10 +234,12 @@ public class World implements Screen {
     }
 
     private void loadEnemies() {
-        enemies.add(new Slime("Slime_1", Classifier.Green_Slime, 300, 1280, new MovementScript("clockwise_2x2")));
-        enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 250, 1280, new MovementScript("clockwise_2x2")));
+        enemies.add(new Slime("Slime_1", Classifier.Green_Slime, 350, 1280, new MovementScript("counterclockwise_4x2")));
+        //enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 200, 1280, new MovementScript("upDown_7x0")));
+        //enemies.add(new Skeleton("Skeleton_2", Classifier.Skeleton, 250, 1280, new MovementScript("clockwise_6x0")));
+        enemies.add(new Skeleton("Skeleton_3", Classifier.Skeleton, 300, 1280, new MovementScript("clockwise_5x2")));
         //enemies.add(new Goblin("Goblin_1", Classifier.Goblin, 200, 1280, new MovementScript("clockwise_2x2")));
-
+        Gdx.app.log("World", "Enemies Loaded");
     }
 
     private void loadMusic() {

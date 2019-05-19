@@ -49,6 +49,7 @@ public class Enemy {
         this.sequence = script.getSequence();
         currentSequenceItem = 0;
 
+        Gdx.app.log("Enemy", name + " : " + script.getIntervalTime() + " : " + script.getStopTime());
     }
 
     public void render(SpriteBatch batch) {
@@ -104,7 +105,7 @@ public class Enemy {
                 }
             }
         } else if(current.equals("Stop")) {
-            if(elapsedTime <= script.getIntervalTime()) {
+            if(elapsedTime <= script.getStopTime()) {
                 animState = 0;
             } else {
                 elapsedTime = 0f;
