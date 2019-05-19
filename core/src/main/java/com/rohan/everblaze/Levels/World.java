@@ -12,13 +12,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
-import main.java.com.rohan.everblaze.Entities.Classifier;
-import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.Entities.*;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.ControllerLib.FollowCam;
 import main.java.com.rohan.everblaze.ControllerLib.PS3_Controller;
 import main.java.com.rohan.everblaze.Debugger;
-import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
@@ -43,6 +41,7 @@ public class World implements Screen {
     public static Sound_Effects levelMusic;
     public static ScreenText drawManager;
 
+    public static ArrayList<Enemy> enemies;
     public static ArrayList<Item> onFloor;
 
     private boolean pauseMenuActive = false;
@@ -65,6 +64,7 @@ public class World implements Screen {
         player = new Player(580, 1300);
 
         onFloor = new ArrayList<Item>();
+        enemies = new ArrayList<Enemy>();
 
         options = new Sprite(new Texture(Gdx.files.internal("UI/pause-options.png")));
         save_quit = new Sprite(new Texture(Gdx.files.internal("UI/save-quit.png")));
@@ -79,6 +79,7 @@ public class World implements Screen {
         overwrite.setCenter(500, 600);
 
         createItems();
+        loadEnemies();
 
         gameManager = new GameManager(player);
         if(loadData) {
@@ -141,6 +142,9 @@ public class World implements Screen {
             batch.begin();
             for(Item item : onFloor) {
                 item.render(batch);
+            }
+            for(Enemy enemy : enemies) {
+                enemy.render(batch);
             }
             batch.end();
 
@@ -224,6 +228,10 @@ public class World implements Screen {
         sword.sprite.setSize(16, 16);
         onFloor.add(sword);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
+    }
+
+    private void loadEnemies() {
+        enemies.add(new Blob("Slime_1", Classifier.Slime, 300, 1280, new MovementScript("upDown3")));
     }
 
     private void loadMusic() {
