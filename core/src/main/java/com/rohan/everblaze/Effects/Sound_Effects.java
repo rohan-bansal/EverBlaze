@@ -2,6 +2,7 @@ package main.java.com.rohan.everblaze.Effects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class Sound_Effects {
 

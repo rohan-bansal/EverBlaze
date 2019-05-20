@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
+import main.java.com.rohan.everblaze.Levels.World;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class Enemy {
     public float speed;
     public int damage;
     private String type;
+    public boolean hit = false;
 
     private String name;
     private MovementScript script;
@@ -26,11 +28,10 @@ public class Enemy {
     public Animation<TextureRegion> idleAnim;
 
     private int animState = 0;
-    private TextureRegion currentFrame;
+    public TextureRegion currentFrame;
     private String horizDirection;
 
-    private Sprite sprite;
-    private Vector2 position;
+    public Vector2 position;
     private ArrayList<String> sequence;
     private int currentSequenceItem;
 
@@ -55,8 +56,6 @@ public class Enemy {
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
 
-        move();
-
         switch(animState) {
             case 0:
                 currentFrame = idleAnim.getKeyFrame(stateTime, true);
@@ -72,6 +71,17 @@ public class Enemy {
         boolean flip = (horizDirection.equals("left"));
         batch.draw(currentFrame, flip ? position.x + currentFrame.getRegionWidth() : position.x, position.y, flip ? -currentFrame.getRegionWidth() : currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
         //batch.draw(currentFrame, position.x, position.y);
+
+        move();
+    }
+
+    public boolean takeDamage(int damage) {
+        health -= damage;
+
+        if(health <= 0) {
+            return true;
+        }
+        return false;
     }
 
     public void move() {
@@ -86,15 +96,24 @@ public class Enemy {
             if(elapsedTime <= script.getIntervalTime()) {
                 animState = 1;
                 if(current.equals("Up")) {
-                    position.y += speed;
+                    if(!World.detector.EnemycollisionAt(this, Math.round(position.x), Math.round(position.y + 5)).equals("obstacle")) {
+                        position.x += speed;
+                    }
                 } else if(current.equals("Down")) {
-                    position.y -= speed;
+                    if(!World.detector.EnemycollisionAt(this, Math.round(position.x), Math.round(position.y - 5)).equals("obstacle")) {
+                        position.y -= speed;
+                    }
                 } else if(current.equals("Left")) {
-                    horizDirection = "left";
-                    position.x -= speed;
+                    if(!World.detector.EnemycollisionAt(this, Math.round(position.x - 5), Math.round(position.y)).equals("obstacle")) {
+                        horizDirection = "left";
+                        position.x -= speed;
+                    }
                 } else if(current.equals("Right")) {
-                    horizDirection = "right";
-                    position.x += speed;
+                    if(!World.detector.EnemycollisionAt(this, Math.round(position.x + 5), Math.round(position.y)).equals("obstacle")) {
+                        horizDirection = "right";
+                        position.x += speed;
+                    }
+
                 }
             } else {
                 elapsedTime = 0f;
@@ -122,5 +141,9 @@ public class Enemy {
     }
 
     public void attack() {
+    }
+
+    public String getName() {
+        return name;
     }
 }

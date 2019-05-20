@@ -15,20 +15,28 @@ public class Slime extends Enemy {
 
     public Slime(String name, String type, int x, int y, MovementScript script) {
         super(name, type, x, y, script);
-        super.health = 2;
-        super.hearts = 2;
-        super.speed = 0.2f;
-        super.damage = 1;
 
         if(type.equals(Classifier.Green_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/green_slime_attack.png"));
             idleSheet = new Texture(Gdx.files.internal("Entities/Slime/green_slime_idle.png"));
+            super.health = 2;
+            super.hearts = 2;
+            super.speed = 0.2f;
+            super.damage = 1;
         } else if(type.equals(Classifier.Orange_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/orange_slime_attack.png"));
             idleSheet = new Texture(Gdx.files.internal("Entities/Slime/orange_slime_idle.png"));
+            super.health = 3;
+            super.hearts = 3;
+            super.speed = 0.2f;
+            super.damage = 2;
         } else if(type.equals(Classifier.Purple_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/purple_slime_attack.png"));
             idleSheet = new Texture(Gdx.files.internal("Entities/Slime/purple_slime_idle.png"));
+            super.health = 4;
+            super.hearts = 4;
+            super.speed = 0.2f;
+            super.damage = 3;
         }
 
         constructAnimation();

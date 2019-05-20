@@ -2,6 +2,8 @@ package main.java.com.rohan.everblaze.TileInteraction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
 import main.java.com.rohan.everblaze.Entities.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
@@ -59,6 +62,32 @@ public class CollisionDetector {
             }
         }
         return "none";
+    }
+
+    public String EnemycollisionAt(Enemy enemy, int x, int y) {
+        Rectangle futureEntity = new Rectangle(x, y, enemy.currentFrame.getRegionWidth(), enemy.currentFrame.getRegionHeight());
+
+        for(RectangleMapObject obj : objects.getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = obj.getRectangle();
+
+            if (Intersector.overlaps(rectangle, futureEntity)) {
+                if(Arrays.asList(obstacles).contains(obj.getName())) {
+                    return "obstacle";
+                }
+            }
+        }
+        return "none";
+    }
+
+    public boolean EnemycollisionWith(Item item, Enemy enemy) {
+        Rectangle item_ = new Rectangle(item.sprite.getX(), item.sprite.getY(), item.sprite.getTexture().getWidth(), item.sprite.getTexture().getHeight());
+        Rectangle enemy_ = new Rectangle(enemy.position.x, enemy.position.y, enemy.currentFrame.getRegionWidth(), enemy.currentFrame.getRegionHeight());
+        if (Intersector.overlaps(item_, enemy_)) {
+            //Gdx.app.log("", "Player Rect: " + item_.getX() + " " + item_.getY() + " " + item_.getWidth() + " " + item_.getHeight() + " | Enemy Rect: " + enemy_.getX() + " " + enemy_.getY() +
+            //        " " + enemy_.getWidth() + " " + enemy_.getHeight());
+            return true;
+        }
+        return false;
     }
 
     public Item itemCollision(boolean debug) {

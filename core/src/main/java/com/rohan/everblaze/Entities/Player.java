@@ -2,12 +2,14 @@ package main.java.com.rohan.everblaze.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.Inventory;
 
@@ -15,7 +17,7 @@ public class Player {
 
     public Texture currentFrame, running, idle;
 
-    private float speed = 2;
+    private float speed = 1.5f;
     private boolean runTemp = false;
 
     public Vector2 position;
@@ -25,13 +27,17 @@ public class Player {
 
     private boolean flip;
 
-    private Item swordClone;
+    public Item swordClone;
     private Sprite slash_left, slash_right;
     public boolean renderSlash = false;
     private float slashTime = 0;
+    public int cooldown = 0;
+
+    private Sound_Effects effect_slash;
+    public Sound_Effects effect_eat;
 
     public int hearts = 10;
-    public int health = 8;
+    public int health = 10;
 
     private Rectangle box;
     public String horiDirection = "right";
@@ -50,8 +56,10 @@ public class Player {
         idle = new Texture(Gdx.files.internal("Character/knight-idle.png"));
         running = new Texture(Gdx.files.internal("Character/knight-walk.png"));
 
-        slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left.png")));
-        slash_right = new Sprite(new Texture(Gdx.files.internal("Character/slash_right.png")));
+        slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left2.png")));
+        slash_right = new Sprite(new Texture(Gdx.files.internal("Character/slash_right2.png")));
+        effect_slash = new Sound_Effects("sword_slash2", false);
+        effect_eat = new Sound_Effects("eat_food", false);
 
         currentFrame = idle;
 
@@ -112,6 +120,7 @@ public class Player {
     }
 
     public void attack() {
+        effect_slash.play();
         renderSlash = true;
         slashTime = 0f;
     }
@@ -136,17 +145,24 @@ public class Player {
                     swordClone.sprite.setY(swordClone.sprite.getY() - 10);
                     slash_left.draw(batch);
                     swordClone.render(batch);
+                    if(cooldown == 0) {
+                        cooldown = 1;
+                    }
                 } else {
                     slash_right.setPosition(position.x + 14, position.y - 2);
                     swordClone.sprite.rotate90(true);
                     swordClone.sprite.setY(swordClone.sprite.getY() - 10);
                     slash_right.draw(batch);
                     swordClone.render(batch);
+                    if(cooldown == 0) {
+                        cooldown = 1;
+                    }
                 }
             }
             swordClone.render(batch);
         }
-        if(renderSlash && slashTime > 0.25f) {
+        if(renderSlash && slashTime > 0.2f) {
+            cooldown = 0;
             renderSlash = false;
         }
 

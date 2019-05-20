@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -32,6 +33,8 @@ public class World implements Screen {
     private SpriteBatch pauseBatch;
     private SpriteBatch overwriteBatch;
     private SpriteBatch itemBatch;
+
+    private ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 
     public static CollisionDetector detector;
     private HUD hud;
@@ -114,7 +117,7 @@ public class World implements Screen {
         debugger = new Debugger(player);
 
         loadMusic();
-        if(gameManager.data.isMusicOn()) {
+        if(gameManager.data.isMusicOn() || !loadData) {
             levelMusic.play();
         }
     }
@@ -148,11 +151,26 @@ public class World implements Screen {
             }
             for(Enemy enemy : enemies) {
                 enemy.render(batch);
+                if(!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.swordClone, enemy)) {
+                    enemy.hit = true;
+                    Gdx.app.log("Player", "Hit Enemy: " + enemy.getName()); // TODO enemy hit --------------------------------------------------------------------------------
+                    if(enemy.takeDamage(player.inventory_.itemSelected.damage)) {
+                        enemiesToRemove.add(enemy);
+                    }
+                }
+                if(player.cooldown == 0) {
+                    enemy.hit = false;
+                }
             }
             batch.end();
 
             player.render(batch, cam.camera);
             hud.render();
+
+            for(Enemy enemy : enemiesToRemove) {
+                enemies.remove(enemy);
+            }
+            enemiesToRemove.clear();
         }
 
     }
@@ -227,17 +245,18 @@ public class World implements Screen {
 
     private void createItems() {
         Item sword = new Item("Sword", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
-        sword.loadCoords(360, 1280);
+        sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
+
         onFloor.add(sword);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
     }
 
     private void loadEnemies() {
-        enemies.add(new Slime("Slime_1", Classifier.Green_Slime, 350, 1280, new MovementScript("counterclockwise_4x2")));
-        //enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 200, 1280, new MovementScript("upDown_7x0")));
-        //enemies.add(new Skeleton("Skeleton_2", Classifier.Skeleton, 250, 1280, new MovementScript("clockwise_6x0")));
-        enemies.add(new Skeleton("Skeleton_3", Classifier.Skeleton, 300, 1280, new MovementScript("clockwise_5x2")));
+        enemies.add(new Slime("Slime_1", Classifier.Orange_Slime, 1093, 1087, new MovementScript("counterclockwise_1x2")));
+        enemies.add(new Slime("Slime_2", Classifier.Green_Slime, 1138, 926, new MovementScript("leftRight_2x2")));
+        enemies.add(new Slime("Slime_3", Classifier.Orange_Slime, 1256, 779, new MovementScript("counterclockwise_1x2")));
+        enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 1115, 1215, new MovementScript("leftRight_2x2")));
         //enemies.add(new Goblin("Goblin_1", Classifier.Goblin, 200, 1280, new MovementScript("clockwise_2x2")));
         Gdx.app.log("World", "Enemies Loaded");
     }

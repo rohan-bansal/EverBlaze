@@ -21,6 +21,7 @@ public class Inventory {
     private Player player;
     public ArrayList<Item> inventory;
     public int slotSelected = 1;
+    public Item itemSelected;
     public ArrayList<Sprite> slots;
     private SpriteBatch slotBatch;
     private float slotX = 300;
@@ -83,6 +84,17 @@ public class Inventory {
             inventory.get(x).render(slotBatch);
         }
         slotBatch.end();
+
+        if(inventory.size() != 0) {
+            if (slotSelected - 1 < inventory.size()) {
+                itemSelected = inventory.get(slotSelected - 1);
+            } else {
+                itemSelected = null;
+            }
+        } else {
+            itemSelected = null;
+        }
+
 
         World.drawManager.render(slotBatch, 3);
     }
@@ -158,6 +170,7 @@ public class Inventory {
                         if(player.health > player.hearts) {
                             player.health = 10;
                         }
+                        player.effect_eat.play();
                         inventory.remove(item);
                         refreshInventory();
                     } else {
