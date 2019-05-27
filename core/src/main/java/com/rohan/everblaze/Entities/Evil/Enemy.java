@@ -1,6 +1,7 @@
 package main.java.com.rohan.everblaze.Entities.Evil;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -63,7 +64,7 @@ public class Enemy {
         currentSequenceItem = 0;
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, OrthographicCamera... camera) {
         stateTime += Gdx.graphics.getDeltaTime();
 
         if(hasDied) {
@@ -140,7 +141,7 @@ public class Enemy {
         return false;
     }
 
-    private void die() {
+    public void die() {
         animState = 3;
 
         if(reachedLastDieFrame) {

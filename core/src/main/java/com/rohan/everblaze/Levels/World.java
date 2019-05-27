@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -24,6 +23,7 @@ import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class World implements Screen {
 
@@ -32,14 +32,14 @@ public class World implements Screen {
     private SpriteBatch batch;
     private SpriteBatch pauseBatch;
     private SpriteBatch overwriteBatch;
-    private SpriteBatch itemBatch;
+    //private SpriteBatch itemBatch;
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
 
     public static CollisionDetector detector;
     private HUD hud;
-    private FollowCam cam;
+    public static FollowCam cam;
     private Player player;
     private Debugger debugger;
     public GameManager gameManager;
@@ -65,7 +65,7 @@ public class World implements Screen {
         batch = new SpriteBatch();
         pauseBatch = new SpriteBatch();
         overwriteBatch = new SpriteBatch();
-        itemBatch = new SpriteBatch();
+        //itemBatch = new SpriteBatch();
         player = new Player(580, 1300);
 
         onFloor = new ArrayList<Item>();
@@ -158,19 +158,32 @@ public class World implements Screen {
             }
             for(Enemy enemy : enemies) {
                 enemy.render(batch);
-                if(!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.swordClone, enemy)) {
-                    enemy.hit = true;
-                    Gdx.app.log("Player", "Hit Enemy: " + enemy.getName()); // TODO enemy hit --------------------------------------------------------------------------------
-                    enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                if(player.swordClone != null) {
+                    if(!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.swordClone, enemy)) {
+                        enemy.hit = true;
+                        Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
+                        enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                    }
+                    if(player.cooldown == 0) {
+                        enemy.hit = false;
+                    }
+                } else if(player.spearClone != null) {
+                    if (!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.spearClone, enemy)) {
+                        enemy.hit = true;
+                        Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
+                        enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                    }
+                    if (player.cooldown == 0) {
+                        enemy.hit = false;
+                    }
                 }
-                if(player.cooldown == 0) {
-                    enemy.hit = false;
-                }
+
             }
             batch.end();
 
             player.render(batch, cam.camera);
             hud.render();
+            debugger.renderDebugBoxes(enemies, onFloor);
 
             for(Enemy enemy : enemiesToRemove) {
                 enemies.remove(enemy);
@@ -255,11 +268,16 @@ public class World implements Screen {
     }
 
     private void createItems() {
-        Item sword = new Item("Sword", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
+        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
         sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
 
+        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, "A typical adventurer's spear. Deals 2 damage per hit.", 10);
+        spear.loadCoords(772, 1380);
+        spear.sprite.setSize(16, 16);
+
         onFloor.add(sword);
+        onFloor.add(spear);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
     }
 

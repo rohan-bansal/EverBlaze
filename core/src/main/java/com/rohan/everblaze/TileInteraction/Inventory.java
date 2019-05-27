@@ -180,7 +180,9 @@ public class Inventory {
                         World.drawManager.resetTimer();
                     }
                 } else if(item.type.equals("Weapon")) {
-                    if(item.name.contains("Sword")) {
+                    if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
+                    item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword")
+                    || item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("halberd") || item.name.toLowerCase().contains("trident")) {
                         player.attack();
                     }
                 }

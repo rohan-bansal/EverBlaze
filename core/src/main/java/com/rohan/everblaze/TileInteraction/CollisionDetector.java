@@ -1,10 +1,6 @@
 package main.java.com.rohan.everblaze.TileInteraction;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -83,13 +79,13 @@ public class CollisionDetector {
         if(player_.length > 0) {
             Rectangle enemy_ = enemy.getRect();
             Rectangle player__ = player.getRectangle();
-            if (Intersector.overlaps(player__, enemy_)) {
+            if (enemy_.overlaps(player__)) {
                 return true;
             }
         } else {
-            Rectangle item_ = new Rectangle(item.sprite.getX(), item.sprite.getY(), item.sprite.getTexture().getWidth(), item.sprite.getTexture().getHeight());
+            Rectangle item_ = item.sprite.getBoundingRectangle();
             Rectangle enemy_ = enemy.getRect();
-            if (Intersector.overlaps(item_, enemy_)) {
+            if (item_.overlaps(enemy_)) {
                 return true;
             }
         }
@@ -102,7 +98,7 @@ public class CollisionDetector {
         enemy_.height += distance;
         enemy_.width += distance;
         enemy_.setCenter(enemy.position.x - (enemy.currentFrame.getRegionWidth() / 2), enemy.position.y - (enemy.currentFrame.getRegionHeight() / 2));
-        if (Intersector.overlaps(enemy_, player_)) {
+        if (enemy_.overlaps(player_)) {
             return true;
         }
         return false;
@@ -110,7 +106,7 @@ public class CollisionDetector {
 
     public Item itemCollision(boolean debug) {
         for(Item item : World.onFloor) {
-            if (Intersector.overlaps(player.getRectangle(), item.sprite.getBoundingRectangle())) {
+            if (player.getRectangle().overlaps(item.sprite.getBoundingRectangle())) {
                 if(debug) {
                     Gdx.app.log("Collision Detector", "Item Collision : " + item.name);
                 }

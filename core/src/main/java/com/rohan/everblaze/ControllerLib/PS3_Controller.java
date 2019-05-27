@@ -88,11 +88,11 @@ public class PS3_Controller implements ControllerListener {
                 if (value > 0) {
                     World.movingRight = true;
                     player.horiDirection = "right";
-                    player.currentFrame = player.running;
+                    //player.currentFrame = player.running;
                 } else {
                     World.movingLeft = true;
                     player.horiDirection = "left";
-                    player.currentFrame = player.running;
+                    //player.currentFrame = player.running;
                 }
             } else {
                 World.movingRight = false;
@@ -103,11 +103,11 @@ public class PS3_Controller implements ControllerListener {
             if(value > 0.2f || value < -0.2f) {
                 if(value < 0) {
                     World.movingUp = true;
-                    player.currentFrame = player.running;
+                    //player.currentFrame = player.running;
 
                 } else {
                     World.movingDown = true;
-                    player.currentFrame = player.running;
+                    //player.currentFrame = player.running;
                 }
             } else {
                 World.movingUp = false;
