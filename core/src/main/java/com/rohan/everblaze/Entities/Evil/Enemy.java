@@ -61,8 +61,6 @@ public class Enemy {
 
         this.sequence = script.getSequence();
         currentSequenceItem = 0;
-
-        Gdx.app.log("Enemy", name + " : " + script.getIntervalTime() + " : " + script.getStopTime());
     }
 
     public void render(SpriteBatch batch) {
@@ -219,14 +217,6 @@ public class Enemy {
 
         float angle = (float) Math.atan2(diffY, diffX);
 
-        if(World.detector.enemySeesPlayer(this, 15)) {
-            animState = 2;
-            if(!attackStarted) {
-                stateTime = 0f;
-                attackStarted = true;
-            }
-        }
-
         if(reachedLastAttackFrame) {
             if(World.detector.EnemycollisionWith(new Item(), this, true)) {
                 if(!playerDamaged) {
@@ -239,6 +229,19 @@ public class Enemy {
             animState = 1;
             attackStarted = false;
             reachedLastAttackFrame = false;
+        }
+
+        if(World.detector.enemySeesPlayer(this, 7)) {
+            animState = 2;
+            if(World.detector.player.position.x < position.x) {
+                horizDirection = "left";
+            } else {
+                horizDirection = "right";
+            }
+            if(!attackStarted) {
+                stateTime = 0f;
+                attackStarted = true;
+            }
         }
 
         if(animState != 2) {
