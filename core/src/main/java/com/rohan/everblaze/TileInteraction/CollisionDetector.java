@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 public class CollisionDetector {
 
-    private Player player;
+    public Player player;
     private TiledMap map;
     private MapObjects objects;
 
@@ -81,10 +81,22 @@ public class CollisionDetector {
 
     public boolean EnemycollisionWith(Item item, Enemy enemy) {
         Rectangle item_ = new Rectangle(item.sprite.getX(), item.sprite.getY(), item.sprite.getTexture().getWidth(), item.sprite.getTexture().getHeight());
-        Rectangle enemy_ = new Rectangle(enemy.position.x, enemy.position.y, enemy.currentFrame.getRegionWidth(), enemy.currentFrame.getRegionHeight());
+        Rectangle enemy_ = enemy.getRect();
         if (Intersector.overlaps(item_, enemy_)) {
             //Gdx.app.log("", "Player Rect: " + item_.getX() + " " + item_.getY() + " " + item_.getWidth() + " " + item_.getHeight() + " | Enemy Rect: " + enemy_.getX() + " " + enemy_.getY() +
             //        " " + enemy_.getWidth() + " " + enemy_.getHeight());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean enemySeesPlayer(Enemy enemy, int distance) {
+        Rectangle player_ = player.getRectangle();
+        Rectangle enemy_ = enemy.getRect();
+        enemy_.height += distance;
+        enemy_.width += distance;
+        enemy_.setCenter(enemy.position.x - (enemy.currentFrame.getRegionWidth() / 2), enemy.position.y - (enemy.currentFrame.getRegionHeight() / 2));
+        if (Intersector.overlaps(enemy_, player_)) {
             return true;
         }
         return false;

@@ -12,6 +12,7 @@ public class Slime extends Enemy {
 
     Texture idleSheet;
     Texture attackWalkSheet;
+    Texture dieSheet;
 
     public Slime(String name, String type, int x, int y, MovementScript script) {
         super(name, type, x, y, script);
@@ -19,6 +20,7 @@ public class Slime extends Enemy {
         if(type.equals(Classifier.Green_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/green_slime_attack.png"));
             idleSheet = new Texture(Gdx.files.internal("Entities/Slime/green_slime_idle.png"));
+            dieSheet = new Texture(Gdx.files.internal("Entities/Slime/green_slime_die.png"));
             super.health = 2;
             super.hearts = 2;
             super.speed = 0.2f;
@@ -26,6 +28,7 @@ public class Slime extends Enemy {
         } else if(type.equals(Classifier.Orange_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/orange_slime_attack.png"));
             idleSheet = new Texture(Gdx.files.internal("Entities/Slime/orange_slime_idle.png"));
+            dieSheet = new Texture(Gdx.files.internal("Entities/Slime/orange_slime_die.png"));
             super.health = 3;
             super.hearts = 3;
             super.speed = 0.2f;
@@ -33,6 +36,7 @@ public class Slime extends Enemy {
         } else if(type.equals(Classifier.Purple_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/purple_slime_attack.png"));
             idleSheet = new Texture(Gdx.files.internal("Entities/Slime/purple_slime_idle.png"));
+            //idleSheet = new Texture(Gdx.files.internal("Entities/Slime/purple_slime_die.png"));
             super.health = 4;
             super.hearts = 4;
             super.speed = 0.2f;
@@ -74,6 +78,19 @@ public class Slime extends Enemy {
 
         super.idleAnim = new Animation<TextureRegion>(0.25f, idleFrames);
 
+        TextureRegion[][] dieTMP = TextureRegion.split(dieSheet,
+                dieSheet.getWidth() / 7,
+                dieSheet.getHeight() / 1);
+
+        TextureRegion[] dieFrames = new TextureRegion[7 * 1];
+        int index4 = 0;
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 7; j++) {
+                dieFrames[index4++] = dieTMP[i][j];
+            }
+        }
+
+        super.dieAnim = new Animation<TextureRegion>(0.1f, dieFrames);
     }
 
     public void render(SpriteBatch batch) {
@@ -82,5 +99,6 @@ public class Slime extends Enemy {
 
     @Override
     public void attack() {
+        super.attack();
     }
 }

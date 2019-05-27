@@ -34,7 +34,7 @@ public class World implements Screen {
     private SpriteBatch overwriteBatch;
     private SpriteBatch itemBatch;
 
-    private ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
+    public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 
     public static CollisionDetector detector;
     private HUD hud;
@@ -154,9 +154,7 @@ public class World implements Screen {
                 if(!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.swordClone, enemy)) {
                     enemy.hit = true;
                     Gdx.app.log("Player", "Hit Enemy: " + enemy.getName()); // TODO enemy hit --------------------------------------------------------------------------------
-                    if(enemy.takeDamage(player.inventory_.itemSelected.damage)) {
-                        enemiesToRemove.add(enemy);
-                    }
+                    enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
                 }
                 if(player.cooldown == 0) {
                     enemy.hit = false;
@@ -257,7 +255,6 @@ public class World implements Screen {
         enemies.add(new Slime("Slime_2", Classifier.Green_Slime, 1138, 926, new MovementScript("leftRight_2x2")));
         enemies.add(new Slime("Slime_3", Classifier.Orange_Slime, 1256, 779, new MovementScript("counterclockwise_1x2")));
         enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 1115, 1215, new MovementScript("leftRight_2x2")));
-        //enemies.add(new Goblin("Goblin_1", Classifier.Goblin, 200, 1280, new MovementScript("clockwise_2x2")));
         Gdx.app.log("World", "Enemies Loaded");
     }
 

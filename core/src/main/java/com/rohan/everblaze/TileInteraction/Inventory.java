@@ -161,7 +161,7 @@ public class Inventory {
         if(inventory.size() != 0) {
             if(slotSelected - 1 < inventory.size()) {
                 Item item = inventory.get(slotSelected - 1);
-                Gdx.app.log("Inventory", item.type);
+                //Gdx.app.log("Inventory", item.type);
                 if(item.type.equals("Food")) {
                     if(player.health != player.hearts) {
                         String[] desc = item.description.split(" ");

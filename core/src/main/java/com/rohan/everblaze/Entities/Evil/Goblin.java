@@ -79,5 +79,6 @@ public class Goblin extends Enemy {
 
     @Override
     public void attack() {
+        super.attack();
     }
 }

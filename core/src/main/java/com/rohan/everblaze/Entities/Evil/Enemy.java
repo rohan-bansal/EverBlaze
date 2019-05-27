@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
 import main.java.com.rohan.everblaze.Levels.World;
@@ -20,12 +21,19 @@ public class Enemy {
     private String type;
     public boolean hit = false;
 
+    private boolean breakMove = false;
+
+    private boolean hasDied;
+    private boolean reachedLastDieFrame = false;
+
     private String name;
     private MovementScript script;
 
     public Animation<TextureRegion> walkAnim;
     public Animation<TextureRegion> attackAnim;
     public Animation<TextureRegion> idleAnim;
+    public Animation<TextureRegion> hitAnim;
+    public Animation<TextureRegion> dieAnim;
 
     private int animState = 0;
     public TextureRegion currentFrame;
@@ -56,6 +64,10 @@ public class Enemy {
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
 
+        if(hasDied) {
+            die();
+        }
+
         switch(animState) {
             case 0:
                 currentFrame = idleAnim.getKeyFrame(stateTime, true);
@@ -66,26 +78,72 @@ public class Enemy {
             case 2:
                 currentFrame = attackAnim.getKeyFrame(stateTime, true);
                 break;
+            case 3:
+                if(dieAnim != null) {
+                    if(!dieAnim.isAnimationFinished(stateTime)) {
+                        currentFrame = dieAnim.getKeyFrame(stateTime);
+                    } else {
+                        reachedLastDieFrame = true;
+                    }
+                } else {
+                    reachedLastDieFrame = true;
+                }
+                break;
         }
 
         boolean flip = (horizDirection.equals("left"));
         batch.draw(currentFrame, flip ? position.x + currentFrame.getRegionWidth() : position.x, position.y, flip ? -currentFrame.getRegionWidth() : currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
-        //batch.draw(currentFrame, position.x, position.y);
 
-        move();
+        if(animState != 3) {
+            if(!breakMove) {
+                move();
+            } else {
+                attack();
+            }
+        }
+
+        if(World.detector.enemySeesPlayer(this, 170)) {
+            breakMove = true;
+        } else {
+            breakMove = false;
+        }
     }
 
-    public boolean takeDamage(int damage) {
+    public Rectangle getRect() {
+        return new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+    }
+
+    public boolean takeDamage(int damage, String direction) {
         health -= damage;
 
+        if(direction.equals("left")) {
+            position.x -= 5;
+        } else {
+            position.x += 5;
+        }
+
         if(health <= 0) {
+            stateTime = 0f;
+            hasDied = true;
             return true;
         }
         return false;
     }
 
+    private void die() {
+        animState = 3;
+
+        if(reachedLastDieFrame) {
+            World.enemiesToRemove.add(this);
+        }
+    }
+
     public void move() {
         elapsedTime += Gdx.graphics.getDeltaTime();
+
+        if(hasDied) {
+            return;
+        }
 
         String current = sequence.get(currentSequenceItem);
 
@@ -141,6 +199,21 @@ public class Enemy {
     }
 
     public void attack() {
+        int diffX = Math.round(World.detector.player.position.x - position.x);
+        int diffY = Math.round(World.detector.player.position.y - position.y);
+
+        float angle = (float) Math.atan2(diffY, diffX);
+
+        position.x += speed * Math.cos(angle);
+        position.y += speed * Math.sin(angle);
+
+        if(Math.cos(angle) < 0) {
+            horizDirection = "left";
+        } else {
+            horizDirection = "right";
+        }
+
+        //Gdx.app.log(name, "" + angle);
     }
 
     public String getName() {

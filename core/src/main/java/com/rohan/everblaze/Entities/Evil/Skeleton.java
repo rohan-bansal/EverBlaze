@@ -13,17 +13,19 @@ public class Skeleton extends Enemy {
     Texture walkSheet;
     Texture idleSheet;
     Texture attackSheet;
+    Texture dieSheet;
 
     public Skeleton(String name, String type, int x, int y, MovementScript script) {
         super(name, type, x, y, script);
-        super.health = 4;
-        super.hearts = 4;
+        super.health = 10;
+        super.hearts = 10;
         super.speed = 0.3f;
         super.damage = 3;
 
         walkSheet = new Texture(Gdx.files.internal("Entities/Skeleton/skeleton_walk.png"));
         attackSheet = new Texture(Gdx.files.internal("Entities/Skeleton/skeleton_attack.png"));
         idleSheet = new Texture(Gdx.files.internal("Entities/Skeleton/skeleton_idle.png"));
+        dieSheet = new Texture(Gdx.files.internal("Entities/Skeleton/skeleton_die.png"));
 
         constructAnimation();
     }
@@ -72,6 +74,20 @@ public class Skeleton extends Enemy {
 
         super.idleAnim = new Animation<TextureRegion>(0.1f, idleFrames);
 
+        TextureRegion[][] dieTMP = TextureRegion.split(dieSheet,
+                dieSheet.getWidth() / 15,
+                dieSheet.getHeight() / 1);
+
+        TextureRegion[] dieFrames = new TextureRegion[15 * 1];
+        int index4 = 0;
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 15; j++) {
+                dieFrames[index4++] = dieTMP[i][j];
+            }
+        }
+
+        super.dieAnim = new Animation<TextureRegion>(0.1f, dieFrames);
+
     }
 
     public void render(SpriteBatch batch) {
@@ -80,5 +96,6 @@ public class Skeleton extends Enemy {
 
     @Override
     public void attack() {
+        super.attack();
     }
 }
