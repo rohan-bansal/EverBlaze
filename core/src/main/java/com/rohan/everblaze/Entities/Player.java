@@ -17,7 +17,7 @@ public class Player {
 
     public Texture currentFrame, running, idle;
 
-    private float speed = 1.5f;
+    private float speed = 0.9f;
     private boolean runTemp = false;
 
     public Vector2 position;

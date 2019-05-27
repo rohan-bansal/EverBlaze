@@ -25,6 +25,7 @@ public class Enemy {
 
     private boolean hasDied;
     private boolean reachedLastDieFrame = false;
+    private boolean reachedLastAttackFrame = false;
 
     private String name;
     private MovementScript script;
@@ -77,6 +78,14 @@ public class Enemy {
                 break;
             case 2:
                 currentFrame = attackAnim.getKeyFrame(stateTime, true);
+                if(currentFrame == attackAnim.getKeyFrames()[attackAnim.getKeyFrames().length - 1]) {
+                    reachedLastAttackFrame = true;
+                }
+                //if(!attackAnim.isAnimationFinished(stateTime)) {
+                //    currentFrame = attackAnim.getKeyFrame(stateTime);
+                //} else {
+                //    reachedLastAttackFrame = true;
+                //}
                 break;
             case 3:
                 if(dieAnim != null) {
@@ -199,19 +208,38 @@ public class Enemy {
     }
 
     public void attack() {
+
         int diffX = Math.round(World.detector.player.position.x - position.x);
         int diffY = Math.round(World.detector.player.position.y - position.y);
 
         float angle = (float) Math.atan2(diffY, diffX);
 
-        position.x += speed * Math.cos(angle);
-        position.y += speed * Math.sin(angle);
-
-        if(Math.cos(angle) < 0) {
-            horizDirection = "left";
-        } else {
-            horizDirection = "right";
+        if(World.detector.enemySeesPlayer(this, 15)) {
+            animState = 2;
         }
+
+        if(reachedLastAttackFrame) {
+            animState = 1;
+            reachedLastAttackFrame = false;
+        }
+
+        if(animState != 2) {
+            if(!World.detector.EnemycollisionAt(this, Math.round(position.x + Math.round(Math.cos(angle))), Math.round(position.y + Math.round(Math.sin(angle)))).equals("obstacle")) {
+                animState = 1;
+
+                position.x += speed * Math.cos(angle);
+                position.y += speed * Math.sin(angle);
+
+                if(Math.cos(angle) < 0) {
+                    horizDirection = "left";
+                } else {
+                    horizDirection = "right";
+                }
+            }
+        }
+
+
+
 
         //Gdx.app.log(name, "" + angle);
     }

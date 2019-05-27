@@ -26,6 +26,8 @@ public class MovementScript {
         } else if(type.contains("leftRight")) {
             String[] params = type.split("_")[1].split("x");
             leftRight(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+        } else if(type.contains("stationary")) {
+            stationary();
         }
     }
 
@@ -43,6 +45,13 @@ public class MovementScript {
 
         intervalTime = inteT;
         stopTime = stopT;
+    }
+
+    private void stationary() {
+        sequence.add("Stop");
+
+        intervalTime = 1;
+        stopTime = 1;
     }
 
     private void counterClockwise(int inteT, int stopT) {

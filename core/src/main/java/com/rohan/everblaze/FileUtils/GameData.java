@@ -18,6 +18,16 @@ public class GameData {
     private int health;
     private int hearts;
 
+    private ArrayList<String> enemiesDead;
+
+    public ArrayList<String> getEnemiesDead() {
+        return enemiesDead;
+    }
+
+    public void setEnemiesDead(ArrayList<String> enemiesDead) {
+        this.enemiesDead = enemiesDead;
+    }
+
     public ArrayList<Item> getOnFloor() {
         return onFloor;
     }

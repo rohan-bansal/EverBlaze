@@ -35,6 +35,7 @@ public class World implements Screen {
     private SpriteBatch itemBatch;
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
+    public static ArrayList<String> removedEnemies = new ArrayList<String>();
 
     public static CollisionDetector detector;
     private HUD hud;
@@ -68,7 +69,13 @@ public class World implements Screen {
         player = new Player(580, 1300);
 
         onFloor = new ArrayList<Item>();
-        enemies = new ArrayList<Enemy>();
+        enemies = new ArrayList<Enemy>() {{
+            add(new Slime("Slime_1", Classifier.Orange_Slime, 1093, 1087, new MovementScript("counterclockwise_1x2")));
+            add(new Slime("Slime_2", Classifier.Green_Slime, 1138, 926, new MovementScript("leftRight_2x2")));
+            add(new Slime("Slime_3", Classifier.Orange_Slime, 1256, 779, new MovementScript("counterclockwise_1x2")));
+            add(new Skeleton("Skeleton_1", Classifier.Skeleton, 1115, 1215, new MovementScript("leftRight_2x2")));
+            add(new Skeleton("Skeleton_2", Classifier.Skeleton, 1075, 1435, new MovementScript("stationary")));
+        }};
 
         options = new Sprite(new Texture(Gdx.files.internal("UI/pause-options.png")));
         save_quit = new Sprite(new Texture(Gdx.files.internal("UI/save-quit.png")));
@@ -83,7 +90,6 @@ public class World implements Screen {
         overwrite.setCenter(500, 600);
 
         createItems();
-        loadEnemies();
 
         gameManager = new GameManager(player);
         if(loadData) {
@@ -116,6 +122,7 @@ public class World implements Screen {
         cam = new FollowCam(player);
         debugger = new Debugger(player);
 
+        loadEnemies();
         loadMusic();
         if(gameManager.data.isMusicOn() || !loadData) {
             levelMusic.play();
@@ -167,6 +174,9 @@ public class World implements Screen {
 
             for(Enemy enemy : enemiesToRemove) {
                 enemies.remove(enemy);
+                if(!removedEnemies.contains(enemy.getName())) {
+                    removedEnemies.add(enemy.getName());
+                }
             }
             enemiesToRemove.clear();
         }
@@ -180,6 +190,7 @@ public class World implements Screen {
         gameManager.data.setHealth(player.health);
         gameManager.data.setHearts(player.hearts);
         gameManager.data.setSlotSelected(player.inventory_.slotSelected);
+        gameManager.data.setEnemiesDead(removedEnemies);
         gameManager.saveData();
     }
 
@@ -189,6 +200,8 @@ public class World implements Screen {
         player.hearts = gameManager.data.getHearts();
         player.inventory_.loadInventory(gameManager);
         player.inventory_.slotSelected = gameManager.data.getSlotSelected();
+
+        removedEnemies = gameManager.data.getEnemiesDead();
         onFloor = gameManager.data.getOnFloor();
         if(onFloor.size() != 0) {
             for(Item item : onFloor) {
@@ -251,10 +264,13 @@ public class World implements Screen {
     }
 
     private void loadEnemies() {
-        enemies.add(new Slime("Slime_1", Classifier.Orange_Slime, 1093, 1087, new MovementScript("counterclockwise_1x2")));
-        enemies.add(new Slime("Slime_2", Classifier.Green_Slime, 1138, 926, new MovementScript("leftRight_2x2")));
-        enemies.add(new Slime("Slime_3", Classifier.Orange_Slime, 1256, 779, new MovementScript("counterclockwise_1x2")));
-        enemies.add(new Skeleton("Skeleton_1", Classifier.Skeleton, 1115, 1215, new MovementScript("leftRight_2x2")));
+        for(Enemy enemy : enemies) {
+            for(String enemyName : removedEnemies) {
+                if(enemy.getName().equals(enemyName)) {
+                    enemiesToRemove.add(enemy);
+                }
+            }
+        }
         Gdx.app.log("World", "Enemies Loaded");
     }
 
