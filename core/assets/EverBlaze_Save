@@ -3,8 +3,8 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 580
-	y: 1300
+	x: 1161.4158
+	y: 1337.801
 }
 inventory: [
 	{
@@ -19,5 +19,19 @@ inventory: [
 		type: Food
 		description: Restores 2 hearts.
 	}
+	{
+		name: Sword
+		spritePath: itemSprites/tile072.png
+		type: Weapon
+		description: A typical adventurer's sword. Deals 2 damage per hit.
+		damage: 2
+	}
+]
+onFloor: []
+slotSelected: 3
+health: 4
+hearts: 10
+enemiesDead: [
+	Skeleton_1
 ]
 }

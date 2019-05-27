@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import main.java.com.rohan.everblaze.Entities.Item;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
 import main.java.com.rohan.everblaze.Levels.World;
 
@@ -26,6 +27,8 @@ public class Enemy {
     private boolean hasDied;
     private boolean reachedLastDieFrame = false;
     private boolean reachedLastAttackFrame = false;
+    private boolean playerDamaged = false;
+    private boolean attackStarted = false;
 
     private String name;
     private MovementScript script;
@@ -209,6 +212,8 @@ public class Enemy {
 
     public void attack() {
 
+        playerDamaged = false;
+
         int diffX = Math.round(World.detector.player.position.x - position.x);
         int diffY = Math.round(World.detector.player.position.y - position.y);
 
@@ -216,10 +221,23 @@ public class Enemy {
 
         if(World.detector.enemySeesPlayer(this, 15)) {
             animState = 2;
+            if(!attackStarted) {
+                stateTime = 0f;
+                attackStarted = true;
+            }
         }
 
         if(reachedLastAttackFrame) {
+            if(World.detector.EnemycollisionWith(new Item(), this, true)) {
+                if(!playerDamaged) {
+                    World.detector.player.health -= damage;
+                    Gdx.app.log(name, "Damaged player for " + damage + " hearts");
+                    playerDamaged = true;
+                }
+
+            }
             animState = 1;
+            attackStarted = false;
             reachedLastAttackFrame = false;
         }
 

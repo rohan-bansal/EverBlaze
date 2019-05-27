@@ -79,13 +79,19 @@ public class CollisionDetector {
         return "none";
     }
 
-    public boolean EnemycollisionWith(Item item, Enemy enemy) {
-        Rectangle item_ = new Rectangle(item.sprite.getX(), item.sprite.getY(), item.sprite.getTexture().getWidth(), item.sprite.getTexture().getHeight());
-        Rectangle enemy_ = enemy.getRect();
-        if (Intersector.overlaps(item_, enemy_)) {
-            //Gdx.app.log("", "Player Rect: " + item_.getX() + " " + item_.getY() + " " + item_.getWidth() + " " + item_.getHeight() + " | Enemy Rect: " + enemy_.getX() + " " + enemy_.getY() +
-            //        " " + enemy_.getWidth() + " " + enemy_.getHeight());
-            return true;
+    public boolean EnemycollisionWith(Item item, Enemy enemy, boolean... player_) {
+        if(player_.length > 0) {
+            Rectangle enemy_ = enemy.getRect();
+            Rectangle player__ = player.getRectangle();
+            if (Intersector.overlaps(player__, enemy_)) {
+                return true;
+            }
+        } else {
+            Rectangle item_ = new Rectangle(item.sprite.getX(), item.sprite.getY(), item.sprite.getTexture().getWidth(), item.sprite.getTexture().getHeight());
+            Rectangle enemy_ = enemy.getRect();
+            if (Intersector.overlaps(item_, enemy_)) {
+                return true;
+            }
         }
         return false;
     }
