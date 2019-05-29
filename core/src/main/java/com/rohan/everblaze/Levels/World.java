@@ -2,15 +2,19 @@ package main.java.com.rohan.everblaze.Levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.*;
 import main.java.com.rohan.everblaze.Entities.Evil.*;
@@ -21,6 +25,7 @@ import main.java.com.rohan.everblaze.Debugger;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +41,7 @@ public class World implements Screen {
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
+    public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
 
     public static CollisionDetector detector;
     private HUD hud;
@@ -45,12 +51,14 @@ public class World implements Screen {
     public GameManager gameManager;
     public static Sound_Effects levelMusic;
     public static ScreenText drawManager;
+    public static ScreenText signManager;
 
     public static ArrayList<Enemy> enemies;
     public static ArrayList<Item> onFloor;
 
     private boolean pauseMenuActive = false;
     private boolean overwriteMenuActive = false;
+    private boolean signActive = false;
 
     private Game game;
 
@@ -90,6 +98,7 @@ public class World implements Screen {
         overwrite.setCenter(500, 600);
 
         createItems();
+        createSignposts();
 
         gameManager = new GameManager(player);
         if(loadData) {
@@ -116,7 +125,8 @@ public class World implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         detector = new CollisionDetector(player, map);
-        drawManager = new ScreenText(player);
+        drawManager = new ScreenText();
+        signManager = new ScreenText();
         PS3_Controller controller = new PS3_Controller(player);
         hud = new HUD(player);
         cam = new FollowCam(player);
@@ -127,6 +137,11 @@ public class World implements Screen {
         if(gameManager.data.isMusicOn() || !loadData) {
             levelMusic.play();
         }
+    }
+
+    private void createSignposts() {
+
+        signposts.add(new Signpost(770, 1400, "This Way -->"));
     }
 
     @Override
@@ -146,9 +161,6 @@ public class World implements Screen {
 
             debugger.printDebug();
 
-            cam.update();
-
-            player.update();
             renderer.setView(cam.camera);
             renderer.render();
 
@@ -156,13 +168,44 @@ public class World implements Screen {
             for(Item item : onFloor) {
                 item.render(batch);
             }
+
+            for(Signpost sign : signposts) {
+                sign.render(batch);
+                if(sign.sprite.getBoundingRectangle().overlaps(player.getRectangle())) {
+                    signManager.setColor(Color.BLACK);
+                    if(!signActive) {
+                        signManager.setSize(1f);
+                        signManager.setText("F");
+                        signManager.setPosition(new Vector2(sign.sprite.getX() + sign.sprite.getWidth() / 2 - 3, sign.sprite.getY() + sign.sprite.getHeight()));
+                        if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                            signActive = true;
+                            signManager.setSize(0.5f);
+                            signManager.setText(sign.getText());
+
+                            GlyphLayout layout = new GlyphLayout();
+                            layout.setText(signManager.drawer, sign.getText());
+                            float offset = (sign.sprite.getWidth() / 2) - layout.width;
+                            signManager.setPosition(new Vector2(sign.sprite.getX() + offset, sign.sprite.getY()));
+                        }
+                    } else {
+                        if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                            signActive = false;
+                        }
+                    }
+                    signManager.renderOnlyIf(batch);
+
+                } else {
+                    signActive = false;
+                }
+            }
+
             for(Enemy enemy : enemies) {
                 enemy.render(batch);
                 if(player.swordClone != null) {
                     if(!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.swordClone, enemy)) {
                         enemy.hit = true;
                         Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
-                        enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                        if(enemy.animState != 3) enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
                     }
                     if(player.cooldown == 0) {
                         enemy.hit = false;
@@ -171,7 +214,7 @@ public class World implements Screen {
                     if (!enemy.hit && player.cooldown == 1 && detector.EnemycollisionWith(player.spearClone, enemy)) {
                         enemy.hit = true;
                         Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
-                        enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                        if(enemy.animState != 3) enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
                     }
                     if (player.cooldown == 0) {
                         enemy.hit = false;
@@ -181,9 +224,12 @@ public class World implements Screen {
             }
             batch.end();
 
+            player.update();
+            cam.update();
+
             player.render(batch, cam.camera);
             hud.render();
-            debugger.renderDebugBoxes(enemies, onFloor);
+            //debugger.renderDebugBoxes(enemies, onFloor);
 
             for(Enemy enemy : enemiesToRemove) {
                 enemies.remove(enemy);
@@ -272,12 +318,17 @@ public class World implements Screen {
         sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
 
-        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, "A typical adventurer's spear. Deals 2 damage per hit.", 10);
+        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, "The darkest spear. Deals 10 damage per hit.", 10);
         spear.loadCoords(772, 1380);
         spear.sprite.setSize(16, 16);
 
+        Item halberd = new Item("Halberd", "itemSprites/tile421.png", Classifier.Weapon, "A knight's spear. Deals 5 damage per hit.", 5);
+        halberd.loadCoords(772, 1380);
+        halberd.sprite.setSize(16, 16);
+
         onFloor.add(sword);
         onFloor.add(spear);
+        onFloor.add(halberd);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
     }
 

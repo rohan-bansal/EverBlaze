@@ -177,6 +177,7 @@ public class Inventory {
                         World.drawManager.setColor(Color.FIREBRICK);
                         World.drawManager.setPosition(new Vector2(390, 100));
                         World.drawManager.setText("Max Health");
+                        World.drawManager.setSize(4);
                         World.drawManager.resetTimer();
                     }
                 } else if(item.type.equals("Weapon")) {

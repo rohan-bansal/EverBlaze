@@ -40,7 +40,7 @@ public class Enemy {
     public Animation<TextureRegion> hitAnim;
     public Animation<TextureRegion> dieAnim;
 
-    private int animState = 0;
+    public int animState = 0;
     public TextureRegion currentFrame;
     private String horizDirection;
 

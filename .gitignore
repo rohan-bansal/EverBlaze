@@ -5,6 +5,10 @@
 *.ear
 hs_err_pid*
 
+## Game
+
+EverBlaze_Save.txt
+
 ## Robovm
 /ios/robovm-build/
 

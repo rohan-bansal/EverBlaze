@@ -70,14 +70,17 @@ public class Player {
         effect_slash = new Sound_Effects("sword_slash2", false);
         effect_eat = new Sound_Effects("eat_food", false);
 
+        HEIGHT = 22;
+        WIDTH = 15;
+
         box = new Rectangle();
         box.x = position.x;
         box.y = position.y;
         box.height = HEIGHT;
         box.width = WIDTH;
 
-        walkSheet = new Texture(Gdx.files.internal("Character/knight_run.png"));
-        idleSheet = new Texture(Gdx.files.internal("Character/knight_idle.png"));
+        walkSheet = new Texture(Gdx.files.internal("Character/knight_run_3.png"));
+        idleSheet = new Texture(Gdx.files.internal("Character/knight_idle_3.png"));
 
         TextureRegion[][] walkTMP = TextureRegion.split(walkSheet,
                 walkSheet.getWidth() / 1,
@@ -132,11 +135,12 @@ public class Player {
             if (inventory_.slotSelected - 1 < inventory_.inventory.size()) {
                 Item item = inventory_.inventory.get(inventory_.slotSelected - 1);
                 if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
-                        item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword")) {
+                        item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword") ||
+                        item.name.toLowerCase().contains("halberd")) {
                     swordClone = new Item(item.name, item.spritePath, item.type, item.description);
                     swordClone.sprite.setSize(16, 16);
                     spearClone = null;
-                } else if(item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("halberd") || item.name.toLowerCase().contains("trident")) {
+                } else if(item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("trident")) {
                     spearClone = new Item(item.name, item.spritePath, item.type, item.description);
                     spearClone.sprite.setSize(16, 16);
                     swordClone = null;

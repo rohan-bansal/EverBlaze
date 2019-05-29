@@ -9,15 +9,13 @@ import main.java.com.rohan.everblaze.Entities.Player;
 
 public class ScreenText {
 
-    Player player;
-    private BitmapFont drawer;
+    public BitmapFont drawer;
     private String text;
     private Vector2 position;
     private float elapsed = 0;
 
-    public ScreenText(Player player) {
+    public ScreenText() {
 
-        this.player = player;
         drawer = new BitmapFont();
         setColor(Color.BLACK);
         setSize(4);
@@ -39,7 +37,7 @@ public class ScreenText {
         elapsed = 0;
     }
 
-    public void setSize(int size) {
+    public void setSize(float size) {
         drawer.getData().setScale(size);
     }
 
@@ -52,6 +50,12 @@ public class ScreenText {
                 drawer.draw(batch, this.text, position.x, position.y);
                 batch.end();
             }
+        }
+    }
+
+    public void renderOnlyIf(SpriteBatch batch) {
+        if(text != null) {
+            drawer.draw(batch, this.text, position.x, position.y);
         }
     }
 }
