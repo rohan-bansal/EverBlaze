@@ -51,14 +51,15 @@ public class World implements Screen {
     public GameManager gameManager;
     public static Sound_Effects levelMusic;
     public static ScreenText drawManager;
-    public static ScreenText signManager;
 
     public static ArrayList<Enemy> enemies;
     public static ArrayList<Item> onFloor;
 
     private boolean pauseMenuActive = false;
     private boolean overwriteMenuActive = false;
-    private boolean signActive = false;
+    public static Signpost signActive = null;
+    private boolean renderWords = false;
+    private boolean disableMovement = false;
 
     private Game game;
 
@@ -126,7 +127,6 @@ public class World implements Screen {
 
         detector = new CollisionDetector(player, map);
         drawManager = new ScreenText();
-        signManager = new ScreenText();
         PS3_Controller controller = new PS3_Controller(player);
         hud = new HUD(player);
         cam = new FollowCam(player);
@@ -141,7 +141,8 @@ public class World implements Screen {
 
     private void createSignposts() {
 
-        signposts.add(new Signpost(770, 1400, "This Way -->"));
+        signposts.add(new Signpost(770, 1400, ">>>"));
+        signposts.add(new Signpost(1152, 1272, "Gate"));
     }
 
     @Override
@@ -172,30 +173,24 @@ public class World implements Screen {
             for(Signpost sign : signposts) {
                 sign.render(batch);
                 if(sign.sprite.getBoundingRectangle().overlaps(player.getRectangle())) {
-                    signManager.setColor(Color.BLACK);
-                    if(!signActive) {
-                        signManager.setSize(1f);
-                        signManager.setText("F");
-                        signManager.setPosition(new Vector2(sign.sprite.getX() + sign.sprite.getWidth() / 2 - 3, sign.sprite.getY() + sign.sprite.getHeight()));
+                    renderWords = true;
+                    if(signActive == null) {
                         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                            signActive = true;
-                            signManager.setSize(0.5f);
-                            signManager.setText(sign.getText());
-
-                            GlyphLayout layout = new GlyphLayout();
-                            layout.setText(signManager.drawer, sign.getText());
-                            float offset = (sign.sprite.getWidth() / 2) - layout.width;
-                            signManager.setPosition(new Vector2(sign.sprite.getX() + offset, sign.sprite.getY()));
+                            signActive = sign;
+                            renderWords = true;
+                            disableMovement = true;
                         }
                     } else {
                         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                            signActive = false;
+                            signActive = null;
+                            renderWords = false;
+                            disableMovement = false;
                         }
                     }
-                    signManager.renderOnlyIf(batch);
-
                 } else {
-                    signActive = false;
+                    if(!renderWords) {
+                        signActive = null;
+                    }
                 }
             }
 
@@ -224,12 +219,21 @@ public class World implements Screen {
             }
             batch.end();
 
-            player.update();
+            if(disableMovement) {
+                player.update(true);
+            } else {
+                player.update(false);
+            }
             cam.update();
 
             player.render(batch, cam.camera);
+
+            debugger.renderDebugBoxes(enemies, onFloor);
+
             hud.render();
-            //debugger.renderDebugBoxes(enemies, onFloor);
+            if(signActive != null) {
+                hud.drawSign(signActive);
+            }
 
             for(Enemy enemy : enemiesToRemove) {
                 enemies.remove(enemy);
@@ -262,11 +266,17 @@ public class World implements Screen {
 
         removedEnemies = gameManager.data.getEnemiesDead();
         onFloor = gameManager.data.getOnFloor();
-        if(onFloor.size() != 0) {
-            for(Item item : onFloor) {
-                item.sprite.setSize(16, 16);
+        try {
+            if(onFloor.size() != 0) {
+                for(Item item : onFloor) {
+                    item.sprite.setSize(16, 16);
+                }
             }
+        } catch (NullPointerException e) {
+            Gdx.app.log("FILE ERROR", "CORRUPT LOAD FILE (maybe you forgot to save last time?)");
+            System.exit(1);
         }
+
 
     }
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 public class HUD {
 
@@ -30,6 +31,12 @@ public class HUD {
         pause = new Sprite(new Texture(Gdx.files.internal("UI/pause.png")));
         pause.setPosition(950, 770);
         pause.setSize(25, 25);
+    }
+
+    public void drawSign(Signpost activeSign) {
+        hud.begin();
+        activeSign.drawText(hud);
+        hud.end();
     }
 
     public void render() {

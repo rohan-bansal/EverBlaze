@@ -11,6 +11,7 @@ import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
 import main.java.com.rohan.everblaze.Entities.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
 
@@ -76,5 +77,6 @@ public class Debugger {
             debugRenderer.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
             debugRenderer.end();
         }
+
     }
 }

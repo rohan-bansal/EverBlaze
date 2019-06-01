@@ -110,12 +110,13 @@ public class Player {
     }
 
 
-    public void update() {
+    public void update(boolean disableMovement) {
 
         runTemp = false;
-        keyboardMove();
-
-        controllerMove();
+        if(!disableMovement) {
+            keyboardMove();
+            controllerMove();
+        }
         processCollision();
         processWeaponry();
 

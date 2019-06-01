@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -160,31 +161,33 @@ public class Inventory {
     public void useSelected() {
         if(inventory.size() != 0) {
             if(slotSelected - 1 < inventory.size()) {
-                Item item = inventory.get(slotSelected - 1);
-                //Gdx.app.log("Inventory", item.type);
-                if(item.type.equals("Food")) {
-                    if(player.health != player.hearts) {
-                        String[] desc = item.description.split(" ");
-                        int restore = Integer.parseInt(desc[1]);
-                        player.health += restore;
-                        if(player.health > player.hearts) {
-                            player.health = 10;
+                if(World.signActive == null) {
+                    Item item = inventory.get(slotSelected - 1);
+                    //Gdx.app.log("Inventory", item.type);
+                    if(item.type.equals("Food")) {
+                        if(player.health != player.hearts) {
+                            String[] desc = item.description.split(" ");
+                            int restore = Integer.parseInt(desc[1]);
+                            player.health += restore;
+                            if(player.health > player.hearts) {
+                                player.health = 10;
+                            }
+                            player.effect_eat.play();
+                            inventory.remove(item);
+                            refreshInventory();
+                        } else {
+                            World.drawManager.setColor(Color.FIREBRICK);
+                            World.drawManager.setPosition(new Vector2(390, 100));
+                            World.drawManager.setText("Max Health");
+                            World.drawManager.setSize(4);
+                            World.drawManager.resetTimer();
                         }
-                        player.effect_eat.play();
-                        inventory.remove(item);
-                        refreshInventory();
-                    } else {
-                        World.drawManager.setColor(Color.FIREBRICK);
-                        World.drawManager.setPosition(new Vector2(390, 100));
-                        World.drawManager.setText("Max Health");
-                        World.drawManager.setSize(4);
-                        World.drawManager.resetTimer();
-                    }
-                } else if(item.type.equals("Weapon")) {
-                    if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
-                    item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword")
-                    || item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("halberd") || item.name.toLowerCase().contains("trident")) {
-                        player.attack();
+                    } else if(item.type.equals("Weapon")) {
+                        if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
+                                item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword")
+                                || item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("halberd") || item.name.toLowerCase().contains("trident")) {
+                            player.attack();
+                        }
                     }
                 }
             }
