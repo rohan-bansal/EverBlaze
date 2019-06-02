@@ -3,8 +3,8 @@ musicOn: true
 VsyncOn: true
 effectsOn: true
 playerPosition: {
-	x: 580
-	y: 1300
+	x: 912.109
+	y: 1270.2992
 }
 inventory: [
 	{
@@ -19,5 +19,31 @@ inventory: [
 		type: Food
 		description: Restores 2 hearts.
 	}
+	{
+		name: Blade
+		spritePath: itemSprites/tile072.png
+		type: Weapon
+		description: A typical adventurer's sword. Deals 2 damage per hit.
+		damage: 2
+	}
+	{
+		name: Trident of the Dark
+		spritePath: itemSprites/tile118.png
+		type: Weapon
+		description: The darkest spear. Deals 10 damage per hit.
+		damage: 10
+	}
+	{
+		name: Halberd
+		spritePath: itemSprites/tile421.png
+		type: Weapon
+		description: A knight's spear. Deals 5 damage per hit.
+		damage: 5
+	}
 ]
+onFloor: []
+slotSelected: 7
+health: 10
+hearts: 10
+enemiesDead: []
 }

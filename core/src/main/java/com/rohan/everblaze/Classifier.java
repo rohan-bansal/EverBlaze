@@ -1,4 +1,4 @@
-package main.java.com.rohan.everblaze.Entities;
+package main.java.com.rohan.everblaze;
 
 public class Classifier {
 
@@ -13,4 +13,8 @@ public class Classifier {
 
     public static String Goblin = "Goblin";
     public static String Skeleton = "Skeleton";
+
+    public static String Blacksmith = "Blacksmith";
+    public static String Villager = "Villager";
+    public static String Adventurer = "Adventurer";
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import main.java.com.rohan.everblaze.Entities.Classifier;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
 
 public class Skeleton extends Enemy {

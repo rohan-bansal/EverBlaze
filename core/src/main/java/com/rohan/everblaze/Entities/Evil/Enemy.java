@@ -1,9 +1,7 @@
 package main.java.com.rohan.everblaze.Entities.Evil;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -52,7 +50,6 @@ public class Enemy {
     private float stateTime = 0f;
 
     public Enemy(String name, String type, int x, int y, MovementScript script) {
-
         this.script = script;
         this.name = name;
         this.type = type;
@@ -64,7 +61,7 @@ public class Enemy {
         currentSequenceItem = 0;
     }
 
-    public void render(SpriteBatch batch, OrthographicCamera... camera) {
+    public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
 
         if(hasDied) {
@@ -232,7 +229,7 @@ public class Enemy {
             reachedLastAttackFrame = false;
         }
 
-        if(World.detector.enemySeesPlayer(this, 7)) {
+        if(World.detector.enemySeesPlayer(this, 2)) {
             animState = 2;
             if(World.detector.player.position.x < position.x) {
                 horizDirection = "left";
@@ -260,10 +257,6 @@ public class Enemy {
             }
         }
 
-
-
-
-        //Gdx.app.log(name, "" + angle);
     }
 
     public String getName() {

@@ -5,16 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
+import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.*;
 import main.java.com.rohan.everblaze.Entities.Evil.*;
@@ -28,7 +26,6 @@ import main.java.com.rohan.everblaze.TileInteraction.HUD;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class World implements Screen {
 
@@ -228,7 +225,7 @@ public class World implements Screen {
 
             player.render(batch, cam.camera);
 
-            debugger.renderDebugBoxes(enemies, onFloor);
+            //debugger.renderDebugBoxes(enemies, onFloor);
 
             hud.render();
             if(signActive != null) {
@@ -343,6 +340,7 @@ public class World implements Screen {
     }
 
     private void loadEnemies() {
+        enemiesToRemove.clear();
         for(Enemy enemy : enemies) {
             for(String enemyName : removedEnemies) {
                 if(enemy.getName().equals(enemyName)) {

@@ -61,6 +61,8 @@ public class Debugger {
             debugRenderer.begin(ShapeRenderer.ShapeType.Line);
             debugRenderer.setColor(Color.RED);
             debugRenderer.rect(enemy.position.x, enemy.position.y, enemy.currentFrame.getRegionWidth(), enemy.currentFrame.getRegionHeight());
+            debugRenderer.setColor(Color.DARK_GRAY);
+            debugRenderer.rect(enemy.getRect().x - 1, enemy.getRect().y - 1, enemy.getRect().width + 2, enemy.getRect().height + 2);
             debugRenderer.end();
         }
         for(Item item : onFloor) {
