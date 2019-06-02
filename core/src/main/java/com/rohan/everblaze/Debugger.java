@@ -1,6 +1,5 @@
 package main.java.com.rohan.everblaze;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -8,10 +7,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
-import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
-import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
 

@@ -8,7 +8,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
-import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.Entities.Good.NPC;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
 
@@ -62,6 +63,21 @@ public class CollisionDetector {
 
     public String EnemycollisionAt(Enemy enemy, int x, int y) {
         Rectangle futureEntity = new Rectangle(x, y, enemy.currentFrame.getRegionWidth(), enemy.currentFrame.getRegionHeight());
+
+        for(RectangleMapObject obj : objects.getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = obj.getRectangle();
+
+            if (Intersector.overlaps(rectangle, futureEntity)) {
+                if(Arrays.asList(obstacles).contains(obj.getName())) {
+                    return "obstacle";
+                }
+            }
+        }
+        return "none";
+    }
+
+    public String NPCcollisionAt(NPC npc, int x, int y) {
+        Rectangle futureEntity = new Rectangle(x, y, npc.currentFrame.getRegionWidth(), npc.currentFrame.getRegionHeight());
 
         for(RectangleMapObject obj : objects.getByType(RectangleMapObject.class)) {
             Rectangle rectangle = obj.getRectangle();

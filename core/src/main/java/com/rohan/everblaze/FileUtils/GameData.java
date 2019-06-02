@@ -1,7 +1,7 @@
 package main.java.com.rohan.everblaze.FileUtils;
 
 import com.badlogic.gdx.math.Vector2;
-import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,15 @@ public class GameData {
     private int slotSelected;
     private int health;
     private int hearts;
+    private int coins;
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
 
     private ArrayList<String> enemiesDead;
 

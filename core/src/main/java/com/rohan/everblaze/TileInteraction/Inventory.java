@@ -5,12 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.Levels.World;
@@ -161,7 +159,7 @@ public class Inventory {
     public void useSelected() {
         if(inventory.size() != 0) {
             if(slotSelected - 1 < inventory.size()) {
-                if(World.signActive == null) {
+                if(World.signActive == null && !World.signDisabledThisTurn) {
                     Item item = inventory.get(slotSelected - 1);
                     //Gdx.app.log("Inventory", item.type);
                     if(item.type.equals("Food")) {

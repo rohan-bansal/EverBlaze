@@ -17,4 +17,5 @@ public class Classifier {
     public static String Blacksmith = "Blacksmith";
     public static String Villager = "Villager";
     public static String Adventurer = "Adventurer";
+    public static String FoodVendor = "FoodVendor";
 }

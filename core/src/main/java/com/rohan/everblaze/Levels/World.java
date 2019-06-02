@@ -16,6 +16,10 @@ import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.*;
 import main.java.com.rohan.everblaze.Entities.Evil.*;
+import main.java.com.rohan.everblaze.Entities.Good.Adventurer;
+import main.java.com.rohan.everblaze.Entities.Good.Blacksmith;
+import main.java.com.rohan.everblaze.Entities.Good.FoodVendor;
+import main.java.com.rohan.everblaze.Entities.Good.NPC;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.ControllerLib.FollowCam;
 import main.java.com.rohan.everblaze.ControllerLib.PS3_Controller;
@@ -23,6 +27,7 @@ import main.java.com.rohan.everblaze.Debugger;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
@@ -39,6 +44,7 @@ public class World implements Screen {
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
+    public static ArrayList<NPC> NPCs;
 
     public static CollisionDetector detector;
     private HUD hud;
@@ -57,6 +63,7 @@ public class World implements Screen {
     public static Signpost signActive = null;
     private boolean renderWords = false;
     private boolean disableMovement = false;
+    public static boolean signDisabledThisTurn = false;
 
     private Game game;
 
@@ -81,6 +88,12 @@ public class World implements Screen {
             add(new Slime("Slime_3", Classifier.Orange_Slime, 1256, 779, new MovementScript("counterclockwise_1x2")));
             add(new Skeleton("Skeleton_1", Classifier.Skeleton, 1115, 1215, new MovementScript("leftRight_2x2")));
             add(new Skeleton("Skeleton_2", Classifier.Skeleton, 1075, 1435, new MovementScript("stationary")));
+        }};
+
+        NPCs = new ArrayList<NPC>() {{
+            add(new Blacksmith("Bobby", 755, 1367, new MovementScript("leftRight_2x2")));
+            add(new FoodVendor("Joey", 755, 1387, new MovementScript("leftRight_2x2")));
+            add(new Adventurer("Huey", 755, 1347, new MovementScript("leftRight_2x2")));
         }};
 
         options = new Sprite(new Texture(Gdx.files.internal("UI/pause-options.png")));
@@ -147,6 +160,10 @@ public class World implements Screen {
         Gdx.gl.glClearColor(37/255f, 32/255f, 31/255f, 1);
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
+        if(signDisabledThisTurn) {
+            signDisabledThisTurn = false;
+        }
+
         if(hud.pausePressed()) {
             pauseMenuActive = true;
         }
@@ -182,6 +199,7 @@ public class World implements Screen {
                             signActive = null;
                             renderWords = false;
                             disableMovement = false;
+                            signDisabledThisTurn = true;
                         }
                     }
                 } else {
@@ -213,6 +231,10 @@ public class World implements Screen {
                     }
                 }
 
+            }
+
+            for(NPC npc : NPCs) {
+                npc.render(batch);
             }
             batch.end();
 
@@ -251,6 +273,7 @@ public class World implements Screen {
         gameManager.data.setHearts(player.hearts);
         gameManager.data.setSlotSelected(player.inventory_.slotSelected);
         gameManager.data.setEnemiesDead(removedEnemies);
+        gameManager.data.setCoins(player.coins);
         gameManager.saveData();
     }
 
@@ -258,6 +281,7 @@ public class World implements Screen {
         player.position = gameManager.data.getPlayerPosition();
         player.health = gameManager.data.getHealth();
         player.hearts = gameManager.data.getHearts();
+        player.coins = gameManager.data.getCoins();
         player.inventory_.loadInventory(gameManager);
         player.inventory_.slotSelected = gameManager.data.getSlotSelected();
 

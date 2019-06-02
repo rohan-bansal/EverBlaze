@@ -1,4 +1,4 @@
-package main.java.com.rohan.everblaze.Entities;
+package main.java.com.rohan.everblaze.TileInteraction.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

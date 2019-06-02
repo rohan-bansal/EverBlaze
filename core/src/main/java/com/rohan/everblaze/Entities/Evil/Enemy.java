@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import main.java.com.rohan.everblaze.Entities.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
 import main.java.com.rohan.everblaze.Levels.World;
 
@@ -133,6 +133,7 @@ public class Enemy {
         if(health <= 0) {
             stateTime = 0f;
             hasDied = true;
+            World.detector.player.coins += 5;
             return true;
         }
         return false;

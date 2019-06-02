@@ -14,6 +14,7 @@ import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.Inventory;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 
 public class Player {
 
@@ -43,6 +44,8 @@ public class Player {
 
     public int hearts = 10;
     public int health = 10;
+
+    public int coins = 0;
 
     private Rectangle box;
     public String horiDirection = "right";
