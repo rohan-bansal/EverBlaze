@@ -25,12 +25,12 @@ public class GameManager {
     public boolean createNewSave(boolean override) {
         this.data = new GameData();
 
-        boolean exists = Gdx.files.local("EverBlaze_Save").exists();
+        boolean exists = Gdx.files.local("EverBlaze_Save.json").exists();
 
         if(exists && !override) {
             return true;
         }
-        if(override || !Gdx.files.local("EverBlaze_Save").exists()) {
+        if(override || !Gdx.files.local("EverBlaze_Save.json").exists()) {
             this.data.setPlayerPosition(player.position);
             this.data.setInventory(player.inventory_.inventory);
 
@@ -39,7 +39,7 @@ public class GameManager {
             this.data.setEffectsOn(true);
             this.data.setInvertControlsOn(false);
 
-            this.gameData = Gdx.files.local("EverBlaze_Save");
+            this.gameData = Gdx.files.local("EverBlaze_Save.json");
             Gdx.app.log("Manager", "New Save Created");
             return false;
         }
@@ -55,7 +55,7 @@ public class GameManager {
     }
 
     public boolean loadData() {
-        this.gameData = Gdx.files.local("EverBlaze_Save");
+        this.gameData = Gdx.files.local("EverBlaze_Save.json");
         try {
             data = json.fromJson(GameData.class, gameData.readString());
             Gdx.app.log("Manager", "Save Loaded");

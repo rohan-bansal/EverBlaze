@@ -56,6 +56,7 @@ public class Goblin extends Enemy {
         }
 
         super.attackAnim = new Animation<TextureRegion>(0.1f, attackFrames);
+        super.damageFrame = attackAnim.getKeyFrames()[9];
 
         TextureRegion[][] idleTMP = TextureRegion.split(idleSheet,
                 idleSheet.getWidth() / 10,

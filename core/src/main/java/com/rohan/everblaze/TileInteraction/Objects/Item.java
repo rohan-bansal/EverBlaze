@@ -4,12 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import main.java.com.rohan.everblaze.Levels.World;
 
-import java.util.Arrays;
 
 public class Item implements Json.Serializable {
 
@@ -19,15 +17,21 @@ public class Item implements Json.Serializable {
     public String type;
     public String description;
     public int damage;
+    public int durability;
 
-    public Item(String name, String path, String type, String description, int... damage) {
+    private ItemDurabilityBar durBar;
+
+    public Item(String name, String path, String type, int durability, String description, int... weapon) {
         this.name = name;
         this.spritePath = path;
         this.type = type;
         this.description = description;
+        this.durability = durability;
 
-        if(damage.length > 0) {
-            this.damage = damage[0];
+        durBar = new ItemDurabilityBar(name, durability, this);
+
+        if(weapon.length > 0) {
+            this.damage = weapon[0];
         } else {
             this.damage = 0;
         }
@@ -39,6 +43,7 @@ public class Item implements Json.Serializable {
 
     public void render(SpriteBatch batch) {
         this.sprite.draw(batch);
+        //durBar.render(batch);
     }
 
     public String getDescription() {
@@ -96,6 +101,7 @@ public class Item implements Json.Serializable {
         json.writeValue("spritePath", spritePath);
         json.writeValue("type", type);
         json.writeValue("description", description);
+        json.writeValue("durability", durability);
         if(damage != 0) {
             json.writeValue("damage", damage);
         }
@@ -110,6 +116,7 @@ public class Item implements Json.Serializable {
         spritePath = jsonData.getString("spritePath");
         type = jsonData.getString("type");
         description = jsonData.getString("description");
+        durability = Integer.parseInt(jsonData.getString("durability"));
         if(type.equals("Weapon")) {
             damage = Integer.parseInt(jsonData.getString("damage"));
         }

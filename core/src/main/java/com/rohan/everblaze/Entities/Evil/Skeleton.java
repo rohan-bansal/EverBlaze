@@ -1,10 +1,12 @@
 package main.java.com.rohan.everblaze.Entities.Evil;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
 
 public class Skeleton extends Enemy {
@@ -13,6 +15,8 @@ public class Skeleton extends Enemy {
     Texture idleSheet;
     Texture attackSheet;
     Texture dieSheet;
+
+    Sound_Effects moveSound = new Sound_Effects("Entities/Skeleton/skeleton_move.mp3");
 
     public Skeleton(String name, String type, int x, int y, MovementScript script) {
         super(name, type, x, y, script);
@@ -58,6 +62,7 @@ public class Skeleton extends Enemy {
         }
 
         super.attackAnim = new Animation<TextureRegion>(0.1f, attackFrames);
+        super.damageFrame = attackAnim.getKeyFrames()[7];
 
         TextureRegion[][] idleTMP = TextureRegion.split(idleSheet,
                 idleSheet.getWidth() / 11,
@@ -96,5 +101,9 @@ public class Skeleton extends Enemy {
     @Override
     public void attack() {
         super.attack();
+        if(super.playSound) {
+            moveSound.play();
+            super.playSound = false;
+        }
     }
 }

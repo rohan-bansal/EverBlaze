@@ -31,6 +31,8 @@ import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class World implements Screen {
 
@@ -63,16 +65,22 @@ public class World implements Screen {
     public static Signpost signActive = null;
     private boolean renderWords = false;
     private boolean disableMovement = false;
-    public static boolean signDisabledThisTurn = false;
 
     private Game game;
 
     public static boolean movingRight, movingLeft, movingUp, movingDown;
     private Sprite options, save_quit, back, go, overwrite;
 
+    public static String focus;
+    private Random rand;
+
     private OrthogonalTiledMapRenderer renderer;
+    private boolean npcTextActive;
+    private String npcText;
 
     public World(Game game, boolean loadData) {
+
+        rand = new Random();
 
         this.game = game;
         batch = new SpriteBatch();
@@ -91,9 +99,9 @@ public class World implements Screen {
         }};
 
         NPCs = new ArrayList<NPC>() {{
-            add(new Blacksmith("Bobby", 755, 1367, new MovementScript("leftRight_2x2")));
-            add(new FoodVendor("Joey", 755, 1387, new MovementScript("leftRight_2x2")));
-            add(new Adventurer("Huey", 755, 1347, new MovementScript("leftRight_2x2")));
+            add(new Blacksmith("Bobby", 750, 1367, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/Conversation.json")));
+            add(new FoodVendor("Joey", 755, 1387, new MovementScript("stationary")).setQuest(Gdx.files.internal("Quests/Conversation.json")));
+            add(new Adventurer("Huey", 760, 1347, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/FindTheSword.json")));
         }};
 
         options = new Sprite(new Texture(Gdx.files.internal("UI/pause-options.png")));
@@ -101,6 +109,8 @@ public class World implements Screen {
         back = new Sprite(new Texture(Gdx.files.internal("UI/back.png")));
         go = new Sprite(new Texture(Gdx.files.internal("UI/go.png")));
         overwrite = new Sprite(new Texture(Gdx.files.internal("UI/overwrite.png")));
+
+        focus = "nothing";
 
         options.setCenter(500, 600);
         save_quit.setCenter(500, 400);
@@ -160,9 +170,7 @@ public class World implements Screen {
         Gdx.gl.glClearColor(37/255f, 32/255f, 31/255f, 1);
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
-        if(signDisabledThisTurn) {
-            signDisabledThisTurn = false;
-        }
+        focus = "nothing";
 
         if(hud.pausePressed()) {
             pauseMenuActive = true;
@@ -187,6 +195,7 @@ public class World implements Screen {
             for(Signpost sign : signposts) {
                 sign.render(batch);
                 if(sign.sprite.getBoundingRectangle().overlaps(player.getRectangle())) {
+                    focus = "sign";
                     renderWords = true;
                     if(signActive == null) {
                         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
@@ -199,7 +208,6 @@ public class World implements Screen {
                             signActive = null;
                             renderWords = false;
                             disableMovement = false;
-                            signDisabledThisTurn = true;
                         }
                     }
                 } else {
@@ -233,9 +241,31 @@ public class World implements Screen {
 
             }
 
+
             for(NPC npc : NPCs) {
                 npc.render(batch);
+                if(npc.getRect().overlaps(player.getRectangle())) {
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                        if(!npcTextActive) {
+                            if(npc.questType != null && npc.questType.equals("conversation")) {
+                                npcTextActive = true;
+                                npcText = npc.reward.get(rand.nextInt(npc.reward.size()));
+                            }
+                        } else {
+                            npcTextActive = false;
+                            npcText = null;
+                        }
+
+                    }
+                    if(npcTextActive) {
+                        npc.drawText(npcText, batch);
+                    }
+                } else {
+                    npcTextActive = false;
+                    npcText = null;
+                }
             }
+
             batch.end();
 
             if(disableMovement) {
@@ -345,15 +375,15 @@ public class World implements Screen {
     }
 
     private void createItems() {
-        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
+        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, 20, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
         sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
 
-        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, "The darkest spear. Deals 10 damage per hit.", 10);
+        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, 50, "The darkest spear. Deals 10 damage per hit.", 10);
         spear.loadCoords(772, 1380);
         spear.sprite.setSize(16, 16);
 
-        Item halberd = new Item("Halberd", "itemSprites/tile421.png", Classifier.Weapon, "A knight's spear. Deals 5 damage per hit.", 5);
+        Item halberd = new Item("Halberd", "itemSprites/tile421.png", Classifier.Weapon, 30, "A knight's spear. Deals 5 damage per hit.", 5);
         halberd.loadCoords(772, 1380);
         halberd.sprite.setSize(16, 16);
 
@@ -409,4 +439,5 @@ public class World implements Screen {
         manager.dispose();
         batch.dispose();
     }
+
 }

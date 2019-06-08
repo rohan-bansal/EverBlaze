@@ -1,13 +1,19 @@
 package main.java.com.rohan.everblaze.Entities.Good;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
+import main.java.com.rohan.everblaze.FileUtils.QuestManager;
 import main.java.com.rohan.everblaze.Levels.World;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class NPC {
@@ -30,6 +36,12 @@ public class NPC {
     public TextureRegion currentFrame;
     private float speed;
 
+    private FileHandle file;
+    private QuestManager quest;
+    public String questType;
+    private ScreenText textDrawer;
+    public ArrayList<String> reward = new ArrayList<String>();
+
     public NPC(String name, String type, int x, int y, float speed, MovementScript script) {
         this.script = script;
         this.name = name;
@@ -39,6 +51,30 @@ public class NPC {
         this.horizDirection = "right";
         this.sequence = script.getSequence();
         currentSequenceItem = 0;
+
+        textDrawer = new ScreenText();
+        textDrawer.setColor(Color.BLACK);
+
+        quest = null;
+        file = null;
+        questType = null;
+    }
+
+    public void drawText(String text, SpriteBatch batch) {
+        textDrawer.setText(text);
+        textDrawer.setPosition(new Vector2(390, 100));
+        textDrawer.setSize(4);
+        textDrawer.renderOnlyIf(batch);
+    }
+
+    public NPC setQuest(FileHandle file) {
+        this.file = file;
+        quest = new QuestManager(this, file);
+        quest.questData.setDescription(quest.questData.getDescription().replace("{0}", name));
+        quest.questData.setNPC(quest.questData.getNPC().replace("{0}", name));
+        questType = quest.questData.getQuestType();
+        reward.addAll(quest.questData.getReward());
+        return this;
     }
 
     public void render(SpriteBatch batch) {
@@ -60,6 +96,10 @@ public class NPC {
         batch.draw(currentFrame, flip ? position.x + currentFrame.getRegionWidth() : position.x, position.y, flip ? -currentFrame.getRegionWidth() : currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
 
         move();
+    }
+
+    public Rectangle getRect() {
+        return new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
 
     private void move() {

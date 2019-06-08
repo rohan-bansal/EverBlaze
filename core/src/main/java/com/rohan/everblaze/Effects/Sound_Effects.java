@@ -13,6 +13,10 @@ public class Sound_Effects {
         if(looping) music.setLooping(true);
     }
 
+    public Sound_Effects(String track) {
+        music = Gdx.audio.newMusic(Gdx.files.internal(track));
+    }
+
     public void play() {
         music.play();
     }

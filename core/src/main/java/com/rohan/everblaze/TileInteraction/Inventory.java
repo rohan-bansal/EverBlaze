@@ -159,7 +159,7 @@ public class Inventory {
     public void useSelected() {
         if(inventory.size() != 0) {
             if(slotSelected - 1 < inventory.size()) {
-                if(World.signActive == null && !World.signDisabledThisTurn) {
+                if(World.focus.equals("nothing")) {
                     Item item = inventory.get(slotSelected - 1);
                     //Gdx.app.log("Inventory", item.type);
                     if(item.type.equals("Food")) {

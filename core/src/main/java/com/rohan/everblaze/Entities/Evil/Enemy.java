@@ -21,6 +21,9 @@ public class Enemy {
     private String type;
     public boolean hit = false;
 
+    public boolean playSound = false;
+    public boolean damageFrameHit = false;
+
     private boolean breakMove = false;
 
     private boolean hasDied;
@@ -40,6 +43,7 @@ public class Enemy {
 
     public int animState = 0;
     public TextureRegion currentFrame;
+    public TextureRegion damageFrame;
     private String horizDirection;
 
     public Vector2 position;
@@ -77,6 +81,9 @@ public class Enemy {
                 break;
             case 2:
                 currentFrame = attackAnim.getKeyFrame(stateTime, true);
+                if(currentFrame == damageFrame) {
+                    damageFrameHit = true;
+                }
                 if(currentFrame == attackAnim.getKeyFrames()[attackAnim.getKeyFrames().length - 1]) {
                     reachedLastAttackFrame = true;
                 }
@@ -209,14 +216,19 @@ public class Enemy {
 
     public void attack() {
 
-        playerDamaged = false;
-
         int diffX = Math.round(World.detector.player.position.x - position.x);
         int diffY = Math.round(World.detector.player.position.y - position.y);
 
         float angle = (float) Math.atan2(diffY, diffX);
 
         if(reachedLastAttackFrame) {
+            animState = 1;
+            attackStarted = false;
+            reachedLastAttackFrame = false;
+            playerDamaged = false;
+        }
+
+        if(damageFrameHit && !playerDamaged) {
             if(World.detector.EnemycollisionWith(new Item(), this, true)) {
                 if(!playerDamaged) {
                     World.detector.player.health -= damage;
@@ -225,9 +237,8 @@ public class Enemy {
                 }
 
             }
-            animState = 1;
-            attackStarted = false;
-            reachedLastAttackFrame = false;
+            playSound = true;
+            damageFrameHit = false;
         }
 
         if(World.detector.enemySeesPlayer(this, 2)) {
@@ -238,6 +249,7 @@ public class Enemy {
                 horizDirection = "right";
             }
             if(!attackStarted) {
+                //playSound = true;
                 stateTime = 0f;
                 attackStarted = true;
             }

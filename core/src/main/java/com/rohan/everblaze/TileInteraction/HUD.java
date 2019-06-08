@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.Player;
@@ -18,7 +19,7 @@ public class HUD {
 
     private ScreenText coins = new ScreenText();
 
-    private SpriteBatch hud;
+    public SpriteBatch hud;
 
     private Player player;
 
@@ -68,7 +69,14 @@ public class HUD {
         coins.renderOnlyIf(hud);
 
         pause.draw(hud);
+
+        renderItemDurability();
+
         hud.end();
+    }
+
+    private void renderItemDurability() {
+
     }
 
     public boolean pausePressed() {

@@ -63,8 +63,8 @@ public class Player {
         position.y = y;
 
         inventory_ = new Inventory(this);
-        inventory_.addItem(new Item("Green Apple", "itemSprites/tile002.png", Classifier.Food, "Restores 2 hearts."));
-        inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, "Restores 2 hearts."));
+        inventory_.addItem(new Item("Green Apple", "itemSprites/tile002.png", Classifier.Food, 1, "Restores 2 hearts."));
+        inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."));
 
         slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left2.png")));
         slash_right = new Sprite(new Texture(Gdx.files.internal("Character/slash_right2.png")));
@@ -139,11 +139,11 @@ public class Player {
                 if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
                         item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword") ||
                         item.name.toLowerCase().contains("halberd")) {
-                    swordClone = new Item(item.name, item.spritePath, item.type, item.description);
+                    swordClone = new Item(item.name, item.spritePath, item.type, item.durability, item.description);
                     swordClone.sprite.setSize(16, 16);
                     spearClone = null;
                 } else if(item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("trident")) {
-                    spearClone = new Item(item.name, item.spritePath, item.type, item.description);
+                    spearClone = new Item(item.name, item.spritePath, item.type, item.durability, item.description);
                     spearClone.sprite.setSize(16, 16);
                     swordClone = null;
                 } else {

@@ -63,6 +63,7 @@ public class Slime extends Enemy {
 
         super.walkAnim = new Animation<TextureRegion>(0.25f, attackFrames);
         super.attackAnim = new Animation<TextureRegion>(0.25f, attackFrames);
+        super.damageFrame = attackAnim.getKeyFrames()[4];
 
         TextureRegion[][] idleTMP = TextureRegion.split(idleSheet,
                 idleSheet.getWidth() / 3,

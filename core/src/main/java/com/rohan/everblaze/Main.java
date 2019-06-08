@@ -10,11 +10,11 @@ import main.java.com.rohan.everblaze.Levels.TitleScreen;
 
 public class Main extends Game {
 
-    long startTime;
-    SpriteBatch batch;
-    Sprite logo;
+    private long startTime;
+    private SpriteBatch batch;
+    private Sprite logo;
 
-    int titleScreenSet = 0;
+    private int titleScreenSet = 0;
 
     @Override
     public void create() {
@@ -26,7 +26,6 @@ public class Main extends Game {
         logo.setCenter(500, 400);
 
         startTime = TimeUtils.millis();
-
     }
 
     @Override
