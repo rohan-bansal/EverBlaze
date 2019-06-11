@@ -19,6 +19,7 @@ public class Goblin extends Enemy {
         super.hearts = 5;
         super.speed = 0.4f;
         super.damage = 2;
+        super.hardness = 2;
 
         walkSheet = new Texture(Gdx.files.internal("Entities/Goblin/goblin_walk.png"));
         attackSheet = new Texture(Gdx.files.internal("Entities/Goblin/goblin_attack.png"));

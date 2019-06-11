@@ -5,13 +5,17 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemDurabilityBar;
 
 import java.util.ArrayList;
 
@@ -25,6 +29,8 @@ public class Inventory {
     private SpriteBatch slotBatch;
     private float slotX = 300;
 
+    private ItemDurabilityBar bar;
+
     private BitmapFont nameDrawer = new BitmapFont();
 
     private Sprite highlighted;
@@ -34,6 +40,7 @@ public class Inventory {
         inventory = new ArrayList<Item>();
         slots = new ArrayList<Sprite>();
         slotBatch = new SpriteBatch();
+        bar = new ItemDurabilityBar();
 
         highlighted = new Sprite(new Texture(Gdx.files.internal("UI/invSlot2.jpg")));
         loadHotBar();
@@ -72,17 +79,32 @@ public class Inventory {
                 highlighted.setCenter(slots.get(y).getX() + 25, slots.get(y).getY() + 25);
                 highlighted.draw(slotBatch);
                 try {
-                    nameDrawer.draw(slotBatch, inventory.get(y).name, inventory.get(y).sprite.getX() - 16, inventory.get(y).sprite.getY() + 60);
+                    GlyphLayout layout = new GlyphLayout();
+                    layout.setText(nameDrawer, inventory.get(y).name);
+                    nameDrawer.draw(slotBatch, inventory.get(y).name, (inventory.get(y).sprite.getX() + inventory.get(y).sprite.getWidth() / 2) - layout.width / 2, inventory.get(y).sprite.getY() + 60);
                 } catch(Exception e) {
                 }
             } else {
                 slots.get(y).draw(slotBatch);
             }
         }
-        for(int x = 0; x < inventory.size(); x++) {
-            inventory.get(x).render(slotBatch);
+
+        for(Item item : inventory) {
+            item.render(slotBatch);
         }
+
         slotBatch.end();
+
+        bar.getDurRenderer().begin(ShapeRenderer.ShapeType.Filled);
+        for(Item item : inventory) {
+            if(!item.type.equals(Classifier.Food) && !item.type.equals(Classifier.Utility)) {
+                bar.render(item);
+                if(item.durability <= 0) {
+                    World.itemsToRemove.add(item);
+                }
+            }
+        }
+        bar.getDurRenderer().end();
 
         if(inventory.size() != 0) {
             if (slotSelected - 1 < inventory.size()) {
@@ -227,7 +249,7 @@ public class Inventory {
         }
     }
 
-    private void refreshInventory() {
+    public void refreshInventory() {
         slotX = 300;
         for(Item item : inventory) {
             item.setSprite();

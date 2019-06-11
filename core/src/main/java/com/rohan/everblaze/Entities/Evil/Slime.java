@@ -7,15 +7,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
+import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 
 public class Slime extends Enemy {
 
     Texture idleSheet;
     Texture attackWalkSheet;
     Texture dieSheet;
+    boolean droppedItem = false;
 
     public Slime(String name, String type, int x, int y, MovementScript script) {
         super(name, type, x, y, script);
+        super.hardness = 1;
 
         if(type.equals(Classifier.Green_Slime)) {
             attackWalkSheet = new Texture(Gdx.files.internal("Entities/Slime/green_slime_attack.png"));
@@ -96,6 +100,14 @@ public class Slime extends Enemy {
 
     public void render(SpriteBatch batch) {
         super.render(batch);
+
+        if(super.reachedLastDieFrame && !droppedItem) {
+            Item dropItem = new Item("Slime Jelly", "itemSprites/tile340.png", Classifier.Utility, 1, "Gelatinous slime obtained from ... slime.");
+            dropItem.loadCoords((int) (position.x + super.currentFrame.getRegionWidth() / 2), (int) (position.y + super.currentFrame.getRegionHeight() / 2));
+            dropItem.sprite.setSize(16, 16);
+            World.onFloor.add(dropItem);
+            droppedItem = true;
+        }
     }
 
     @Override

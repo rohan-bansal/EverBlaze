@@ -65,7 +65,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "kryonet:kryonet:2.21"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         
     }

@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
+import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 
 public class Skeleton extends Enemy {
 
@@ -15,6 +18,7 @@ public class Skeleton extends Enemy {
     Texture idleSheet;
     Texture attackSheet;
     Texture dieSheet;
+    boolean droppedItem = false;
 
     Sound_Effects moveSound = new Sound_Effects("Entities/Skeleton/skeleton_move.mp3");
 
@@ -24,6 +28,7 @@ public class Skeleton extends Enemy {
         super.hearts = 10;
         super.speed = 0.3f;
         super.damage = 3;
+        super.hardness = 3;
 
         walkSheet = new Texture(Gdx.files.internal("Entities/Skeleton/skeleton_walk.png"));
         attackSheet = new Texture(Gdx.files.internal("Entities/Skeleton/skeleton_attack.png"));
@@ -96,6 +101,14 @@ public class Skeleton extends Enemy {
 
     public void render(SpriteBatch batch) {
         super.render(batch);
+
+        if(super.reachedLastDieFrame && !droppedItem) {
+            Item dropItem = new Item("Halberd", "itemSprites/tile421.png", Classifier.Weapon, 50, "A knight's spear. Deals 5 damage per hit.", 5);
+            dropItem.loadCoords((int) (position.x + super.currentFrame.getRegionWidth() / 2), (int) (position.y + super.currentFrame.getRegionHeight() / 2));
+            dropItem.sprite.setSize(16, 16);
+            World.onFloor.add(dropItem);
+            droppedItem = true;
+        }
     }
 
     @Override

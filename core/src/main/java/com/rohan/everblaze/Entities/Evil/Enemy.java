@@ -16,6 +16,7 @@ public class Enemy {
 
     public int hearts;
     public int health;
+    public int hardness;
     public float speed;
     public int damage;
     private String type;
@@ -27,7 +28,7 @@ public class Enemy {
     private boolean breakMove = false;
 
     private boolean hasDied;
-    private boolean reachedLastDieFrame = false;
+    public boolean reachedLastDieFrame = false;
     private boolean reachedLastAttackFrame = false;
     private boolean playerDamaged = false;
     private boolean attackStarted = false;

@@ -1,9 +1,11 @@
 package main.java.com.rohan.everblaze.TileInteraction.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import main.java.com.rohan.everblaze.Levels.World;
@@ -18,8 +20,7 @@ public class Item implements Json.Serializable {
     public String description;
     public int damage;
     public int durability;
-
-    private ItemDurabilityBar durBar;
+    public int baseDur;
 
     public Item(String name, String path, String type, int durability, String description, int... weapon) {
         this.name = name;
@@ -27,8 +28,7 @@ public class Item implements Json.Serializable {
         this.type = type;
         this.description = description;
         this.durability = durability;
-
-        durBar = new ItemDurabilityBar(name, durability, this);
+        this.baseDur = durability;
 
         if(weapon.length > 0) {
             this.damage = weapon[0];
@@ -43,7 +43,6 @@ public class Item implements Json.Serializable {
 
     public void render(SpriteBatch batch) {
         this.sprite.draw(batch);
-        //durBar.render(batch);
     }
 
     public String getDescription() {

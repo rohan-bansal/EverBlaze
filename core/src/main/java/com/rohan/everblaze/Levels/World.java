@@ -44,6 +44,7 @@ public class World implements Screen {
     //private SpriteBatch itemBatch;
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
+    public static ArrayList<Item> itemsToRemove = new ArrayList<Item>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
     public static ArrayList<NPC> NPCs;
@@ -224,6 +225,11 @@ public class World implements Screen {
                         enemy.hit = true;
                         Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
                         if(enemy.animState != 3) enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                        for(Item item : player.inventory_.inventory) {
+                            if(player.swordClone.name.equals(item.name)) {
+                                item.durability -= enemy.hardness;
+                            }
+                        }
                     }
                     if(player.cooldown == 0) {
                         enemy.hit = false;
@@ -233,14 +239,17 @@ public class World implements Screen {
                         enemy.hit = true;
                         Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
                         if(enemy.animState != 3) enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
+                        for(Item item : player.inventory_.inventory) {
+                            if (player.spearClone.name.equals(item.name)) {
+                                item.durability -= enemy.hardness;
+                            }
+                        }
                     }
                     if (player.cooldown == 0) {
                         enemy.hit = false;
                     }
                 }
-
             }
-
 
             for(NPC npc : NPCs) {
                 npc.render(batch);
@@ -290,7 +299,14 @@ public class World implements Screen {
                     removedEnemies.add(enemy.getName());
                 }
             }
+
+            for(Item item : itemsToRemove) {
+                player.inventory_.inventory.remove(item);
+                player.inventory_.refreshInventory();
+            }
+
             enemiesToRemove.clear();
+            itemsToRemove.clear();
         }
 
     }
@@ -348,7 +364,6 @@ public class World implements Screen {
                 game.setScreen(new TitleScreen(game, false));
             }
         }
-
     }
 
     private void drawPauseMenu() {
@@ -375,7 +390,8 @@ public class World implements Screen {
     }
 
     private void createItems() {
-        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, 20, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
+        // Name Path Type Durability Description Damage
+        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, 50, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
         sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
 
@@ -383,13 +399,8 @@ public class World implements Screen {
         spear.loadCoords(772, 1380);
         spear.sprite.setSize(16, 16);
 
-        Item halberd = new Item("Halberd", "itemSprites/tile421.png", Classifier.Weapon, 30, "A knight's spear. Deals 5 damage per hit.", 5);
-        halberd.loadCoords(772, 1380);
-        halberd.sprite.setSize(16, 16);
-
         onFloor.add(sword);
         onFloor.add(spear);
-        onFloor.add(halberd);
         Gdx.app.log("World", "OnFloor Sprites Loaded");
     }
 

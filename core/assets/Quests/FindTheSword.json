@@ -1,8 +1,8 @@
 {
   "questName": "Sword Hunter",
   "questType": "treasure",
-  "NPC": "{0}",
-  "description": "{0} wants his weapon back! Go find it for him. He says he lost it near a small lake.",
+  "NPC": "Huey",
+  "description": "Huey wants his weapon back! Go find it for him. He says he lost it near a small lake.",
   "reward": [
     "tile085.png",
     "Dagger",

@@ -1,29 +1,31 @@
 package main.java.com.rohan.everblaze.TileInteraction.Objects;
 
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class ItemDurabilityBar {
 
-    public String name;
-    private Item item;
-    private int durability;
     private ShapeRenderer durRenderer;
 
-    public ItemDurabilityBar(String name, int durability, Item INVitem) {
-        this.item = INVitem;
-        this.durability = durability;
-        this.name = name;
+    public ItemDurabilityBar() {
         durRenderer = new ShapeRenderer();
     }
 
-    public void render(SpriteBatch batch) {
-        durRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        durRenderer.setColor(Color.GREEN);
-        durRenderer.rect(item.sprite.getX(), item.sprite.getY(), 20, 5);
-        durRenderer.end();
+    public ShapeRenderer getDurRenderer() {
+        return durRenderer;
+    }
+
+    public void render(Item item) {
+        float durabilityFraction = (float) item.durability / item.baseDur;
+        if(durabilityFraction >= 0.35 && durabilityFraction <= 0.6) {
+            durRenderer.setColor(Color.YELLOW);
+        } else if(durabilityFraction > 0.6) {
+            durRenderer.setColor(Color.GREEN);
+        } else if(durabilityFraction < 0.35) {
+            durRenderer.setColor(Color.RED);
+        }
+        durRenderer.rect(item.sprite.getX() + 5, item.sprite.getY() - 5, durabilityFraction * 25, 2);
     }
 
 }
