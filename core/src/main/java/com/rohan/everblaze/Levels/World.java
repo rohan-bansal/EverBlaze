@@ -33,7 +33,6 @@ import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class World implements Screen {
 
@@ -45,7 +44,7 @@ public class World implements Screen {
     //private SpriteBatch itemBatch;
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
-    public static ArrayList<Item> itemsToRemove = new ArrayList<Item>();
+    public static ArrayList<ItemStack> itemStackToRemove = new ArrayList<ItemStack>();
     public static ArrayList<Item> onFloorToRemove = new ArrayList<Item>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
@@ -305,18 +304,18 @@ public class World implements Screen {
                 }
             }
 
-            for(Item item : itemsToRemove) {
-                player.inventory_.inventory.remove(item);
-                player.inventory_.refreshInventory();
-            }
-
             for(Item item : onFloorToRemove) {
                 onFloor.remove(item);
             }
 
+            for(ItemStack item : itemStackToRemove) {
+                player.inventory_.inventory.remove(item);
+                player.inventory_.refreshInventory();
+            }
+
             enemiesToRemove.clear();
-            itemsToRemove.clear();
             onFloorToRemove.clear();
+            itemStackToRemove.clear();
         }
 
     }

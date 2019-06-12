@@ -12,9 +12,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
-import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.Inventory;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class Player {
 
@@ -65,7 +65,6 @@ public class Player {
 
         inventory_ = new Inventory(this);
         inventory_.addItem(new Item("Green Apple", "itemSprites/tile002.png", Classifier.Food, 1, "Restores 2 hearts."));
-        inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."));
         inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."));
 
         slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left2.png")));
@@ -177,7 +176,6 @@ public class Player {
                 spearClone.sprite.rotate(-60);
             }
         }
-        //TODO spears | spearClone != null
     }
 
     public void attack() {

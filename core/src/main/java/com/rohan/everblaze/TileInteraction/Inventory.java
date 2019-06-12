@@ -105,6 +105,9 @@ public class Inventory {
 
         for(ItemStack item : inventory) {
             item.stackedItem.render(slotBatch);
+            if(item.stackedItem.durability <= 0) {
+                World.itemStackToRemove.add(item);
+            }
             if(item.count > 1) {
                 itemCounter.draw(slotBatch, item.count + "", item.stackedItem.sprite.getX() + 25, item.stackedItem.sprite.getY() + 8);
             }
@@ -116,9 +119,6 @@ public class Inventory {
         for(ItemStack item : inventory) {
             if(!item.stackedItem.type.equals(Classifier.Food) && !item.stackedItem.type.equals(Classifier.Utility)) {
                 bar.render(item.stackedItem);
-                if(item.stackedItem.durability <= 0) {
-                    World.itemsToRemove.add(item.stackedItem);
-                }
             }
         }
         bar.getDurRenderer().end();
