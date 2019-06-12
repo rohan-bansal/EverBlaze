@@ -22,6 +22,19 @@ public class Item implements Json.Serializable {
     public int durability;
     public int baseDur;
 
+
+    public Item(Item another) {
+        this.name = another.name;
+        this.spritePath = another.spritePath;
+        this.type = another.type;
+        this.description = another.description;
+        this.durability = another.durability;
+        this.baseDur = another.durability;
+        this.damage = another.damage;
+
+        setSprite();
+    }
+
     public Item(String name, String path, String type, int durability, String description, int... weapon) {
         this.name = name;
         this.spritePath = path;
@@ -30,7 +43,7 @@ public class Item implements Json.Serializable {
         this.durability = durability;
         this.baseDur = durability;
 
-        if(weapon.length > 0) {
+        if(weapon.length > 0 && weapon[0] != 0) {
             this.damage = weapon[0];
         } else {
             this.damage = 0;

@@ -16,13 +16,17 @@ import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemDurabilityBar;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
+import org.apache.commons.collections4.BidiMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class Inventory {
 
     private Player player;
-    public ArrayList<Item> inventory;
+    public ArrayList<ItemStack> inventory;
     public int slotSelected = 1;
     public Item itemSelected;
     public ArrayList<Sprite> slots;
@@ -32,18 +36,20 @@ public class Inventory {
     private ItemDurabilityBar bar;
 
     private BitmapFont nameDrawer = new BitmapFont();
+    private BitmapFont itemCounter = new BitmapFont();
 
     private Sprite highlighted;
 
     public Inventory(Player player) {
         this.player = player;
-        inventory = new ArrayList<Item>();
+        inventory = new ArrayList<ItemStack>();
         slots = new ArrayList<Sprite>();
         slotBatch = new SpriteBatch();
         bar = new ItemDurabilityBar();
 
         highlighted = new Sprite(new Texture(Gdx.files.internal("UI/invSlot2.jpg")));
         loadHotBar();
+        refreshInventory();
 
     }
 
@@ -66,7 +72,14 @@ public class Inventory {
         item.setSprite();
         item.sprite.setCenter(slotX, 25);
         slotX += 50;
-        inventory.add(item);
+
+        for(ItemStack item_ : inventory) {
+            if(item_.stackedItem.name.equals(item.name) && (item.type.equals(Classifier.Utility) || item.type.equals(Classifier.Food))) {
+                item_.addItem();
+                return;
+            }
+        }
+        inventory.add(new ItemStack(item, 1));
     }
 
     public void render() {
@@ -80,8 +93,9 @@ public class Inventory {
                 highlighted.draw(slotBatch);
                 try {
                     GlyphLayout layout = new GlyphLayout();
-                    layout.setText(nameDrawer, inventory.get(y).name);
-                    nameDrawer.draw(slotBatch, inventory.get(y).name, (inventory.get(y).sprite.getX() + inventory.get(y).sprite.getWidth() / 2) - layout.width / 2, inventory.get(y).sprite.getY() + 60);
+                    layout.setText(nameDrawer, inventory.get(y).stackedItem.name);
+                    nameDrawer.draw(slotBatch, inventory.get(y).stackedItem.name, (inventory.get(y).stackedItem.sprite.getX() +
+                            inventory.get(y).stackedItem.sprite.getWidth() / 2) - layout.width / 2, inventory.get(y).stackedItem.sprite.getY() + 60);
                 } catch(Exception e) {
                 }
             } else {
@@ -89,18 +103,21 @@ public class Inventory {
             }
         }
 
-        for(Item item : inventory) {
-            item.render(slotBatch);
+        for(ItemStack item : inventory) {
+            item.stackedItem.render(slotBatch);
+            if(item.count > 1) {
+                itemCounter.draw(slotBatch, item.count + "", item.stackedItem.sprite.getX() + 25, item.stackedItem.sprite.getY() + 8);
+            }
         }
 
         slotBatch.end();
 
         bar.getDurRenderer().begin(ShapeRenderer.ShapeType.Filled);
-        for(Item item : inventory) {
-            if(!item.type.equals(Classifier.Food) && !item.type.equals(Classifier.Utility)) {
-                bar.render(item);
-                if(item.durability <= 0) {
-                    World.itemsToRemove.add(item);
+        for(ItemStack item : inventory) {
+            if(!item.stackedItem.type.equals(Classifier.Food) && !item.stackedItem.type.equals(Classifier.Utility)) {
+                bar.render(item.stackedItem);
+                if(item.stackedItem.durability <= 0) {
+                    World.itemsToRemove.add(item.stackedItem);
                 }
             }
         }
@@ -108,7 +125,7 @@ public class Inventory {
 
         if(inventory.size() != 0) {
             if (slotSelected - 1 < inventory.size()) {
-                itemSelected = inventory.get(slotSelected - 1);
+                itemSelected = inventory.get(slotSelected - 1).stackedItem;
             } else {
                 itemSelected = null;
             }
@@ -160,6 +177,14 @@ public class Inventory {
         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             useSelected();
         }
+        if(World.autoPickup) {
+            for(Item item : World.onFloor) {
+                if(player.getRectangle().overlaps(item.sprite.getBoundingRectangle())) {
+                    pickUpItem();
+                }
+            }
+        }
+
     }
 
     public void shiftSlotSelected(boolean direction) {
@@ -182,7 +207,7 @@ public class Inventory {
         if(inventory.size() != 0) {
             if(slotSelected - 1 < inventory.size()) {
                 if(World.focus.equals("nothing")) {
-                    Item item = inventory.get(slotSelected - 1);
+                    Item item = inventory.get(slotSelected - 1).stackedItem;
                     //Gdx.app.log("Inventory", item.type);
                     if(item.type.equals("Food")) {
                         if(player.health != player.hearts) {
@@ -193,7 +218,10 @@ public class Inventory {
                                 player.health = 10;
                             }
                             player.effect_eat.play();
-                            inventory.remove(item);
+                            boolean remove = inventory.get(slotSelected - 1).dropItem();
+                            if(remove) {
+                                inventory.remove(inventory.get(slotSelected - 1));
+                            }
                             refreshInventory();
                         } else {
                             World.drawManager.setColor(Color.FIREBRICK);
@@ -216,27 +244,46 @@ public class Inventory {
     }
 
     public void pickUpItem() {
-        if (World.detector.itemCollision(false) != null) {
-            Item item = World.detector.itemCollision(false);
-            Gdx.app.log("Inventory", "Picking Up Item : " + item.name);
+        if(inventory.size() < 10) {
+            if (World.detector.itemCollision(false) != null) {
+                Item item = World.detector.itemCollision(false);
+                Gdx.app.log("Inventory", "Picking Up Item : " + item.name);
 
-            addItem(item);
-            World.onFloor.remove(item);
+                addItem(item);
+                World.onFloorToRemove.add(item);
+                //World.onFloor.remove(item);
+            }
         }
     }
 
     public void dropItem() {
         if(inventory.size() != 0) {
             if(slotSelected <= inventory.size()) {
-                Item item_ = inventory.get(slotSelected - 1);
-                Gdx.app.log("Inventory", "Dropping Item : " + item_.name);
+                //Item item_ = inventory.get(slotSelected - 1).stackedItem;
+                //Gdx.app.log("Inventory", "Dropping Item : " + item_.name);
 
-                item_.setSprite();
-                item_.sprite.setCenter(player.position.x + player.WIDTH, player.position.y);
-                item_.sprite.setSize(16, 16);
+                //item_.setSprite();
+                //item_.sprite.setCenter(player.position.x + player.WIDTH, player.position.y);
+                //item_.sprite.setSize(16, 16);
 
-                World.onFloor.add(item_);
-                inventory.remove(item_);
+                //World.onFloor.add(item_);
+                boolean tempVar = inventory.get(slotSelected - 1).dropItem();
+                if(tempVar) {
+                    Item toDrop = new Item(inventory.get(slotSelected - 1).stackedItem);
+                    inventory.remove(inventory.get(slotSelected - 1));
+                    toDrop.setSprite();
+                    toDrop.sprite.setCenter(player.position.x + player.WIDTH, player.position.y);
+                    toDrop.sprite.setSize(16, 16);
+                    World.onFloor.add(toDrop);
+                    Gdx.app.log("Inventory", "Dropping Item : " + toDrop.name);
+                } else {
+                    Item toDrop = new Item(inventory.get(slotSelected - 1).stackedItem);
+                    toDrop.setSprite();
+                    toDrop.sprite.setCenter(player.position.x + player.WIDTH, player.position.y);
+                    toDrop.sprite.setSize(16, 16);
+                    World.onFloor.add(toDrop);
+                    Gdx.app.log("Inventory", "Dropping Item : " + toDrop.name);
+                }
 
                 refreshInventory();
             }
@@ -244,16 +291,16 @@ public class Inventory {
     }
 
     public void printInventory() {
-        for(Item item : inventory) {
-            Gdx.app.log("Inventory", item.name);
+        for(ItemStack item : inventory) {
+            Gdx.app.log("Inventory", item.stackedItem.name);
         }
     }
 
     public void refreshInventory() {
         slotX = 300;
-        for(Item item : inventory) {
-            item.setSprite();
-            item.sprite.setCenter(slotX, 25);
+        for(ItemStack item : inventory) {
+            item.stackedItem.setSprite();
+            item.stackedItem.sprite.setCenter(slotX, 25);
             slotX += 50;
         }
     }

@@ -28,6 +28,7 @@ import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class World implements Screen {
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
     public static ArrayList<Item> itemsToRemove = new ArrayList<Item>();
+    public static ArrayList<Item> onFloorToRemove = new ArrayList<Item>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
     public static ArrayList<NPC> NPCs;
@@ -68,6 +70,8 @@ public class World implements Screen {
     private boolean disableMovement = false;
 
     private Game game;
+
+    public static boolean autoPickup = false;
 
     public static boolean movingRight, movingLeft, movingUp, movingDown;
     private Sprite options, save_quit, back, go, overwrite;
@@ -97,6 +101,7 @@ public class World implements Screen {
             add(new Slime("Slime_3", Classifier.Orange_Slime, 1256, 779, new MovementScript("counterclockwise_1x2")));
             add(new Skeleton("Skeleton_1", Classifier.Skeleton, 1115, 1215, new MovementScript("leftRight_2x2")));
             add(new Skeleton("Skeleton_2", Classifier.Skeleton, 1075, 1435, new MovementScript("stationary")));
+
         }};
 
         NPCs = new ArrayList<NPC>() {{
@@ -225,9 +230,9 @@ public class World implements Screen {
                         enemy.hit = true;
                         Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
                         if(enemy.animState != 3) enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
-                        for(Item item : player.inventory_.inventory) {
-                            if(player.swordClone.name.equals(item.name)) {
-                                item.durability -= enemy.hardness;
+                        for(ItemStack item : player.inventory_.inventory) {
+                            if(player.swordClone.name.equals(item.stackedItem.name)) {
+                                item.stackedItem.durability -= enemy.hardness;
                             }
                         }
                     }
@@ -239,9 +244,9 @@ public class World implements Screen {
                         enemy.hit = true;
                         Gdx.app.log("Player", "Hit Enemy: " + enemy.getName());
                         if(enemy.animState != 3) enemy.takeDamage(player.inventory_.itemSelected.damage, player.horiDirection);
-                        for(Item item : player.inventory_.inventory) {
-                            if (player.spearClone.name.equals(item.name)) {
-                                item.durability -= enemy.hardness;
+                        for(ItemStack item : player.inventory_.inventory) {
+                            if (player.spearClone.name.equals(item.stackedItem.name)) {
+                                item.stackedItem.durability -= enemy.hardness;
                             }
                         }
                     }
@@ -305,8 +310,13 @@ public class World implements Screen {
                 player.inventory_.refreshInventory();
             }
 
+            for(Item item : onFloorToRemove) {
+                onFloor.remove(item);
+            }
+
             enemiesToRemove.clear();
             itemsToRemove.clear();
+            onFloorToRemove.clear();
         }
 
     }

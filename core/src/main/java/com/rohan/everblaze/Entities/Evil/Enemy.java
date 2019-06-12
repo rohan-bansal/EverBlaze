@@ -232,9 +232,11 @@ public class Enemy {
         if(damageFrameHit && !playerDamaged) {
             if(World.detector.EnemycollisionWith(new Item(), this, true)) {
                 if(!playerDamaged) {
-                    World.detector.player.health -= damage;
-                    Gdx.app.log(name, "Damaged player for " + damage + " hearts");
-                    playerDamaged = true;
+                    if(!World.detector.player.invincible) {
+                        World.detector.player.health -= damage;
+                        Gdx.app.log(name, "Damaged player for " + damage + " hearts");
+                        playerDamaged = true;
+                    }
                 }
 
             }

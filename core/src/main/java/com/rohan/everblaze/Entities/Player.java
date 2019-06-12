@@ -29,6 +29,7 @@ public class Player {
     public int HEIGHT;
 
     private boolean flip;
+    public boolean invincible = false;
 
     public Item swordClone;
     public Item spearClone;
@@ -64,6 +65,7 @@ public class Player {
 
         inventory_ = new Inventory(this);
         inventory_.addItem(new Item("Green Apple", "itemSprites/tile002.png", Classifier.Food, 1, "Restores 2 hearts."));
+        inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."));
         inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."));
 
         slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left2.png")));
@@ -135,7 +137,7 @@ public class Player {
     private void processWeaponry() {
         if(inventory_.inventory.size() != 0) {
             if (inventory_.slotSelected - 1 < inventory_.inventory.size()) {
-                Item item = inventory_.inventory.get(inventory_.slotSelected - 1);
+                Item item = inventory_.inventory.get(inventory_.slotSelected - 1).stackedItem;
                 if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
                         item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword") ||
                         item.name.toLowerCase().contains("halberd")) {

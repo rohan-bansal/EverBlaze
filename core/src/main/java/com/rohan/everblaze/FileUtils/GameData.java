@@ -2,6 +2,7 @@ package main.java.com.rohan.everblaze.FileUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ public class GameData {
     private boolean invertControlsOn;
     private boolean effectsOn;
     private Vector2 playerPosition;
-    private ArrayList<Item> inventory;
+    private ArrayList<ItemStack> inventory;
     private ArrayList<Item> onFloor;
     private int slotSelected;
     private int health;
@@ -69,11 +70,11 @@ public class GameData {
         this.hearts = hearts;
     }
 
-    public ArrayList<Item> getInventory() {
+    public ArrayList<ItemStack> getInventory() {
         return inventory;
     }
 
-    public void setInventory(ArrayList<Item> inventory) {
+    public void setInventory(ArrayList<ItemStack> inventory) {
         this.inventory = inventory;
     }
 
