@@ -188,6 +188,8 @@ public class Player {
         slashTime += Gdx.graphics.getDeltaTime();
         stateTime += Gdx.graphics.getDeltaTime();
 
+        die();
+
         switch(animState) {
             case 0:
                 currentFrame = idleAnim.getKeyFrame(stateTime, true);
@@ -373,5 +375,9 @@ public class Player {
     }
 
     public void die() {
+        if(health <= 0) {
+            Gdx.app.log("Player", "died");
+            World.playerDie();
+        }
     }
 }

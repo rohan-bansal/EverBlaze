@@ -68,7 +68,7 @@ public class World implements Screen {
     private boolean renderWords = false;
     private boolean disableMovement = false;
 
-    private Game game;
+    public static Game game;
 
     public static boolean autoPickup = false;
 
@@ -90,7 +90,6 @@ public class World implements Screen {
         batch = new SpriteBatch();
         pauseBatch = new SpriteBatch();
         overwriteBatch = new SpriteBatch();
-        //itemBatch = new SpriteBatch();
         player = new Player(580, 1300);
 
         onFloor = new ArrayList<Item>();
@@ -162,6 +161,10 @@ public class World implements Screen {
         if(gameManager.data.isMusicOn() || !loadData) {
             levelMusic.play();
         }
+    }
+
+    public static void playerDie() {
+        game.setScreen(new GameOver(game));
     }
 
     private void createSignposts() {

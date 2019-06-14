@@ -40,11 +40,15 @@ public class PS3_Controller implements ControllerListener {
 
     private CollisionDetector detector;
 
-    Player player;
+    private Player player;
 
     public PS3_Controller(Player player) {
 
         this.player = player;
+        Controllers.addListener(this);
+    }
+
+    public PS3_Controller() {
         Controllers.addListener(this);
     }
 

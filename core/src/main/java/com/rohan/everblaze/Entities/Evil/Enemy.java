@@ -210,12 +210,10 @@ public class Enemy {
                 }
             }
         }
-
-        //Gdx.app.log("Enemy", current + " : " + position.x + " : " + position.y);
-        //Gdx.app.log("EnemyTick", "" + currentSequenceItem);
     }
 
     public void attack() {
+        Gdx.app.log(name, damageFrameHit + "");
 
         int diffX = Math.round(World.detector.player.position.x - position.x);
         int diffY = Math.round(World.detector.player.position.y - position.y);

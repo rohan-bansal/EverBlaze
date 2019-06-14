@@ -1,11 +1,5 @@
 package main.java.com.rohan.everblaze.TileInteraction.Objects;
 
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.DualHashBidiMap;
-
-import java.text.Bidi;
-import java.util.HashMap;
-
 public class ItemStack {
 
     public int count;
@@ -14,6 +8,10 @@ public class ItemStack {
     public ItemStack(Item stackedItem, int count) {
         this.stackedItem = stackedItem;
         this.count = count;
+    }
+
+    public ItemStack() {
+
     }
 
     public boolean dropItem() {
@@ -27,5 +25,22 @@ public class ItemStack {
 
     public void addItem() {
         count += 1;
+    }
+
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Item getStackedItem() {
+        return stackedItem;
+    }
+
+    public void setStackedItem(Item stackedItem) {
+        this.stackedItem = stackedItem;
     }
 }

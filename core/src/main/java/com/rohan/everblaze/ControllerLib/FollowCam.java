@@ -13,7 +13,7 @@ public class FollowCam {
         this.player = player;
 
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 375, 300);
+        this.camera.setToOrtho(false, 500, 400);
         this.camera.position.set(420, 1290, 0);
 
     }
