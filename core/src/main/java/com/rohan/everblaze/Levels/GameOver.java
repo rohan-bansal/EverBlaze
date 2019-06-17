@@ -22,7 +22,7 @@ public class GameOver implements Screen {
 
     private float stateTime = 0f;
 
-    Animation<TextureRegion> animation;
+    private Animation<TextureRegion> animation;
 
     private Sound_Effects music;
 
@@ -40,9 +40,9 @@ public class GameOver implements Screen {
         this.load = new Sprite(new Texture(Gdx.files.internal("UI/load-game.png")));
         this.quit = new Sprite(new Texture(Gdx.files.internal("UI/quit.png")));
 
-        title.setCenter(500, 400);
-        load.setCenter(500, 300);
-        quit.setCenter(500, 200);
+        title.setCenter(500, 450);
+        load.setCenter(500, 390);
+        quit.setCenter(500, 325);
     }
 
     @Override

@@ -66,11 +66,12 @@ public class World implements Screen {
     private boolean overwriteMenuActive = false;
     public static Signpost signActive = null;
     private boolean renderWords = false;
-    private boolean disableMovement = false;
 
     public static Game game;
 
-    public static boolean autoPickup = false;
+    public static boolean autoPickup = true;
+    private boolean disableMovement = false;
+    public static boolean encryptSaveFiles = true;
 
     public static boolean movingRight, movingLeft, movingUp, movingDown;
     private Sprite options, save_quit, back, go, overwrite;
@@ -82,9 +83,13 @@ public class World implements Screen {
     private boolean npcTextActive;
     private String npcText;
 
+    public static final String RED_BOLD = "\033[1;31m";
+    public static final String ANSI_RESET = "\u001B[0m";
+
     public World(Game game, boolean loadData) {
 
         rand = new Random();
+
 
         this.game = game;
         batch = new SpriteBatch();
@@ -352,8 +357,9 @@ public class World implements Screen {
                 }
             }
         } catch (NullPointerException e) {
-            Gdx.app.log("FILE ERROR", "CORRUPT LOAD FILE (maybe you forgot to save last time?)");
+            Gdx.app.log(RED_BOLD + "FILE ERROR", "CORRUPT LOAD FILE (maybe you forgot to save?)" + ANSI_RESET);
             System.exit(1);
+
         }
 
 
@@ -403,11 +409,11 @@ public class World implements Screen {
 
     private void createItems() {
         // Name Path Type Durability Description Damage
-        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, 50, "A typical adventurer's sword. Deals 2 damage per hit.", 2);
+        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, 50, "A typical adventurer's sword.", 2);
         sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
 
-        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, 50, "The darkest spear. Deals 10 damage per hit.", 10);
+        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, 50, "The darkest spear.", 10);
         spear.loadCoords(772, 1380);
         spear.sprite.setSize(16, 16);
 

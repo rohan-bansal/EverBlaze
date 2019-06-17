@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class GameManager {
 
@@ -49,7 +50,11 @@ public class GameManager {
     public void saveData() {
         if (gameData != null) {
             json.setIgnoreDeprecated(true);
-            gameData.writeString(json.prettyPrint(data), false);
+            if(World.encryptSaveFiles) {
+                gameData.writeString(Base64Coder.encodeString(json.prettyPrint(data)), false);
+            } else {
+                gameData.writeString(json.prettyPrint(data), false);
+            }
             Gdx.app.log("Manager", "Data Saved");
         }
     }
@@ -57,7 +62,11 @@ public class GameManager {
     public boolean loadData() {
         this.gameData = Gdx.files.local("EverBlaze_Save.json");
         try {
-            data = json.fromJson(GameData.class, gameData.readString());
+            if(World.encryptSaveFiles) {
+                data = json.fromJson(GameData.class, Base64Coder.decodeString(gameData.readString()));
+            } else {
+                data = json.fromJson(GameData.class, gameData.readString());
+            }
             Gdx.app.log("Manager", "Save Loaded");
             return true;
         } catch(Exception e) {

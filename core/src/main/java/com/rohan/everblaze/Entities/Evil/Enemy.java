@@ -213,7 +213,7 @@ public class Enemy {
     }
 
     public void attack() {
-        Gdx.app.log(name, damageFrameHit + "");
+        Gdx.app.log(name, playerDamaged + "");
 
         int diffX = Math.round(World.detector.player.position.x - position.x);
         int diffY = Math.round(World.detector.player.position.y - position.y);

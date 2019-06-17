@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Classifier;
+import main.java.com.rohan.everblaze.Levels.InventoryOverlay;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.FileUtils.GameManager;
@@ -27,13 +28,16 @@ public class Inventory {
 
     private Player player;
     public ArrayList<ItemStack> inventory;
-    public int slotSelected = 1;
+    public static int slotSelected = 1;
     public Item itemSelected;
     public ArrayList<Sprite> slots;
     private SpriteBatch slotBatch;
     private float slotX = 300;
 
+    private boolean renderOverlay = false;
+
     private ItemDurabilityBar bar;
+    private InventoryOverlay overlay;
 
     private BitmapFont nameDrawer = new BitmapFont();
     private BitmapFont itemCounter = new BitmapFont();
@@ -48,6 +52,9 @@ public class Inventory {
         bar = new ItemDurabilityBar();
 
         highlighted = new Sprite(new Texture(Gdx.files.internal("UI/invSlot2.jpg")));
+
+        overlay = new InventoryOverlay(inventory);
+
         loadHotBar();
         refreshInventory();
 
@@ -90,21 +97,21 @@ public class Inventory {
         for(int y = 0; y < slots.size(); y++) {
             if(slots.indexOf(slots.get(y)) == slotSelected - 1) {
                 highlighted.setCenter(slots.get(y).getX() + 25, slots.get(y).getY() + 25);
-                highlighted.draw(slotBatch);
+                if(!renderOverlay) highlighted.draw(slotBatch);
                 try {
                     GlyphLayout layout = new GlyphLayout();
                     layout.setText(nameDrawer, inventory.get(y).stackedItem.name);
-                    nameDrawer.draw(slotBatch, inventory.get(y).stackedItem.name, (inventory.get(y).stackedItem.sprite.getX() +
+                    if(!renderOverlay) nameDrawer.draw(slotBatch, inventory.get(y).stackedItem.name, (inventory.get(y).stackedItem.sprite.getX() +
                             inventory.get(y).stackedItem.sprite.getWidth() / 2) - layout.width / 2, inventory.get(y).stackedItem.sprite.getY() + 60);
                 } catch(Exception e) {
                 }
             } else {
-                slots.get(y).draw(slotBatch);
+                if(!renderOverlay) slots.get(y).draw(slotBatch);
             }
         }
 
         for(ItemStack item : inventory) {
-            item.stackedItem.render(slotBatch);
+            if(!renderOverlay) item.stackedItem.render(slotBatch);
             if(item.stackedItem.durability <= 0) {
                 World.itemStackToRemove.add(item);
             }
@@ -113,12 +120,16 @@ public class Inventory {
             }
         }
 
+        if(renderOverlay) {
+            overlay.render(slotBatch, inventory);
+        }
+
         slotBatch.end();
 
         bar.getDurRenderer().begin(ShapeRenderer.ShapeType.Filled);
         for(ItemStack item : inventory) {
             if(!item.stackedItem.type.equals(Classifier.Food) && !item.stackedItem.type.equals(Classifier.Utility)) {
-                bar.render(item.stackedItem);
+                if(!renderOverlay) bar.render(item.stackedItem);
             }
         }
         bar.getDurRenderer().end();
@@ -133,8 +144,7 @@ public class Inventory {
             itemSelected = null;
         }
 
-
-        World.drawManager.render(slotBatch, 3);
+        if(!renderOverlay) World.drawManager.render(slotBatch, 3);
     }
 
     public void detectKeyPressed() {
@@ -169,10 +179,15 @@ public class Inventory {
             slotSelected = 10;
         } else
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            pickUpItem();
+            if(renderOverlay) {
+                renderOverlay = false;
+                refreshInventory();
+            } else {
+                openOverlay();
+            }
         } else
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            dropItem();
+            if(!renderOverlay) dropItem();
         } else
         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             useSelected();
@@ -185,6 +200,10 @@ public class Inventory {
             }
         }
 
+    }
+
+    private void openOverlay() {
+        renderOverlay = true;
     }
 
     public void shiftSlotSelected(boolean direction) {
