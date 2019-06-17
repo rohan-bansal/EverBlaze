@@ -34,7 +34,7 @@ public class Inventory {
     private SpriteBatch slotBatch;
     private float slotX = 300;
 
-    private boolean renderOverlay = false;
+    public static boolean renderOverlay = false;
 
     private ItemDurabilityBar bar;
     private InventoryOverlay overlay;
@@ -53,7 +53,7 @@ public class Inventory {
 
         highlighted = new Sprite(new Texture(Gdx.files.internal("UI/invSlot2.jpg")));
 
-        overlay = new InventoryOverlay(inventory);
+        overlay = new InventoryOverlay(inventory, player);
 
         loadHotBar();
         refreshInventory();
@@ -121,7 +121,7 @@ public class Inventory {
         }
 
         if(renderOverlay) {
-            overlay.render(slotBatch, inventory);
+            overlay.render(slotBatch, inventory, itemCounter);
         }
 
         slotBatch.end();

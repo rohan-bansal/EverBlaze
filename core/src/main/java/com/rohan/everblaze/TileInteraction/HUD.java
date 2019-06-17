@@ -52,21 +52,23 @@ public class HUD {
 
     public void render() {
         hud.begin();
-        for(int x = 0; x < player.hearts; x++) {
-            if(player.health == player.hearts) {
-                hud.draw(heart, 20 * x + 5, 770);
-            } else {
-                if(x > player.health - 1) {
-                    hud.draw(empty, 20 * x + 5, 770);
-                } else {
+        if(!Inventory.renderOverlay) {
+            for(int x = 0; x < player.hearts; x++) {
+                if(player.health == player.hearts) {
                     hud.draw(heart, 20 * x + 5, 770);
+                } else {
+                    if(x > player.health - 1) {
+                        hud.draw(empty, 20 * x + 5, 770);
+                    } else {
+                        hud.draw(heart, 20 * x + 5, 770);
+                    }
                 }
             }
-        }
-        hud.draw(coin, 5, 740);
+            hud.draw(coin, 5, 740);
 
-        coins.setText(player.coins + "");
-        coins.renderOnlyIf(hud);
+            coins.setText(player.coins + "");
+            coins.renderOnlyIf(hud);
+        }
 
         pause.draw(hud);
 
