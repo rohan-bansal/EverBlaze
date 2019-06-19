@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -27,6 +31,7 @@ import main.java.com.rohan.everblaze.Debugger;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Chest;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
@@ -48,6 +53,7 @@ public class World implements Screen {
     public static ArrayList<Item> onFloorToRemove = new ArrayList<Item>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
+    public static ArrayList<Chest> chests = new ArrayList<Chest>();
     public static ArrayList<NPC> NPCs;
 
     public static CollisionDetector detector;
@@ -80,6 +86,8 @@ public class World implements Screen {
     private Random rand;
 
     private OrthogonalTiledMapRenderer renderer;
+    private int[] layersToRender = new int[] {0, 1, 2, 3, 5, 6};
+    private int[] layersToRenderAfter = new int[] {4};
     private boolean npcTextActive;
     private String npcText;
 
@@ -95,7 +103,8 @@ public class World implements Screen {
         batch = new SpriteBatch();
         pauseBatch = new SpriteBatch();
         overwriteBatch = new SpriteBatch();
-        player = new Player(580, 1300);
+        //player = new Player(580, 1300);
+        player = new Player(580, 2140);
 
         onFloor = new ArrayList<Item>();
         enemies = new ArrayList<Enemy>() {{
@@ -148,9 +157,9 @@ public class World implements Screen {
 
         manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader());
-        manager.load("level/overworld_forest.tmx", TiledMap.class);
+        manager.load("level/overworld_forest_2.tmx", TiledMap.class);
         manager.finishLoading();
-        map = manager.get("level/overworld_forest.tmx", TiledMap.class);
+        map = manager.get("level/overworld_forest_2.tmx", TiledMap.class);
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
@@ -161,10 +170,33 @@ public class World implements Screen {
         cam = new FollowCam(player);
         debugger = new Debugger(player);
 
+        createChests();
+
         loadEnemies();
         loadMusic();
         if(gameManager.data.isMusicOn() || !loadData) {
             levelMusic.play();
+        }
+    }
+
+    private void createChests() {
+        ArrayList<MapObject> chests_ = detector.getChests();
+        for(MapObject chest : chests_) {
+            MapProperties props = chest.getProperties();
+            int x = Math.round(((RectangleMapObject) chest).getRectangle().getX());
+            int y = Math.round(((RectangleMapObject) chest).getRectangle().getY());
+            String itemName = (String) props.get("tileName");
+            String itemID = "itemSprites/" + props.get("tileID");
+            String itemType = (String) props.get("Classifier");
+            int itemDurability = (Integer) props.get("Durability");
+            String itemDescription = (String) props.get("Description");
+            try {
+                int itemDamage = (Integer) props.get("Damage");
+                chests.add(new Chest(x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription, itemDamage)));
+            } catch (NullPointerException e) {
+                chests.add(new Chest(x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription)));
+            }
+
         }
     }
 
@@ -198,7 +230,7 @@ public class World implements Screen {
             debugger.printDebug();
 
             renderer.setView(cam.camera);
-            renderer.render();
+            renderer.render(layersToRender);
 
             batch.begin();
             for(Item item : onFloor) {
@@ -287,6 +319,19 @@ public class World implements Screen {
                 }
             }
 
+            for(Chest chest : chests) {
+                chest.render(batch);
+                if(chest.getRect().overlaps(player.getRectangle())) {
+                    focus = "chest";
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                        if(chest.chestState != 1) {
+                            chest.displayContents();
+                        }
+                        chest.chestState = 1;
+                    }
+                }
+            }
+
             batch.end();
 
             if(disableMovement) {
@@ -299,11 +344,13 @@ public class World implements Screen {
             player.render(batch, cam.camera);
 
             //debugger.renderDebugBoxes(enemies, onFloor);
+            renderer.render(layersToRenderAfter);
 
             hud.render();
             if(signActive != null) {
                 hud.drawSign(signActive);
             }
+            player.inventory_.render();
 
             for(Enemy enemy : enemiesToRemove) {
                 enemies.remove(enemy);
@@ -409,11 +456,11 @@ public class World implements Screen {
 
     private void createItems() {
         // Name Path Type Durability Description Damage
-        Item sword = new Item("Blade", "itemSprites/tile072.png", Classifier.Weapon, 50, "A typical adventurer's sword.", 2);
+        Item sword = new Item("Traveler's Blade", "itemSprites/tile072.png", Classifier.Weapon, 50, "A typical adventurer's sword.", 2);
         sword.loadCoords(772, 1373);
         sword.sprite.setSize(16, 16);
 
-        Item spear = new Item("Trident of the Dark", "itemSprites/tile118.png", Classifier.Weapon, 50, "The darkest spear.", 10);
+        Item spear = new Item("Trident of the Light", "itemSprites/tile118.png", Classifier.Weapon, 50, "The darkest spear.", 10);
         spear.loadCoords(772, 1380);
         spear.sprite.setSize(16, 16);
 

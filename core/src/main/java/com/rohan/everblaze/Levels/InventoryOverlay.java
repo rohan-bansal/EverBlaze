@@ -21,12 +21,12 @@ public class InventoryOverlay {
 
     private Sprite inventory, quests, healthbar, highlighted;
 
-    private BitmapFont nameDrawer = new BitmapFont();
+    private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont descriptionDrawer = new BitmapFont();
-    private BitmapFont dmgHealthDrawer = new BitmapFont();
-    private BitmapFont durabilityDrawer = new BitmapFont();
-    private BitmapFont healthDrawer = new BitmapFont();
-    private BitmapFont coinDrawer = new BitmapFont();
+    private BitmapFont dmgHealthDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+    private BitmapFont durabilityDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+    private BitmapFont healthDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
+    private BitmapFont coinDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
 
 
 
@@ -41,7 +41,7 @@ public class InventoryOverlay {
         highlighted = new Sprite(new Texture(Gdx.files.internal("UI/invSlot2.jpg")));
 
         int xPos = 610;
-        int yPos = 600;
+        int yPos = 540;
         int incr = 1;
         while(incr < 11) {
             Sprite temp = new Sprite(new Texture(Gdx.files.internal("UI/invSlot.jpg")));
@@ -56,9 +56,11 @@ public class InventoryOverlay {
         }
         inventory = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/inventory.png")));
         healthbar = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/healthbar.png")));
+        quests = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/quests.png")));
 
-        inventory.setCenter(750, 450);
-        healthbar.setCenter(215, 720);
+        inventory.setCenter(750, 400);
+        healthbar.setCenter(300, 720);
+        quests.setCenter(320, 360);
     }
 
     public void render(SpriteBatch batch, ArrayList<ItemStack> inventory_, BitmapFont itemCounter) {
@@ -67,6 +69,7 @@ public class InventoryOverlay {
 
         inventory.draw(batch);
         healthbar.draw(batch);
+        quests.draw(batch);
 
         for(int x = 0; x < 10; x++) {
             if(slots.indexOf(slots.get(x)) == Inventory.slotSelected - 1) {
@@ -91,22 +94,24 @@ public class InventoryOverlay {
             GlyphLayout layout = new GlyphLayout();
             layout.setText(nameDrawer, tempItem.name);
             nameDrawer.setColor(Color.GOLD);
-            nameDrawer.getData().setScale(2);
+            //nameDrawer.getData().setScale(2);
             nameDrawer.draw(batch, tempItem.name, (inventory.getX() +
-                    inventory.getWidth() / 2) - layout.width / 2, 460);
+                    inventory.getWidth() / 2) - layout.width / 2, 420);
 
             layout.setText(descriptionDrawer, tempItem.description);
             descriptionDrawer.setColor(Color.GOLD);
             descriptionDrawer.draw(batch, tempItem.description, (inventory.getX() +
-                    inventory.getWidth() / 2) - layout.width / 2, 420);
+                    inventory.getWidth() / 2) - layout.width / 2, 380);
 
-            dmgHealthDrawer.setColor(Color.FIREBRICK);
+            dmgHealthDrawer.setColor(Color.SCARLET);
+            dmgHealthDrawer.getData().setScale(0.6f);
             if(tempItem.type.equals(Classifier.Weapon)) {
                 layout.setText(dmgHealthDrawer, "Damage : " + tempItem.damage);
                 dmgHealthDrawer.draw(batch, "Damage : " + tempItem.damage, (inventory.getX() +
-                        inventory.getWidth() / 2) - layout.width / 2, 390);
+                        inventory.getWidth() / 2) - layout.width / 2, 350);
             }
 
+            durabilityDrawer.getData().setScale(0.6f);
             if(!tempItem.type.equals(Classifier.Food) && !tempItem.type.equals(Classifier.Utility)) {
                 layout.setText(durabilityDrawer, "Durability : " + tempItem.durability);
                 float itemDur = (float) tempItem.durability/tempItem.baseDur;
@@ -118,18 +123,18 @@ public class InventoryOverlay {
                     durabilityDrawer.setColor(Color.RED);
                 }
                 durabilityDrawer.draw(batch, "Durability : " + tempItem.durability, (inventory.getX() +
-                        inventory.getWidth() / 2) - layout.width / 2, 370);
+                        inventory.getWidth() / 2) - layout.width / 2, 330);
             }
 
             layout.setText(healthDrawer, player.health + " / " + player.hearts);
             healthDrawer.setColor(Color.GREEN);
-            healthDrawer.getData().setScale(2);
+            healthDrawer.getData().setScale(0.8f);
             healthDrawer.draw(batch, player.health + " / " + player.hearts, (healthbar.getX() +
                     healthbar.getWidth() / 2) - layout.width / 2, 730);
 
             layout.setText(coinDrawer, player.coins + "");
-            coinDrawer.setColor(Color.GOLDENROD);
-            coinDrawer.getData().setScale(2);
+            coinDrawer.setColor(Color.BROWN);
+            coinDrawer.getData().setScale(0.8f);
             coinDrawer.draw(batch, player.coins + "", (healthbar.getX() +
                     healthbar.getWidth() / 2) - layout.width / 2, 690);
 

@@ -217,7 +217,7 @@ public class Player {
 
         batch.end();
 
-        inventory_.render();
+        //inventory_.render();
     }
 
     private void renderClones(SpriteBatch batch) {

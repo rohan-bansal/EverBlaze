@@ -1,18 +1,21 @@
 package main.java.com.rohan.everblaze.TileInteraction;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
 import main.java.com.rohan.everblaze.Entities.Good.NPC;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CollisionDetector {
@@ -25,13 +28,16 @@ public class CollisionDetector {
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
 
-    public static final String[] obstacles = {"Pillar", "Wall", "Statue", "Gate_Wall", "Tree", "Swamp_Wall", "Tower", "Railing"};
+    public static final String[] obstacles = {"Pillar", "Wall", "Statue", "Gate_Wall", "Tree", "Swamp_Wall", "Tower", "Railing", "Rock", "Tower_1"};
     public static final String[] room_entrances = {"Cave_Entrance_1", "Cave_Entrance_2", "Blocked_Cave_Entrance_1", "Blocked_Cave_Entrance_2"};
 
     public CollisionDetector(Player player, TiledMap map) {
         this.player = player;
         this.map = map;
         this.objects = map.getLayers().get("Collisions").getObjects();
+        //for(MapObject object : objects) {
+        //    Gdx.app.log("detector", object.getName());
+        //}
 
         MapProperties properties = map.getProperties();
         tileWidth = properties.get("tilewidth", Integer.class);
@@ -44,6 +50,19 @@ public class CollisionDetector {
 
     public MapObjects getObjects () {
         return objects;
+    }
+
+    public ArrayList<MapObject> getChests() {
+
+        ArrayList<MapObject> chests = new ArrayList<MapObject>();
+
+        for(MapObject object : objects) {
+            if(object.getName().toLowerCase().contains("chest")) {
+                chests.add(object);
+                Gdx.app.log("Detector", "Found chest. Loading...");
+            }
+        }
+        return chests;
     }
 
     public String collisionAt(int x, int y) {

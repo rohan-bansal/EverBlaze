@@ -2,6 +2,7 @@ package main.java.com.rohan.everblaze.Levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,15 +22,16 @@ public class TitleScreen implements Screen {
     //Animation<TextureRegion> animation;
     int rotation = 1;
     boolean fileNotFound;
-
     private Sound_Effects music;
+    private boolean renderTransition = false;
 
 
     public TitleScreen(Game game, boolean fileNotFound) {
 
         Gdx.app.log("Title", "Set title screen");
 
-        music = new Sound_Effects("title", true);
+        music = new Sound_Effects("Music/title_music.wav");
+        //music = new Sound_Effects("title", true);
 
         this.game = game;
         screen = new SpriteBatch();
@@ -82,9 +84,9 @@ public class TitleScreen implements Screen {
         } else {
             rotation = 0;
         }
+
         Gdx.gl.glClearColor(37/255f, 32/255f, 31/255f, 1);
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
-
 
         screen.begin();
         if (title.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {

@@ -78,7 +78,6 @@ public class Inventory {
         Gdx.app.log("Inventory", item.name + " added to inventory");
         item.setSprite();
         item.sprite.setCenter(slotX, 25);
-        slotX += 50;
 
         for(ItemStack item_ : inventory) {
             if(item_.stackedItem.name.equals(item.name) && (item.type.equals(Classifier.Utility) || item.type.equals(Classifier.Food))) {
@@ -86,6 +85,7 @@ public class Inventory {
                 return;
             }
         }
+        slotX += 50;
         inventory.add(new ItemStack(item, 1));
     }
 
