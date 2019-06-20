@@ -21,15 +21,24 @@ public class Chest {
 
     private Item dropItem;
 
-    public Chest(int x, int y, Item item) {
+    public int id;
+
+    public Chest(int ID, int x, int y, Item item) {
 
         position = new Vector2(x, y);
-        Gdx.app.log("Chest", "Position : " + position.x + " : " + position.y);
 
         dropItem = item;
+        this.id = ID;
 
         closed = new TextureRegion(new Texture(Gdx.files.internal("Entities/Chest/chest_f0.png")));
         open = new TextureRegion(new Texture(Gdx.files.internal("Entities/Chest/chest_f2.png")));
+    }
+
+    public Chest() {
+    }
+
+    public Item getDropItem() {
+        return dropItem;
     }
 
     public Rectangle getRect() {

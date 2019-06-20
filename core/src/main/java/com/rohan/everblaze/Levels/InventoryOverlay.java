@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Entities.Player;
+import main.java.com.rohan.everblaze.FileUtils.Quest;
 import main.java.com.rohan.everblaze.TileInteraction.Inventory;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
@@ -27,8 +28,6 @@ public class InventoryOverlay {
     private BitmapFont durabilityDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
     private BitmapFont healthDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
     private BitmapFont coinDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
-
-
 
     private ArrayList<Sprite> slots = new ArrayList<Sprite>();
     public ArrayList<ItemStack> inventory_;
@@ -70,6 +69,15 @@ public class InventoryOverlay {
         inventory.draw(batch);
         healthbar.draw(batch);
         quests.draw(batch);
+
+        for(Quest quest : World.quests) {
+            quest.renderCard(batch);
+
+            if(quest.card.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                Gdx.app.log("Overlay", "True");
+            }
+        }
+
 
         for(int x = 0; x < 10; x++) {
             if(slots.indexOf(slots.get(x)) == Inventory.slotSelected - 1) {

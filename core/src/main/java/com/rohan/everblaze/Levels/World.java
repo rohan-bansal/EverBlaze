@@ -29,6 +29,7 @@ import main.java.com.rohan.everblaze.ControllerLib.FollowCam;
 import main.java.com.rohan.everblaze.ControllerLib.PS3_Controller;
 import main.java.com.rohan.everblaze.Debugger;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
+import main.java.com.rohan.everblaze.FileUtils.Quest;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Chest;
@@ -37,10 +38,12 @@ import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class World implements Screen {
 
+    public static boolean questAdded = false;
     private TiledMap map;
     private AssetManager manager;
     private SpriteBatch batch;
@@ -54,6 +57,8 @@ public class World implements Screen {
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
     public static ArrayList<Chest> chests = new ArrayList<Chest>();
+    public static ArrayList<Integer> openedChests = new ArrayList<Integer>();
+    public static ArrayList<Quest> quests = new ArrayList<Quest>();
     public static ArrayList<NPC> NPCs;
 
     public static CollisionDetector detector;
@@ -68,6 +73,7 @@ public class World implements Screen {
     public static ArrayList<Enemy> enemies;
     public static ArrayList<Item> onFloor;
 
+    public static int questY = 450;
     private boolean pauseMenuActive = false;
     private boolean overwriteMenuActive = false;
     public static Signpost signActive = null;
@@ -77,7 +83,7 @@ public class World implements Screen {
 
     public static boolean autoPickup = true;
     private boolean disableMovement = false;
-    public static boolean encryptSaveFiles = true;
+    public static boolean encryptSaveFiles = false;
 
     public static boolean movingRight, movingLeft, movingUp, movingDown;
     private Sprite options, save_quit, back, go, overwrite;
@@ -98,13 +104,16 @@ public class World implements Screen {
 
         rand = new Random();
 
+        removedEnemies.clear();
+        quests.clear();
+        questY = 450;
 
         this.game = game;
         batch = new SpriteBatch();
         pauseBatch = new SpriteBatch();
         overwriteBatch = new SpriteBatch();
         //player = new Player(580, 1300);
-        player = new Player(580, 2140);
+        player = new Player(400, 475);
 
         onFloor = new ArrayList<Item>();
         enemies = new ArrayList<Enemy>() {{
@@ -117,8 +126,8 @@ public class World implements Screen {
         }};
 
         NPCs = new ArrayList<NPC>() {{
-            add(new Blacksmith("Bobby", 750, 1367, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/Conversation.json")));
-            add(new FoodVendor("Joey", 755, 1387, new MovementScript("stationary")).setQuest(Gdx.files.internal("Quests/Conversation.json")));
+            add(new Blacksmith("Bobby", 750, 1367, new MovementScript("leftRight_2x2")));
+            add(new FoodVendor("Joey", 755, 1387, new MovementScript("stationary")));
             add(new Adventurer("Huey", 760, 1347, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/FindTheSword.json")));
         }};
 
@@ -179,6 +188,15 @@ public class World implements Screen {
         }
     }
 
+    public static void addQuest(Quest questData) {
+        Sprite temp = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/questCard.png")));
+        temp.setCenter(320, questY);
+        questY -= 65;
+        questData.setCard(temp);
+        quests.add(questData);
+
+    }
+
     private void createChests() {
         ArrayList<MapObject> chests_ = detector.getChests();
         for(MapObject chest : chests_) {
@@ -190,13 +208,19 @@ public class World implements Screen {
             String itemType = (String) props.get("Classifier");
             int itemDurability = (Integer) props.get("Durability");
             String itemDescription = (String) props.get("Description");
+            int chestID = (Integer) props.get("ChestID");
+
             try {
                 int itemDamage = (Integer) props.get("Damage");
-                chests.add(new Chest(x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription, itemDamage)));
+                chests.add(new Chest(chestID, x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription, itemDamage)));
             } catch (NullPointerException e) {
-                chests.add(new Chest(x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription)));
+                chests.add(new Chest(chestID, x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription)));
             }
-
+        }
+        for(Chest chest2 : chests) {
+            if(openedChests.contains(chest2.id)) {
+                chest2.chestState = 1;
+            }
         }
     }
 
@@ -216,6 +240,7 @@ public class World implements Screen {
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         focus = "nothing";
+        questAdded = false;
 
         if(hud.pausePressed()) {
             pauseMenuActive = true;
@@ -326,6 +351,7 @@ public class World implements Screen {
                     if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                         if(chest.chestState != 1) {
                             chest.displayContents();
+                            openedChests.add(chest.id);
                         }
                         chest.chestState = 1;
                     }
@@ -384,6 +410,7 @@ public class World implements Screen {
         gameManager.data.setSlotSelected(player.inventory_.slotSelected);
         gameManager.data.setEnemiesDead(removedEnemies);
         gameManager.data.setCoins(player.coins);
+        gameManager.data.setOpenedChests(openedChests);
         gameManager.saveData();
     }
 
@@ -395,6 +422,7 @@ public class World implements Screen {
         player.inventory_.loadInventory(gameManager);
         player.inventory_.slotSelected = gameManager.data.getSlotSelected();
 
+        openedChests = gameManager.data.getOpenedChests();
         removedEnemies = gameManager.data.getEnemiesDead();
         onFloor = gameManager.data.getOnFloor();
         try {

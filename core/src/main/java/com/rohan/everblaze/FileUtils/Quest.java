@@ -1,5 +1,13 @@
 package main.java.com.rohan.everblaze.FileUtils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import main.java.com.rohan.everblaze.Levels.World;
+
 import java.util.ArrayList;
 
 public class Quest {
@@ -9,6 +17,44 @@ public class Quest {
     private String description;
     private ArrayList<String> reward;
     private String questType;
+    public Sprite card;
+    public int priority;
+    public BitmapFont cardDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public BitmapFont getCardDrawer() {
+        return cardDrawer;
+    }
+
+    public void setCardDrawer(BitmapFont cardDrawer) {
+        this.cardDrawer = cardDrawer;
+    }
+
+    public Sprite getCard() {
+        return card;
+    }
+
+    public void renderCard(SpriteBatch batch) {
+        card.draw(batch);
+
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(cardDrawer, questName);
+        cardDrawer.setColor(Color.GOLD);
+        cardDrawer.draw(batch, questName, (card.getX() +
+                card.getWidth() / 2) - layout.width / 2, card.getY() + 42);
+    }
+
+    public void setCard(Sprite card) {
+        this.card = card;
+    }
 
     public String getQuestType() {
         return questType;

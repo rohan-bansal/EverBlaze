@@ -37,7 +37,7 @@ public class Inventory {
     public static boolean renderOverlay = false;
 
     private ItemDurabilityBar bar;
-    private InventoryOverlay overlay;
+    public InventoryOverlay overlay;
 
     private BitmapFont nameDrawer = new BitmapFont();
     private BitmapFont itemCounter = new BitmapFont();
@@ -252,7 +252,7 @@ public class Inventory {
                     } else if(item.type.equals("Weapon")) {
                         if(item.name.toLowerCase().contains("sword") || item.name.toLowerCase().contains("blade") || item.name.toLowerCase().contains("saber") || item.name.toLowerCase().contains("dagger") ||
                                 item.name.toLowerCase().contains("knife") || item.name.toLowerCase().contains("rapier") || item.name.toLowerCase().contains("longsword") || item.name.toLowerCase().contains("shortsword")
-                                || item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("halberd") || item.name.toLowerCase().contains("trident")) {
+                                || item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("halberd") || item.name.toLowerCase().contains("trident") || item.name.toLowerCase().contains("sceptre")) {
                             player.attack();
                         }
                     }

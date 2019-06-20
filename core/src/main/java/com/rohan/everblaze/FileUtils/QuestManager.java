@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import main.java.com.rohan.everblaze.Entities.Good.NPC;
+import main.java.com.rohan.everblaze.Levels.World;
 
 public class QuestManager {
 
@@ -24,6 +25,7 @@ public class QuestManager {
     private void parseRequirements() {
         try {
             questData = json.fromJson(Quest.class, data.readString());
+            World.addQuest(questData);
             Gdx.app.log("Quests", "Quest Loaded : " + questData.getQuestName());
         } catch(Exception e) {
             Gdx.app.log("Quests", "Quest Parsing Failed");

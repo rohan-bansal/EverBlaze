@@ -20,7 +20,7 @@ public class Player {
 
     public TextureRegion currentFrame;
 
-    private float speed = 0.9f;
+    private float speed = 0.7f;
     private boolean runTemp = false;
 
     public Vector2 position;
@@ -143,7 +143,7 @@ public class Player {
                     swordClone = new Item(item.name, item.spritePath, item.type, item.durability, item.description);
                     swordClone.sprite.setSize(16, 16);
                     spearClone = null;
-                } else if(item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("trident")) {
+                } else if(item.name.toLowerCase().contains("spear") || item.name.toLowerCase().contains("trident") || item.name.toLowerCase().contains("sceptre")) {
                     spearClone = new Item(item.name, item.spritePath, item.type, item.durability, item.description);
                     spearClone.sprite.setSize(16, 16);
                     swordClone = null;

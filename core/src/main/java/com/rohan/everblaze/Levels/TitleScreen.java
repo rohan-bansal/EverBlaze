@@ -30,7 +30,7 @@ public class TitleScreen implements Screen {
 
         Gdx.app.log("Title", "Set title screen");
 
-        music = new Sound_Effects("Music/title_music.wav");
+        music = new Sound_Effects("Music/title_music.mp3");
         //music = new Sound_Effects("title", true);
 
         this.game = game;

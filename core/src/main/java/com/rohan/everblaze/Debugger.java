@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import main.java.com.rohan.everblaze.Entities.Evil.Enemy;
+import main.java.com.rohan.everblaze.FileUtils.Quest;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.Levels.World;
@@ -37,6 +38,12 @@ public class Debugger {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.P)) {
             World.detector.itemCollision(true);
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.Y)) {
+            for(Quest quest : World.quests) {
+                Gdx.app.log("Quests", quest.getQuestName());
+            }
         }
     }
 

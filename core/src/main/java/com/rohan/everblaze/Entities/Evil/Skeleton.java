@@ -103,7 +103,7 @@ public class Skeleton extends Enemy {
         super.render(batch);
 
         if(super.reachedLastDieFrame && !droppedItem) {
-            Item dropItem = new Item("Rusty Halberd", "itemSprites/tile421.png", Classifier.Weapon, 3, "Rusty Weapon. Very brittle!", 5);
+            Item dropItem = new Item("Rusty Halberd", "itemSprites/tile421.png", Classifier.Weapon, 3, "Rusty Weapon. Very brittle!", 3);
             dropItem.loadCoords((int) (position.x + super.currentFrame.getRegionWidth() / 2), (int) (position.y + super.currentFrame.getRegionHeight() / 2));
             dropItem.sprite.setSize(16, 16);
             World.onFloor.add(dropItem);
