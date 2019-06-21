@@ -15,12 +15,21 @@ public class Quest {
     private String questName;
     private String NPC;
     private String description;
+    private String location;
     private ArrayList<String> reward;
     private String questType;
     public Sprite card;
     public int priority;
     public BitmapFont cardDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
 
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public int getPriority() {
         return priority;
@@ -45,6 +54,14 @@ public class Quest {
     public void renderCard(SpriteBatch batch) {
         card.draw(batch);
 
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(cardDrawer, questName);
+        cardDrawer.setColor(Color.GOLD);
+        cardDrawer.draw(batch, questName, (card.getX() +
+                card.getWidth() / 2) - layout.width / 2, card.getY() + 42);
+    }
+
+    public void renderText(SpriteBatch batch) {
         GlyphLayout layout = new GlyphLayout();
         layout.setText(cardDrawer, questName);
         cardDrawer.setColor(Color.GOLD);

@@ -2,8 +2,10 @@
   "questName": "Sword Hunter",
   "questType": "treasure",
   "NPC": "Huey",
-  "description": "Huey wants his weapon back! Go find it for him. He says he lost it near a small lake.",
+  "location": "Marketplace",
+  "description": "Huey wants his weapon back! Go find it for him. He said he lost it near a small lake.",
   "reward": [
+    "Weapon",
     "tile085.png",
     "Dagger",
     "3 Damage"

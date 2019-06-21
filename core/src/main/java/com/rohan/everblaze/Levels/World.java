@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -127,7 +128,7 @@ public class World implements Screen {
 
         NPCs = new ArrayList<NPC>() {{
             add(new Blacksmith("Bobby", 750, 1367, new MovementScript("leftRight_2x2")));
-            add(new FoodVendor("Joey", 755, 1387, new MovementScript("stationary")));
+            add(new FoodVendor("Joey", 755, 1387, new MovementScript("stationary")).setQuest(Gdx.files.internal("Quests/BerryBlast.json")));
             add(new Adventurer("Huey", 760, 1347, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/FindTheSword.json")));
         }};
 
@@ -186,6 +187,7 @@ public class World implements Screen {
         if(gameManager.data.isMusicOn() || !loadData) {
             levelMusic.play();
         }
+
     }
 
     public static void addQuest(Quest questData) {

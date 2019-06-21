@@ -1,0 +1,13 @@
+{
+  "questName": "Berry Blast",
+  "questType": "collection",
+  "NPC": "Sebastian",
+  "location": "Marketplace",
+  "description": "Find fifteen blackberries for Sebastian's fruitcake.",
+  "reward": [
+    "Food",
+    "tile022.png",
+    "Fruitcake",
+    "Restores 10 hearts."
+  ]
+}

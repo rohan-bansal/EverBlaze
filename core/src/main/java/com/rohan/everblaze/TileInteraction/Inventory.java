@@ -18,11 +18,9 @@ import main.java.com.rohan.everblaze.FileUtils.GameManager;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemDurabilityBar;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
-import org.apache.commons.collections4.BidiMap;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+
 
 public class Inventory {
 
@@ -147,6 +145,7 @@ public class Inventory {
         if(!renderOverlay) World.drawManager.render(slotBatch, 3);
     }
 
+
     public void detectKeyPressed() {
         if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             slotSelected = 1;
@@ -192,6 +191,7 @@ public class Inventory {
         if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             useSelected();
         }
+
         if(World.autoPickup) {
             for(Item item : World.onFloor) {
                 if(player.getRectangle().overlaps(item.sprite.getBoundingRectangle())) {

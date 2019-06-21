@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.java.com.rohan.everblaze.Effects.Sound_Effects;
@@ -24,6 +25,8 @@ public class TitleScreen implements Screen {
     boolean fileNotFound;
     private Sound_Effects music;
     private boolean renderTransition = false;
+
+    ParticleEffect pe;
 
 
     public TitleScreen(Game game, boolean fileNotFound) {
@@ -69,6 +72,11 @@ public class TitleScreen implements Screen {
         titleIcon.setCenter(500,450);
 
         music.play();
+
+        pe = new ParticleEffect();
+        pe.load(Gdx.files.internal("UI/HUD/everblade_fire3"),Gdx.files.internal(""));
+        pe.getEmitters().first().setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+        pe.start();
     }
 
     @Override
@@ -78,6 +86,8 @@ public class TitleScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        pe.update(Gdx.graphics.getDeltaTime());
 
         if(rotation != 360) {
             rotation += 1;
@@ -89,6 +99,9 @@ public class TitleScreen implements Screen {
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         screen.begin();
+
+        pe.draw(screen);
+
         if (title.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             title_1.draw(screen);
         } else {
@@ -121,6 +134,8 @@ public class TitleScreen implements Screen {
         titleIcon.setRotation(-45);
         titleIcon.draw(screen);
         screen.end();
+
+        if (pe.isComplete()) pe.reset();
 
         buttonPressed();
 

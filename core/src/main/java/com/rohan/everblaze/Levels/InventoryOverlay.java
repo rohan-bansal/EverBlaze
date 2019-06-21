@@ -1,12 +1,14 @@
 package main.java.com.rohan.everblaze.Levels;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Entities.Player;
 import main.java.com.rohan.everblaze.FileUtils.Quest;
@@ -20,6 +22,7 @@ public class InventoryOverlay {
 
     private Player player;
 
+    private Sprite questHighlight = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/questCardHighlight.png")));
     private Sprite inventory, quests, healthbar, highlighted;
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
@@ -29,8 +32,20 @@ public class InventoryOverlay {
     private BitmapFont healthDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
     private BitmapFont coinDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
 
+    private BitmapFont questDescDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
+    private BitmapFont escapeDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
+    private BitmapFont questNameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
+    private BitmapFont questLocationDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+
+
+
+
     private ArrayList<Sprite> slots = new ArrayList<Sprite>();
     public ArrayList<ItemStack> inventory_;
+    private int slotSelected = 0;
+
+    private Quest renderQuestDesc_ = null;
+
 
     public InventoryOverlay(ArrayList<ItemStack> inventory_, Player player) {
 
@@ -62,6 +77,40 @@ public class InventoryOverlay {
         quests.setCenter(320, 360);
     }
 
+    public void renderQuestDesc(Quest quest, SpriteBatch batch) {
+
+        Sprite questDesc = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/questDescription.png")));
+        questDesc.setCenter(500, 400);
+        questDesc.draw(batch);
+
+        escapeDrawer.setColor(Color.SLATE);
+        escapeDrawer.getData().setScale(0.5f);
+        escapeDrawer.draw(batch, "Press 'Esc' to hide this window", 400, 200);
+
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(questDescDrawer, quest.getDescription());
+        questDescDrawer.setColor(Color.GOLD);
+        questDescDrawer.getData().setScale(0.5f);
+        questDescDrawer.draw(batch, quest.getDescription(), (questDesc.getX() +
+                questDesc.getWidth() / 2) - layout.width / 2, 490);
+
+        layout.setText(questNameDrawer, quest.getQuestName());
+        questNameDrawer.setColor(Color.SCARLET);
+        questNameDrawer.getData().setScale(1.5f);
+        questNameDrawer.draw(batch, quest.getQuestName(), (questDesc.getX() +
+                questDesc.getWidth() / 2) - layout.width / 2, 600);
+
+        layout.setText(questLocationDrawer, quest.getLocation());
+        questLocationDrawer.setColor(Color.GOLD);
+        questLocationDrawer.getData().setScale(0.7f);
+        questLocationDrawer.draw(batch, quest.getLocation(), (questDesc.getX() +
+                questDesc.getWidth() / 2) - layout.width / 2, 535);
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            renderQuestDesc_ = null;
+        }
+    }
+
     public void render(SpriteBatch batch, ArrayList<ItemStack> inventory_, BitmapFont itemCounter) {
 
         this.inventory_ = inventory_;
@@ -69,14 +118,6 @@ public class InventoryOverlay {
         inventory.draw(batch);
         healthbar.draw(batch);
         quests.draw(batch);
-
-        for(Quest quest : World.quests) {
-            quest.renderCard(batch);
-
-            if(quest.card.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                Gdx.app.log("Overlay", "True");
-            }
-        }
 
 
         for(int x = 0; x < 10; x++) {
@@ -134,20 +175,41 @@ public class InventoryOverlay {
                         inventory.getWidth() / 2) - layout.width / 2, 330);
             }
 
-            layout.setText(healthDrawer, player.health + " / " + player.hearts);
-            healthDrawer.setColor(Color.GREEN);
-            healthDrawer.getData().setScale(0.8f);
-            healthDrawer.draw(batch, player.health + " / " + player.hearts, (healthbar.getX() +
-                    healthbar.getWidth() / 2) - layout.width / 2, 730);
-
-            layout.setText(coinDrawer, player.coins + "");
-            coinDrawer.setColor(Color.BROWN);
-            coinDrawer.getData().setScale(0.8f);
-            coinDrawer.draw(batch, player.coins + "", (healthbar.getX() +
-                    healthbar.getWidth() / 2) - layout.width / 2, 690);
-
-
         } catch (IndexOutOfBoundsException e) {
+        }
+
+        GlyphLayout layout2 = new GlyphLayout();
+        layout2.setText(healthDrawer, player.health + " / " + player.hearts);
+        healthDrawer.setColor(Color.GREEN);
+        healthDrawer.getData().setScale(0.8f);
+        healthDrawer.draw(batch, player.health + " / " + player.hearts, (healthbar.getX() +
+                healthbar.getWidth() / 2) - layout2.width / 2, 730);
+
+        layout2.setText(coinDrawer, player.coins + "");
+        coinDrawer.setColor(Color.BROWN);
+        coinDrawer.getData().setScale(0.8f);
+        coinDrawer.draw(batch, player.coins + "", (healthbar.getX() +
+                healthbar.getWidth() / 2) - layout2.width / 2, 690);
+
+        for(Quest quest : World.quests) {
+            quest.renderCard(batch);
+
+            if(quest.card.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                questHighlight.setPosition(quest.card.getX(), quest.card.getY());
+                questHighlight.draw(batch);
+                quest.renderText(batch);
+
+                if(Gdx.input.justTouched()) {
+                    renderQuestDesc_ = quest;
+                }
+
+            } else {
+                quest.renderCard(batch);
+            }
+        }
+
+        if(renderQuestDesc_ != null) {
+            renderQuestDesc(renderQuestDesc_, batch);
         }
 
     }
