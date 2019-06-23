@@ -110,6 +110,9 @@ public class World implements Screen {
 
         removedEnemies.clear();
         quests.clear();
+        storageChests.clear();
+        treasureChests.clear();
+        signposts.clear();
         questY = 450;
 
         this.game = game;
@@ -228,7 +231,9 @@ public class World implements Screen {
             }
         }
 
-        storageChests.add(new StorageChest(player.position.x, player.position.y));
+        if(storageChests.size() == 0) {
+            storageChests.add(new StorageChest(player.position.x, player.position.y));
+        }
     }
 
     public static void playerDie() {
@@ -436,6 +441,7 @@ public class World implements Screen {
         gameManager.data.setEnemiesDead(removedEnemies);
         gameManager.data.setCoins(player.coins);
         gameManager.data.setOpenedChests(openedChests);
+        gameManager.data.setStorageChests(storageChests);
         gameManager.saveData();
     }
 
@@ -450,6 +456,7 @@ public class World implements Screen {
         openedChests = gameManager.data.getOpenedChests();
         removedEnemies = gameManager.data.getEnemiesDead();
         onFloor = gameManager.data.getOnFloor();
+        storageChests = gameManager.data.getStorageChests();
         try {
             if(onFloor.size() != 0) {
                 for(Item item : onFloor) {

@@ -7,13 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import main.java.com.rohan.everblaze.Levels.World;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 
 import java.util.ArrayList;
 
-public class Chest {
+public class Chest implements Json.Serializable {
 
     public TextureRegion closed;
     public TextureRegion open;
@@ -25,10 +27,6 @@ public class Chest {
     public SpriteBatch chestBatch;
 
     private Item dropItem;
-
-    private ArrayList<ItemStack> chestInventory;
-    private ArrayList<Sprite> slots = new ArrayList<Sprite>();
-    private Sprite inventorySprite;
 
     public int id;
 
@@ -46,7 +44,6 @@ public class Chest {
     public Chest(float x, float y) {
 
         position = new Vector2(x, y);
-        this.chestInventory = new ArrayList<ItemStack>();
         id = World.storageID;
         World.storageID += 1;
         chestBatch = new SpriteBatch();
@@ -56,6 +53,13 @@ public class Chest {
     }
 
     public Chest() {
+        position = new Vector2();
+        id = World.storageID;
+        World.storageID += 1;
+        chestBatch = new SpriteBatch();
+
+        closed = new TextureRegion(new Texture(Gdx.files.internal("Objects/Chest/chest_f0.png")));
+        open = new TextureRegion(new Texture(Gdx.files.internal("Objects/Chest/chest_f2.png")));
     }
 
     public Item getDropItem() {
@@ -75,5 +79,18 @@ public class Chest {
         }
 
         batch.draw(currentFrame, position.x, position.y);
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("x", position.x);
+        json.writeValue("y", position.y);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        position.x = jsonData.getInt("x");
+        position.y = jsonData.getInt("y");
+        Gdx.app.log("Chest", id + "");
     }
 }

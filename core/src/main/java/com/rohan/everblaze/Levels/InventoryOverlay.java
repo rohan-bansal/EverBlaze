@@ -81,6 +81,8 @@ public class InventoryOverlay {
     public void drawInventory(SpriteBatch batch, Sprite highlight, BitmapFont nameDrawer, ArrayList<ItemStack> chestInv) {
         inventory.draw(batch);
 
+        this.inventory_ = World.detector.player.inventory_.inventory;
+
         for(int x = 0; x < 10; x++) {
             if(slots.get(x).getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 highlight.setCenter(slots.get(x).getX() + 25, slots.get(x).getY() + 25);
