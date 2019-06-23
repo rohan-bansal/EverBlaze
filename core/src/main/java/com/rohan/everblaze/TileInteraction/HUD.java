@@ -52,7 +52,7 @@ public class HUD {
 
     public void render() {
         hud.begin();
-        if(!Inventory.renderOverlay) {
+        if(!World.detector.player.inventory_.renderOverlay) {
             for(int x = 0; x < player.hearts; x++) {
                 if(player.health == player.hearts) {
                     hud.draw(heart, 20 * x + 5, 770);

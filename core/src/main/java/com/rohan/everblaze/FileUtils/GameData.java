@@ -1,9 +1,9 @@
 package main.java.com.rohan.everblaze.FileUtils;
 
 import com.badlogic.gdx.math.Vector2;
-import main.java.com.rohan.everblaze.TileInteraction.Objects.Chest;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Chests.StorageChest;
 
 import java.util.ArrayList;
 
@@ -17,10 +17,19 @@ public class GameData {
     private ArrayList<ItemStack> inventory;
     private ArrayList<Item> onFloor;
     private ArrayList<Integer> openedChests;
+    private ArrayList<StorageChest> storageChests;
     private int slotSelected;
     private int health;
     private int hearts;
     private int coins;
+
+    public ArrayList<StorageChest> getStorageChests() {
+        return storageChests;
+    }
+
+    public void setStorageChests(ArrayList<StorageChest> storageChests) {
+        this.storageChests = storageChests;
+    }
 
     public ArrayList<Integer> getOpenedChests() {
         return openedChests;

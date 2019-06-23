@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.MovementScript;
 import main.java.com.rohan.everblaze.FileUtils.QuestManager;
@@ -71,15 +72,11 @@ public class NPC {
         this.file = file;
         quest = new QuestManager(this, file);
         questType = quest.questData.getQuestType();
-        if(questType.equals("conversation")) {
-            quest.questData.setNPC(quest.questData.getNPC().replace("{0}", name));
-            for(String string : quest.questData.getReward()) {
-                if(string.contains("{0}")) {
-                    string = string.replace("{0}", name);
-                }
-            }
-        }
         reward.addAll(quest.questData.getReward());
+
+        if(reward.get(0).equals(Classifier.Weapon)) {
+
+        }
         return this;
     }
 

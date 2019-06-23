@@ -32,7 +32,8 @@ public class Inventory {
     private SpriteBatch slotBatch;
     private float slotX = 300;
 
-    public static boolean renderOverlay = false;
+    public boolean renderOverlay = false;
+    public boolean renderChestOverlay = false;
 
     private ItemDurabilityBar bar;
     public InventoryOverlay overlay;
@@ -72,7 +73,7 @@ public class Inventory {
         }
     }
 
-    public void addItem(Item item) {
+    public void addItem(Item item, int... count) {
         Gdx.app.log("Inventory", item.name + " added to inventory");
         item.setSprite();
         item.sprite.setCenter(slotX, 25);
@@ -84,7 +85,12 @@ public class Inventory {
             }
         }
         slotX += 50;
-        inventory.add(new ItemStack(item, 1));
+
+        if(count.length > 0) {
+            inventory.add(new ItemStack(item, count[0]));
+        } else {
+            inventory.add(new ItemStack(item, 1));
+        }
     }
 
     public void render() {
@@ -118,7 +124,7 @@ public class Inventory {
             }
         }
 
-        if(renderOverlay) {
+        if(renderOverlay && !renderChestOverlay) {
             overlay.render(slotBatch, inventory, itemCounter);
         }
 
@@ -178,11 +184,24 @@ public class Inventory {
             slotSelected = 10;
         } else
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            if(renderOverlay) {
+            if(!renderChestOverlay) {
+                if (renderOverlay) {
+                    renderOverlay = false;
+                    refreshInventory();
+                } else {
+                    openOverlay();
+                }
+            }
+
+        } else
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if(renderChestOverlay) {
+                World.chestInventoryDisp.chestState = 0;
+                World.chestInventoryDisp = null;
+                World.disableMovement = false;
+                renderChestOverlay = false;
                 renderOverlay = false;
                 refreshInventory();
-            } else {
-                openOverlay();
             }
         } else
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {

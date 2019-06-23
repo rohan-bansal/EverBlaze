@@ -19,7 +19,7 @@ public class Signpost {
 
 
     public Signpost(int x, int y, String text) {
-        sprite = new Sprite(new Texture(Gdx.files.internal("itemSprites/signpost.png")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("Objects/signpost.png")));
         sprite.setPosition(x, y);
         this.text = text;
 

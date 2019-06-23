@@ -105,7 +105,6 @@ public class TitleScreen implements Screen {
         if (title.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             title_1.draw(screen);
         } else {
-
             title.draw(screen);
         }
         if (play.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {

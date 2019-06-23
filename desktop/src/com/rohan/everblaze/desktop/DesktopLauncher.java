@@ -9,7 +9,7 @@ import main.java.com.rohan.everblaze.Main;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.vSyncEnabled = true;
+		//config.vSyncEnabled = true;
 		config.title = "EverBlaze";
 		config.width = 1000;
 		config.height = 800;

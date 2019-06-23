@@ -5,12 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -33,18 +31,20 @@ import main.java.com.rohan.everblaze.Effects.Sound_Effects;
 import main.java.com.rohan.everblaze.FileUtils.Quest;
 import main.java.com.rohan.everblaze.TileInteraction.CollisionDetector;
 import main.java.com.rohan.everblaze.TileInteraction.HUD;
-import main.java.com.rohan.everblaze.TileInteraction.Objects.Chest;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Chests.Chest;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Chests.StorageChest;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Chests.TreasureChest;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 import main.java.com.rohan.everblaze.TileInteraction.Objects.Signpost;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class World implements Screen {
 
     public static boolean questAdded = false;
+    public static StorageChest chestInventoryDisp = null;
     private TiledMap map;
     private AssetManager manager;
     private SpriteBatch batch;
@@ -57,7 +57,8 @@ public class World implements Screen {
     public static ArrayList<Item> onFloorToRemove = new ArrayList<Item>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
-    public static ArrayList<Chest> chests = new ArrayList<Chest>();
+    public static ArrayList<TreasureChest> treasureChests = new ArrayList<TreasureChest>();
+    public static ArrayList<StorageChest> storageChests = new ArrayList<StorageChest>();
     public static ArrayList<Integer> openedChests = new ArrayList<Integer>();
     public static ArrayList<Quest> quests = new ArrayList<Quest>();
     public static ArrayList<NPC> NPCs;
@@ -83,7 +84,7 @@ public class World implements Screen {
     public static Game game;
 
     public static boolean autoPickup = true;
-    private boolean disableMovement = false;
+    public static boolean disableMovement = false;
     public static boolean encryptSaveFiles = false;
 
     public static boolean movingRight, movingLeft, movingUp, movingDown;
@@ -91,6 +92,8 @@ public class World implements Screen {
 
     public static String focus;
     private Random rand;
+
+    public static int storageID = 100;
 
     private OrthogonalTiledMapRenderer renderer;
     private int[] layersToRender = new int[] {0, 1, 2, 3, 5, 6};
@@ -214,16 +217,18 @@ public class World implements Screen {
 
             try {
                 int itemDamage = (Integer) props.get("Damage");
-                chests.add(new Chest(chestID, x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription, itemDamage)));
+                treasureChests.add(new TreasureChest(chestID, x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription, itemDamage)));
             } catch (NullPointerException e) {
-                chests.add(new Chest(chestID, x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription)));
+                treasureChests.add(new TreasureChest(chestID, x, y, new Item(itemName, itemID, itemType, itemDurability, itemDescription)));
             }
         }
-        for(Chest chest2 : chests) {
+        for(Chest chest2 : treasureChests) {
             if(openedChests.contains(chest2.id)) {
                 chest2.chestState = 1;
             }
         }
+
+        storageChests.add(new StorageChest(player.position.x, player.position.y));
     }
 
     public static void playerDie() {
@@ -232,7 +237,7 @@ public class World implements Screen {
 
     private void createSignposts() {
 
-        signposts.add(new Signpost(770, 1400, ">>>"));
+        signposts.add(new Signpost(521, 477, ">>>"));
         signposts.add(new Signpost(1152, 1272, "Gate"));
     }
 
@@ -346,7 +351,7 @@ public class World implements Screen {
                 }
             }
 
-            for(Chest chest : chests) {
+            for(TreasureChest chest : treasureChests) {
                 chest.render(batch);
                 if(chest.getRect().overlaps(player.getRectangle())) {
                     focus = "chest";
@@ -356,6 +361,19 @@ public class World implements Screen {
                             openedChests.add(chest.id);
                         }
                         chest.chestState = 1;
+                    }
+                }
+            }
+
+            for(StorageChest chest : storageChests) {
+                chest.render(batch);
+                if(chest.getRect().overlaps(player.getRectangle())) {
+                    focus = "chest";
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                        chest.chestState = 1;
+                        player.inventory_.renderChestOverlay = true;
+                        player.inventory_.renderOverlay = true;
+                        chestInventoryDisp = chest;
                     }
                 }
             }
@@ -373,6 +391,11 @@ public class World implements Screen {
 
             //debugger.renderDebugBoxes(enemies, onFloor);
             renderer.render(layersToRenderAfter);
+
+            if(chestInventoryDisp != null) {
+                chestInventoryDisp.displayInventory(player.inventory_.overlay);
+                disableMovement = true;
+            }
 
             hud.render();
             if(signActive != null) {

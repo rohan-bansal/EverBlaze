@@ -24,6 +24,7 @@ public class InventoryOverlay {
 
     private Sprite questHighlight = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/questCardHighlight.png")));
     private Sprite inventory, quests, healthbar, highlighted;
+    private BitmapFont itemCounter = new BitmapFont();
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont descriptionDrawer = new BitmapFont();
@@ -75,6 +76,43 @@ public class InventoryOverlay {
         inventory.setCenter(750, 400);
         healthbar.setCenter(300, 720);
         quests.setCenter(320, 360);
+    }
+
+    public void drawInventory(SpriteBatch batch, Sprite highlight, BitmapFont nameDrawer, ArrayList<ItemStack> chestInv) {
+        inventory.draw(batch);
+
+        for(int x = 0; x < 10; x++) {
+            if(slots.get(x).getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                highlight.setCenter(slots.get(x).getX() + 25, slots.get(x).getY() + 25);
+                highlight.draw(batch);
+                GlyphLayout layout = new GlyphLayout();
+                try {
+                    layout.setText(nameDrawer, inventory_.get(x).stackedItem.name);
+                    nameDrawer.draw(batch, inventory_.get(x).stackedItem.name, (inventory_.get(x).stackedItem.sprite.getX() +
+                            inventory_.get(x).stackedItem.sprite.getWidth() / 2) - layout.width / 2, inventory_.get(x).stackedItem.sprite.getY() + 60);
+                    if(Gdx.input.justTouched()) {
+                        ItemStack item = inventory_.get(x);
+                        chestInv.add(item);
+                        World.itemStackToRemove.add(inventory_.get(x));
+                        World.detector.player.inventory_.refreshInventory();
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                }
+
+            } else {
+                slots.get(x).draw(batch);
+            }
+
+            try {
+                this.inventory_.get(x).stackedItem.sprite.setCenter(slots.get(x).getX() + (slots.get(x).getWidth() / 2), slots.get(x).getY() + (slots.get(x).getHeight() / 2));
+                this.inventory_.get(x).stackedItem.render(batch);
+                if(this.inventory_.get(x).count > 1) {
+                    itemCounter.draw(batch, this.inventory_.get(x).count + "", this.inventory_.get(x).stackedItem.sprite.getX() + 25, this.inventory_.get(x).stackedItem.sprite.getY() + 8);
+                }
+            } catch (IndexOutOfBoundsException e) {
+            }
+
+        }
     }
 
     public void renderQuestDesc(Quest quest, SpriteBatch batch) {

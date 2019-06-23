@@ -1,13 +1,17 @@
-package main.java.com.rohan.everblaze.TileInteraction.Objects;
+package main.java.com.rohan.everblaze.TileInteraction.Objects.Chests;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
+
+import java.util.ArrayList;
 
 public class Chest {
 
@@ -15,11 +19,16 @@ public class Chest {
     public TextureRegion open;
     public TextureRegion currentFrame;
 
-    private Vector2 position;
+    public Vector2 position;
     public int chestState = 0;
-    private float stateTime = 0f;
+
+    public SpriteBatch chestBatch;
 
     private Item dropItem;
+
+    private ArrayList<ItemStack> chestInventory;
+    private ArrayList<Sprite> slots = new ArrayList<Sprite>();
+    private Sprite inventorySprite;
 
     public int id;
 
@@ -30,8 +39,20 @@ public class Chest {
         dropItem = item;
         this.id = ID;
 
-        closed = new TextureRegion(new Texture(Gdx.files.internal("Entities/Chest/chest_f0.png")));
-        open = new TextureRegion(new Texture(Gdx.files.internal("Entities/Chest/chest_f2.png")));
+        closed = new TextureRegion(new Texture(Gdx.files.internal("Objects/Chest/chest_f0.png")));
+        open = new TextureRegion(new Texture(Gdx.files.internal("Objects/Chest/chest_f2.png")));
+    }
+
+    public Chest(float x, float y) {
+
+        position = new Vector2(x, y);
+        this.chestInventory = new ArrayList<ItemStack>();
+        id = World.storageID;
+        World.storageID += 1;
+        chestBatch = new SpriteBatch();
+
+        closed = new TextureRegion(new Texture(Gdx.files.internal("Objects/Chest/chest_f0.png")));
+        open = new TextureRegion(new Texture(Gdx.files.internal("Objects/Chest/chest_f2.png")));
     }
 
     public Chest() {
@@ -46,7 +67,6 @@ public class Chest {
     }
 
     public void render(SpriteBatch batch) {
-        stateTime += Gdx.graphics.getDeltaTime();
 
         if(chestState == 0) {
             currentFrame = closed;
@@ -55,12 +75,5 @@ public class Chest {
         }
 
         batch.draw(currentFrame, position.x, position.y);
-    }
-
-    public void displayContents() {
-        dropItem.setSprite();
-        dropItem.sprite.setSize(16, 16);
-        dropItem.sprite.setCenter(position.x + 24, position.y + 24);
-        World.onFloor.add(dropItem);
     }
 }

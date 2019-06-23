@@ -6,7 +6,7 @@ public class Classifier {
     public static String Tool = "Tool";
     public static String Food = "Food";
     public static String Utility = "Utility";
-    public static String Chest = "Chest";
+    public static String Chest = "TreasureChest";
 
     public static String Green_Slime = "Green_Slime";
     public static String Orange_Slime = "Orange_Slime";
