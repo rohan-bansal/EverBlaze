@@ -249,7 +249,8 @@ public class World implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(37/255f, 32/255f, 31/255f, 1);
-        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
+            Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
+
 
         focus = "nothing";
         questAdded = false;
@@ -375,10 +376,20 @@ public class World implements Screen {
                 if(chest.getRect().overlaps(player.getRectangle())) {
                     focus = "chest";
                     if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                        chest.chestState = 1;
-                        player.inventory_.renderChestOverlay = true;
-                        player.inventory_.renderOverlay = true;
-                        chestInventoryDisp = chest;
+                        if(chestInventoryDisp != null) {
+                            chestInventoryDisp.chestState = 0;
+                            player.inventory_.renderChestOverlay = false;
+                            player.inventory_.renderOverlay = false;
+                            chestInventoryDisp = null;
+                            disableMovement = false;
+                            player.inventory_.refreshInventory();
+                        } else {
+                            chest.chestState = 1;
+                            player.inventory_.renderChestOverlay = true;
+                            player.inventory_.renderOverlay = true;
+                            chestInventoryDisp = chest;
+                        }
+
                     }
                 }
             }

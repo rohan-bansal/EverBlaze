@@ -120,7 +120,7 @@ public class Inventory {
                 World.itemStackToRemove.add(item);
             }
             if(item.count > 1) {
-                itemCounter.draw(slotBatch, item.count + "", item.stackedItem.sprite.getX() + 25, item.stackedItem.sprite.getY() + 8);
+                if(!renderChestOverlay) itemCounter.draw(slotBatch, item.count + "", item.stackedItem.sprite.getX() + 22, item.stackedItem.sprite.getY() + 8);
             }
         }
 
@@ -191,17 +191,6 @@ public class Inventory {
                 } else {
                     openOverlay();
                 }
-            }
-
-        } else
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if(renderChestOverlay) {
-                World.chestInventoryDisp.chestState = 0;
-                World.chestInventoryDisp = null;
-                World.disableMovement = false;
-                renderChestOverlay = false;
-                renderOverlay = false;
-                refreshInventory();
             }
         } else
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {

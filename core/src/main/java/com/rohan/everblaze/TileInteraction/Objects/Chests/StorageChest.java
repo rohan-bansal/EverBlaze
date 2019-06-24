@@ -24,8 +24,8 @@ public class StorageChest extends Chest implements Json.Serializable {
     private ArrayList<ItemStack> chestInventory;
     private ArrayList<Sprite> slots = new ArrayList<Sprite>();
     private Sprite inventorySprite;
-    BitmapFont nameDrawer = new BitmapFont();
-    BitmapFont itemCounter = new BitmapFont();
+    private BitmapFont nameDrawer = new BitmapFont();
+    private BitmapFont itemCounter = new BitmapFont();
 
 
     public StorageChest(float x, float y) {
@@ -120,7 +120,7 @@ public class StorageChest extends Chest implements Json.Serializable {
                         item.stackedItem.sprite.getWidth() / 2) - layout.width / 2, item.stackedItem.sprite.getY() + 60);
             }
             if(item.count > 1) {
-                itemCounter.draw(chestBatch, item.count + "", item.stackedItem.sprite.getX() + 25, item.stackedItem.sprite.getY() + 8);
+                itemCounter.draw(chestBatch, item.count + "", item.stackedItem.sprite.getX() + 22, item.stackedItem.sprite.getY() + 8);
             }
 
         }
@@ -142,7 +142,13 @@ public class StorageChest extends Chest implements Json.Serializable {
 
         for(JsonValue value : inv) {
             JsonValue item_ = value.get("stackedItem");
-            chestInventory.add(new ItemStack(new Item(item_.get("name").asString(), item_.get("spritePath").asString(), item_.get("type").asString(), item_.get("durability").asInt(), item_.get("description").asString()), value.get("count").asInt()));
+            try {
+                chestInventory.add(new ItemStack(new Item(item_.get("name").asString(), item_.get("spritePath").asString(), item_.get("type").asString(),
+                        item_.get("durability").asInt(), item_.get("description").asString(), item_.get("damage").asInt()), value.get("count").asInt()));
+            } catch (Exception e) {
+                chestInventory.add(new ItemStack(new Item(item_.get("name").asString(), item_.get("spritePath").asString(), item_.get("type").asString(),
+                        item_.get("durability").asInt(), item_.get("description").asString()), value.get("count").asInt()));
+            }
         }
         refreshInventory();
     }

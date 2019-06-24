@@ -118,6 +118,7 @@ public class InventoryOverlay {
     }
 
     public void renderQuestDesc(Quest quest, SpriteBatch batch) {
+        World.focus = "questMenu";
 
         Sprite questDesc = new Sprite(new Texture(Gdx.files.internal("UI/HUD/Inventory/questDescription.png")));
         questDesc.setCenter(500, 400);
@@ -171,7 +172,7 @@ public class InventoryOverlay {
                 this.inventory_.get(x).stackedItem.sprite.setCenter(slots.get(x).getX() + (slots.get(x).getWidth() / 2), slots.get(x).getY() + (slots.get(x).getHeight() / 2));
                 this.inventory_.get(x).stackedItem.render(batch);
                 if(this.inventory_.get(x).count > 1) {
-                    itemCounter.draw(batch, this.inventory_.get(x).count + "", this.inventory_.get(x).stackedItem.sprite.getX() + 25, this.inventory_.get(x).stackedItem.sprite.getY() + 8);
+                    itemCounter.draw(batch, this.inventory_.get(x).count + "", this.inventory_.get(x).stackedItem.sprite.getX() + 22, this.inventory_.get(x).stackedItem.sprite.getY() + 8);
                 }
             } catch (IndexOutOfBoundsException e) {
             }
