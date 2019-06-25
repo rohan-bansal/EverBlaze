@@ -111,6 +111,7 @@ public class StorageChest extends Chest implements Json.Serializable {
                 slot.draw(chestBatch);
             }
         }
+
         for(ItemStack item : chestInventory) {
             item.stackedItem.render(chestBatch);
             if(item.stackedItem.sprite.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
@@ -120,14 +121,13 @@ public class StorageChest extends Chest implements Json.Serializable {
                         item.stackedItem.sprite.getWidth() / 2) - layout.width / 2, item.stackedItem.sprite.getY() + 60);
             }
             if(item.count > 1) {
-                itemCounter.draw(chestBatch, item.count + "", item.stackedItem.sprite.getX() + 22, item.stackedItem.sprite.getY() + 8);
+                itemCounter.draw(chestBatch, item.count + "", item.stackedItem.sprite.getX() + 25, item.stackedItem.sprite.getY() + 8);
             }
-
         }
         chestBatch.end();
         refreshInventory();
     }
-
+    
     @Override
     public void write(Json json) {
         super.write(json);

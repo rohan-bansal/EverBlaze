@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Entities.Player;
 
@@ -19,6 +20,12 @@ public class ScreenText {
         drawer = new BitmapFont();
         setColor(Color.BLACK);
         setSize(4);
+    }
+
+    public ScreenText(String font, String fontfile) {
+
+        drawer = new BitmapFont(Gdx.files.internal(font), Gdx.files.internal(fontfile), false);
+        setSize(0.5f);
     }
 
     public void setColor(Color color) {

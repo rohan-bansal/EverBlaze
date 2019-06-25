@@ -3,6 +3,8 @@
   "questType": "treasure",
   "NPC": "Huey",
   "location": "Marketplace",
+  "startText": "A skeleton rose near my campsite and I dropped my sword... I need to find it!",
+  "endText": "Woah! You were able to retrieve it! Well, you can keep it for your bravery.",
   "description": "Huey wants his weapon back! Go find it for him. He said he lost it near a small lake.",
   "reward": [
     "Weapon",

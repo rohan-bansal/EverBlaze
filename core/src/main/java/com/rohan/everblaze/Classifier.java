@@ -1,5 +1,11 @@
 package main.java.com.rohan.everblaze;
 
+import main.java.com.rohan.everblaze.Entities.Good.Adventurer;
+import main.java.com.rohan.everblaze.Entities.Good.Blacksmith;
+import main.java.com.rohan.everblaze.Entities.Good.FoodVendor;
+
+import java.util.ArrayList;
+
 public class Classifier {
 
     public static String Weapon = "Weapon";
@@ -19,4 +25,10 @@ public class Classifier {
     public static String Villager = "Villager";
     public static String Adventurer = "Adventurer";
     public static String FoodVendor = "FoodVendor";
+
+    public static ArrayList<String> marketplaceNPCs = new ArrayList<String>() {{
+        add(Blacksmith);
+        add(Adventurer);
+        add(FoodVendor);
+    }};
 }

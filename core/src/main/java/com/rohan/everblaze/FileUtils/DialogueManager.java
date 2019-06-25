@@ -3,32 +3,30 @@ package main.java.com.rohan.everblaze.FileUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import main.java.com.rohan.everblaze.Entities.Good.NPC;
 import main.java.com.rohan.everblaze.Levels.World;
 
-public class QuestManager {
+public class DialogueManager {
 
+    public Dialogue dialogueData;
     private FileHandle data;
-    public Quest questData;
     private Json json;
     private NPC npc;
 
-    public QuestManager(NPC npc, FileHandle data) {
-        this.questData = new Quest();
+    public DialogueManager(NPC npc, FileHandle data) {
         this.json = new Json();
-        this.npc = npc;
         this.data = data;
+        this.npc = npc;
 
         parseRequirements();
     }
 
     private void parseRequirements() {
         try {
-            questData = json.fromJson(Quest.class, data.readString());
-            //World.addQuest(questData);
-            Gdx.app.log("Quests", "Quest Loaded : " + questData.getQuestName());
+            dialogueData = json.fromJson(Dialogue.class, data.readString());
         } catch(Exception e) {
-            Gdx.app.log("Quests", "Quest Parsing Failed");
+            Gdx.app.log("Dialogue", "Dialogue Parsing Failed");
             e.printStackTrace();
         }
     }

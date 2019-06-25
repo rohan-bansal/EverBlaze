@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import main.java.com.rohan.everblaze.Classifier;
 import main.java.com.rohan.everblaze.Effects.ScreenText;
 import main.java.com.rohan.everblaze.Entities.*;
@@ -100,6 +102,7 @@ public class World implements Screen {
     private int[] layersToRenderAfter = new int[] {4};
     private boolean npcTextActive;
     private String npcText;
+    private NPC npcActive;
 
     public static final String RED_BOLD = "\033[1;31m";
     public static final String ANSI_RESET = "\u001B[0m";
@@ -133,9 +136,9 @@ public class World implements Screen {
         }};
 
         NPCs = new ArrayList<NPC>() {{
-            add(new Blacksmith("Bobby", 750, 1367, new MovementScript("leftRight_2x2")));
-            add(new FoodVendor("Joey", 755, 1387, new MovementScript("stationary")).setQuest(Gdx.files.internal("Quests/BerryBlast.json")));
-            add(new Adventurer("Huey", 760, 1347, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/FindTheSword.json")));
+            add(new Blacksmith("Bobby", 440, 480, new MovementScript("leftRight_2x2")));
+            add(new FoodVendor("Joey", 570, 480, new MovementScript("stationary")).setQuest(Gdx.files.internal("Quests/BerryBlast.json")));
+            add(new Adventurer("Huey", 600, 480, new MovementScript("leftRight_2x2")).setQuest(Gdx.files.internal("Quests/FindTheSword.json")));
         }};
 
         options = new Sprite(new Texture(Gdx.files.internal("UI/pause-options.png")));
@@ -336,24 +339,36 @@ public class World implements Screen {
             for(NPC npc : NPCs) {
                 npc.render(batch);
                 if(npc.getRect().overlaps(player.getRectangle())) {
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-                        if(!npcTextActive) {
-                            if(npc.questType != null && npc.questType.equals("conversation")) {
-                                npcTextActive = true;
-                                npcText = npc.reward.get(rand.nextInt(npc.reward.size()));
+                    focus = "NPC";
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                        if (!npcTextActive) {
+                            npcTextActive = true;
+                            npcActive = npc;
+                            disableMovement = true;
+                            player.setStop();
+                            if(npc.questType != null) {
+                                if(!World.quests.contains(npc.quest.questData)) {
+                                    npcText = npc.getQuestText();
+                                } else {
+                                    npcText = npc.dialog.dialogueData.getDialogue()[rand.nextInt(npc.dialog.dialogueData.getDialogue().length - 1)];
+                                }
+                            } else {
+                                npcText = npc.dialog.dialogueData.getDialogue()[rand.nextInt(npc.dialog.dialogueData.getDialogue().length - 1)];
                             }
                         } else {
+                            if(npc.questType != null) {
+                                if(!World.quests.contains(npc.quest.questData)) {
+                                    hud.drawNewQuest = npc;
+                                }
+                            }
                             npcTextActive = false;
                             npcText = null;
+                            disableMovement = false;
+                            npc.stop = false;
+                            npcActive = null;
                         }
 
                     }
-                    if(npcTextActive) {
-                        npc.drawText(npcText, batch);
-                    }
-                } else {
-                    npcTextActive = false;
-                    npcText = null;
                 }
             }
 
@@ -419,6 +434,12 @@ public class World implements Screen {
             }
             player.inventory_.render();
 
+            if(npcTextActive) {
+                hud.drawNPCDialog(npcActive, npcText);
+                if(npcActive.questType != null) {
+                }
+            }
+
             for(Enemy enemy : enemiesToRemove) {
                 enemies.remove(enemy);
                 if(!removedEnemies.contains(enemy.getName())) {
@@ -441,6 +462,7 @@ public class World implements Screen {
         }
 
     }
+
 
     private void setSave() {
         gameManager.data.setPlayerPosition(player.position);

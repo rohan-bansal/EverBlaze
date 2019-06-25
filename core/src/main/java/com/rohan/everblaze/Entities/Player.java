@@ -111,6 +111,10 @@ public class Player {
         idleAnim = new Animation<TextureRegion>(0.4f, idleFrames);
     }
 
+    public void setStop() {
+        animState = 0;
+    }
+
 
     public void update(boolean disableMovement) {
 

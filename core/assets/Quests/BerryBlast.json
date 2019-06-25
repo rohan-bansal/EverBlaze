@@ -3,6 +3,8 @@
   "questType": "collection",
   "NPC": "Sebastian",
   "location": "Marketplace",
+  "startText": "I'm making my signature fruitcake to sell at the market!",
+  "endText": "Thanks so much! I will need all of these. Take this...",
   "description": "Find fifteen blackberries for Sebastian's fruitcake.",
   "reward": [
     "Food",

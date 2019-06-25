@@ -18,10 +18,28 @@ public class Quest {
     private String location;
     private ArrayList<String> reward;
     private String questType;
+    private String startText;
+    private String endText;
     public Sprite card;
     public int priority;
     public BitmapFont cardDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
 
+
+    public String getEndText() {
+        return endText;
+    }
+
+    public void setEndText(String endText) {
+        this.endText = endText;
+    }
+
+    public String getStartText() {
+        return startText;
+    }
+
+    public void setStartText(String startText) {
+        this.startText = startText;
+    }
 
     public String getLocation() {
         return location;

@@ -78,10 +78,10 @@ public class HowToPlay implements Screen {
         plot.getData().setScale(0.8f);
         plot.draw(screen, "An archmage that goes by the name Earthshatterer has brought terror to the land!", (Gdx.graphics.getWidth() / 2) - layout.width / 2, 630);
 
-        layout.setText(plot2, "Find a magic weapon known as the EverBlade to bring back peace to the world.");
+        layout.setText(plot2, "Find an ancient weapon known as the EverBlade and use it to defeat the Earhshatterer!");
         plot2.setColor(Color.CORAL);
         plot2.getData().setScale(0.8f);
-        plot2.draw(screen, "Find a magic weapon known as the EverBlade to bring back peace to the world.", (Gdx.graphics.getWidth() / 2) - layout.width / 2, 600);
+        plot2.draw(screen, "Find an ancient weapon known as the EverBlade and use it to defeat the Earhshatterer!", (Gdx.graphics.getWidth() / 2) - layout.width / 2, 600);
 
         layout.setText(move, "Move the player with 'W A S D'");
         move.setColor(Color.TAN);
