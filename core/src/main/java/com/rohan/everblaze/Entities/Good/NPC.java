@@ -13,6 +13,8 @@ import main.java.com.rohan.everblaze.Entities.MovementScript;
 import main.java.com.rohan.everblaze.FileUtils.DialogueManager;
 import main.java.com.rohan.everblaze.FileUtils.QuestManager;
 import main.java.com.rohan.everblaze.Levels.World;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.Item;
+import main.java.com.rohan.everblaze.TileInteraction.Objects.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class NPC {
 
     private FileHandle file;
     public QuestManager quest;
+    public boolean questFinished = false;
     public DialogueManager dialog;
     private Sprite dialogBox = new Sprite(new Texture(Gdx.files.internal("UI/HUD/NPC/dialogueBox.png")));
     public String questType;
@@ -190,4 +193,22 @@ public class NPC {
         }
     }
 
+    public void giveQuestReward() {
+        if(quest.questData.getReward().size() > 1) {
+            if(quest.questData.getReward().size() > 4) {
+                Item temp_ = new Item(quest.questData.getReward().get(0), "itemSprites/" + quest.questData.getReward().get(1), Classifier.Weapon, Integer.parseInt(quest.questData.getReward().get(2)),
+                        quest.questData.getReward().get(3), Integer.parseInt(quest.questData.getReward().get(4)));
+                temp_.sprite.setSize(16, 16);
+                World.detector.player.inventory_.addItem(temp_);
+            } else {
+                Item temp_ = new Item(quest.questData.getReward().get(0), "itemSprites/" + quest.questData.getReward().get(1), Classifier.Food, 1,
+                        quest.questData.getReward().get(2));
+                temp_.sprite.setSize(16, 16);
+                World.itemToAdd.add(temp_);
+            }
+        } else {
+            World.detector.player.coins += Integer.parseInt(quest.questData.getReward().get(0));
+        }
+
+    }
 }

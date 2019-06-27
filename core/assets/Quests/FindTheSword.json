@@ -1,15 +1,18 @@
 {
   "questName": "Sword Hunter",
-  "questType": "treasure",
+  "questType": "find&keep",
   "NPC": "Huey",
   "location": "Marketplace",
   "startText": "A skeleton rose near my campsite and I dropped my sword... I need to find it!",
   "endText": "Woah! You were able to retrieve it! Well, you can keep it for your bravery.",
-  "description": "Huey wants his weapon back! Go find it for him. He said he lost it near a small lake.",
+  "description": "Huey wants his weapon back! Go find it for him. He said he lost it near a clump of bushes.",
   "reward": [
-    "Weapon",
-    "tile085.png",
     "Dagger",
-    "3 Damage"
-  ]
+    "tile085.png",
+    50,
+    "Huey's dagger.",
+    3
+  ],
+  "coordX": 666,
+  "coordY": 422
 }

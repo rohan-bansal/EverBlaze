@@ -56,6 +56,7 @@ public class World implements Screen {
 
     public static ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
     public static ArrayList<ItemStack> itemStackToRemove = new ArrayList<ItemStack>();
+    public static ArrayList<Item> itemToAdd = new ArrayList<Item>();
     public static ArrayList<Item> onFloorToRemove = new ArrayList<Item>();
     public static ArrayList<String> removedEnemies = new ArrayList<String>();
     public static ArrayList<Signpost> signposts = new ArrayList<Signpost>();
@@ -63,6 +64,8 @@ public class World implements Screen {
     public static ArrayList<StorageChest> storageChests = new ArrayList<StorageChest>();
     public static ArrayList<Integer> openedChests = new ArrayList<Integer>();
     public static ArrayList<Quest> quests = new ArrayList<Quest>();
+    public static ArrayList<String> questsCompleted = new ArrayList<String>();
+    public static ArrayList<Quest> questsToRemove = new ArrayList<Quest>();
     public static ArrayList<NPC> NPCs;
 
     public static CollisionDetector detector;
@@ -206,6 +209,27 @@ public class World implements Screen {
         questData.setCard(temp);
         quests.add(questData);
 
+        if(questData.getQuestType().equals("find&keep")) {
+            if(questData.getReward().size() > 4) {
+                Item temp_ = new Item(questData.getReward().get(0), "itemSprites/" + questData.getReward().get(1), Classifier.Weapon, Integer.parseInt(questData.getReward().get(2)),
+                        questData.getReward().get(3), Integer.parseInt(questData.getReward().get(4)));
+                temp_.loadCoords(Integer.parseInt(questData.getCoordX()), Integer.parseInt(questData.getCoordY()));
+                temp_.sprite.setSize(16, 16);
+                World.onFloor.add(temp_);
+            } else {
+
+            }
+        }
+
+    }
+
+    public void removeQuest(Quest questdata) {
+        for(Quest quest : quests) {
+            if(quest.getQuestName().equals(questdata.getQuestName())) {
+                questsToRemove.add(quest);
+                questY += 65;
+            }
+        }
     }
 
     private void createChests() {
@@ -336,21 +360,52 @@ public class World implements Screen {
                 }
             }
 
-            for(NPC npc : NPCs) {
+            for(NPC npc : NPCs) { // for each npc
                 npc.render(batch);
-                if(npc.getRect().overlaps(player.getRectangle())) {
+                if(npc.getRect().overlaps(player.getRectangle())) { // if player intersects npc
                     focus = "NPC";
-                    if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                        if (!npcTextActive) {
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.F)) { // if player presses 'f'
+                        if (!npcTextActive) { // if text is inactive
                             npcTextActive = true;
                             npcActive = npc;
                             disableMovement = true;
                             player.setStop();
-                            if(npc.questType != null) {
-                                if(!World.quests.contains(npc.quest.questData)) {
+                            if(npc.questType != null) { // if npc has a quest
+                                if(!World.quests.contains(npc.quest.questData)) { // if the quest is not already given
                                     npcText = npc.getQuestText();
                                 } else {
-                                    npcText = npc.dialog.dialogueData.getDialogue()[rand.nextInt(npc.dialog.dialogueData.getDialogue().length - 1)];
+                                    if(!npc.questFinished) { // while not quest finished
+                                        if(npc.quest.questData.getQuestType().equals("find&keep")) { // if quest type is find and keep
+                                            for (ItemStack item_ : player.inventory_.inventory) {
+                                                if (item_.stackedItem.description.equals(npc.quest.questData.getReward().get(3))) { // if descriptions on items match
+                                                    npcText = npc.quest.questData.getEndText();
+                                                    npc.questFinished = true;
+                                                    questsCompleted.add(npc.quest.questData.getQuestName());
+                                                    removeQuest(npc.quest.questData);
+                                                }
+                                            }
+                                        } else if(npc.quest.questData.getQuestType().equals("collection")) { // if quest is find collection
+                                            for (ItemStack item_ : player.inventory_.inventory) {
+                                                if(item_.stackedItem.name.equals(npc.quest.questData.getFind().get(0)) &&
+                                                        item_.count >= Integer.parseInt(npc.quest.questData.getFind().get(1))) { // if names match and count is fulfilled
+                                                    npcText = npc.quest.questData.getEndText();
+                                                    if(item_.count == Integer.parseInt(npc.quest.questData.getFind().get(1))) {
+                                                        itemStackToRemove.add(item_);
+                                                    } else {
+                                                        item_.count -= Integer.parseInt(npc.quest.questData.getFind().get(1));
+                                                    }
+                                                    npc.giveQuestReward();
+                                                    npc.questFinished = true;
+                                                    questsCompleted.add(npc.quest.questData.getQuestName());
+                                                    removeQuest(npc.quest.questData);
+                                                }
+                                            }
+                                        } else {
+                                            npcText = npc.dialog.dialogueData.getDialogue()[rand.nextInt(npc.dialog.dialogueData.getDialogue().length - 1)];
+                                        }
+                                    } else {
+                                        npcText = npc.dialog.dialogueData.getDialogue()[rand.nextInt(npc.dialog.dialogueData.getDialogue().length - 1)];
+                                    }
                                 }
                             } else {
                                 npcText = npc.dialog.dialogueData.getDialogue()[rand.nextInt(npc.dialog.dialogueData.getDialogue().length - 1)];
@@ -358,7 +413,7 @@ public class World implements Screen {
                         } else {
                             if(npc.questType != null) {
                                 if(!World.quests.contains(npc.quest.questData)) {
-                                    hud.drawNewQuest = npc;
+                                    if(!npc.questFinished) hud.drawNewQuest = npc;
                                 }
                             }
                             npcTextActive = false;
@@ -456,9 +511,19 @@ public class World implements Screen {
                 player.inventory_.refreshInventory();
             }
 
+            for(Quest quest : questsToRemove) {
+                quests.remove(quest);
+            }
+
+            for(Item item : itemToAdd) {
+                player.inventory_.addItem(item);
+            }
+
             enemiesToRemove.clear();
             onFloorToRemove.clear();
             itemStackToRemove.clear();
+            questsToRemove.clear();
+            itemToAdd.clear();
         }
 
     }
@@ -475,6 +540,7 @@ public class World implements Screen {
         gameManager.data.setCoins(player.coins);
         gameManager.data.setOpenedChests(openedChests);
         gameManager.data.setStorageChests(storageChests);
+        gameManager.data.setQuestsCompleted(questsCompleted);
         gameManager.saveData();
     }
 

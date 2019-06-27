@@ -65,7 +65,7 @@ public class Player {
 
         inventory_ = new Inventory(this);
         inventory_.addItem(new Item("Green Apple", "itemSprites/tile002.png", Classifier.Food, 1, "Restores 2 hearts."), 10);
-        //inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."));
+        inventory_.addItem(new Item("Blackberry", "itemSprites/tile000.png", Classifier.Food, 1, "Restores 2 hearts."), 20);
 
         slash_left = new Sprite(new Texture(Gdx.files.internal("Character/slash_left2.png")));
         slash_right = new Sprite(new Texture(Gdx.files.internal("Character/slash_right2.png")));

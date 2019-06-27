@@ -18,10 +18,19 @@ public class GameData {
     private ArrayList<Item> onFloor;
     private ArrayList<Integer> openedChests;
     private ArrayList<StorageChest> storageChests;
+    private ArrayList<String> questsCompleted;
     private int slotSelected;
     private int health;
     private int hearts;
     private int coins;
+
+    public ArrayList<String> getQuestsCompleted() {
+        return questsCompleted;
+    }
+
+    public void setQuestsCompleted(ArrayList<String> questsCompleted) {
+        this.questsCompleted = questsCompleted;
+    }
 
     public ArrayList<StorageChest> getStorageChests() {
         return storageChests;

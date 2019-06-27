@@ -1,15 +1,18 @@
 {
   "questName": "Berry Blast",
   "questType": "collection",
-  "NPC": "Sebastian",
+  "NPC": "Joey",
   "location": "Marketplace",
   "startText": "I'm making my signature fruitcake to sell at the market!",
   "endText": "Thanks so much! I will need all of these. Take this...",
-  "description": "Find fifteen blackberries for Sebastian's fruitcake.",
+  "description": "Find fifteen blackberries for Joey's fruitcake.",
+  "find": [
+    "Blackberry",
+    15
+    ],
   "reward": [
-    "Food",
-    "tile022.png",
     "Fruitcake",
+    "tile022.png",
     "Restores 10 hearts."
   ]
 }

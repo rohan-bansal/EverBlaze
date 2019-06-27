@@ -2,6 +2,7 @@ package main.java.com.rohan.everblaze;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +25,10 @@ public class Main extends Game {
 
         logo = new Sprite(new Texture(Gdx.files.internal("UI/logo2.png")));
         logo.setCenter(500, 400);
+
+        Pixmap pm = new Pixmap(Gdx.files.internal("Entities/pointer.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        pm.dispose();
 
         startTime = TimeUtils.millis();
     }

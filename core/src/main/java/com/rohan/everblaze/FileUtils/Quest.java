@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import main.java.com.rohan.everblaze.Levels.World;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Quest {
@@ -21,9 +24,38 @@ public class Quest {
     private String startText;
     private String endText;
     public Sprite card;
+    private String coordX;
+    private String coordY;
+    private ArrayList<String> find;
     public int priority;
     public BitmapFont cardDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
 
+    public Quest() {
+    }
+
+    public ArrayList<String> getFind() {
+        return find;
+    }
+
+    public void setFind(ArrayList<String> find) {
+        this.find = find;
+    }
+
+    public String getCoordX() {
+        return coordX;
+    }
+
+    public void setCoordX(String coordX) {
+        this.coordX = coordX;
+    }
+
+    public String getCoordY() {
+        return coordY;
+    }
+
+    public void setCoordY(String coordY) {
+        this.coordY = coordY;
+    }
 
     public String getEndText() {
         return endText;
@@ -130,4 +162,5 @@ public class Quest {
     public void setReward(ArrayList<String> reward) {
         this.reward = reward;
     }
+
 }
