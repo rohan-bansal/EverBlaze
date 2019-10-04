@@ -2,7 +2,7 @@
 
 __A java roguelike with a custom storyline, combat, and exploration.__
 
-_50% finished_
+_60% finished_
 
 ## Features
 
